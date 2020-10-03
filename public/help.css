@@ -1,0 +1,13 @@
+* {
+    font-family: Roboto, sans-serif;
+}
+
+p {
+    font-size: large;
+}
+
+body {
+    width: min(80vw, 700px);
+    margin: 50px auto;
+    padding-right: max(0px, calc(80vw - 1000px));
+}
