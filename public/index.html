@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conway's Game of Life</title>
+
+    <link href="help.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+</head>
+<body>
+    <h1>Conway's Game of Life Help</h1>
+    <ul>
+        <li>
+            <p>
+                <strong>Resizing the window</strong><br/>
+                If you resize the window, the game size will automatically adjust to the new window size. This will restart the game.
+            </p>
+        </li>
+        <li>
+            <p>
+                <strong>Pause</strong><br/>
+                While checked, the game will be paused and no generations will occur.
+            </p>
+        </li>
+        <li>
+            <p>
+                <strong>Enable wrapping</strong><br/>
+                While checked, the borders of the screen will wrap to the other side (i.e. the game will run in a toroidal world).
+            </p>
+        </li>
+        <li>
+            <p>
+                <strong>Live cell color</strong><br/>
+                This sets the color of living cells. By default, living cells are black.
+            </p>
+        </li>
+        <li>
+            <p>
+                <strong>Generations per second</strong><br/>
+                This sets the number of generations that will occur each second while the game is unpaused. For high values, your computer might not be able to keep up and you may not actually get the number of generations per second that the game is set to. When this happens, red text that says "Can't keep up!" will appear in the top left.
+            </p>
+        </li>
+        <li>
+            <p>
+                <strong>Render scale</strong><br/>
+                This changes how many pixels each cell takes up on the screen. Larger values increase performance. Changing this value will restart the game.
+            </p>
+        </li>
+        <li>
+            <p>
+                <strong>Flip alive/dead</strong><br/>
+                This button flips the living/dead state of every cell.
+            </p>
+        </li>
+        <li>
+            <p>
+                <strong>Randomize game</strong><br/>
+                This button randomly sets the alive state of each cell, restarting the game.
+            </p>
+        </li>
+        <li>
+            <p>
+                <strong>View instructions</strong><br/>
+                This button takes you to this page.
+            </p>
+        </li>
+    </ul>
+    <p>
+        Ready to start?
+        <br/>
+        <button onclick="window.location.href = './game'">Start the game</button>
+    </p>
+</body>
+</html>
