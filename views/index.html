@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+
+    <title>Audio Visualizer-Yaru Gong</title>
+
+    <!-- import the webpage's stylesheet -->
+    <link rel="stylesheet" href="/style.css" />
+
+    <!-- import the webpage's javascript file -->
+    <script src="/script.js" defer></script>
+    
+  </head>
+  <body>
+    <h1>One Man's Dream - Yanni</h1>
+    
+    <button id="help">
+      Help
+    </button>
+
+    <div id="content">
+      
+      <label for="theme">Theme:</label>
+      <select name="theme" id="theme">
+        <option value="default" selected="selected">Default</option>
+        <option value="rose">Rose</option>
+        <option value="ocean">Ocean</option>
+      </select>
+      <label for="size">Size:</label>
+      <select name="size" id="size">
+        <option value="default" selected="selected">Default</option>
+        <option value="small">Small</option>
+        <option value="large">Large</option>
+      </select>
+      <label for="direction">Direction:</label>
+      <select name="direction" id="direction">
+        <option value="default" selected="selected">Bottom to Top</option>
+        <option value="top">Top to bottom</option>
+        <option value="center">Center</option>
+      </select>
+      <label for="color">Color Gradient:</label>
+      <select name="color" id="color">
+        <option value="default" selected="selected">Default</option>
+        <option value="high">Gradient 1</option>
+        <option value="low">Gradient 2</option>
+      </select>
+      <label for="height">Amplitude:</label>
+      <select name="height" id="height">
+        <option value="default" selected="selected">Default</option>
+        <option value="high">High</option>
+        <option value="low">Low</option>
+      </select>
+      <label for="background">Background Color:</label>
+      <select name="background" id="background">
+        <option value="default" selected="selected">Black</option>
+        <option value="lightCyan">Light Cyan</option>
+        <option value="cadetGrey">Cadet Grey</option>
+        <option value="mintCream">Mint Cream</option>
+      </select>
+      <button id="load">LOAD</button>
+      <canvas id="canvas"></canvas>
+      <audio id="audio" controls></audio>
+    </div>
+  </body>
+</html>
