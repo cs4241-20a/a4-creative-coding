@@ -1,0 +1,129 @@
+body {
+  background-image: url("https://cdn.glitch.com/f8e433c2-7fd9-4b45-a65f-98d28860474f%2FSnakeGameBackground.jpeg?v=1601584962783");
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: 100% 100%;
+}
+
+h1 {
+  text-align: center;
+  font-family: "Bangers", cursive;
+  font-size: 100px;
+  font-weight: lighter;
+  letter-spacing: 4px;
+}
+
+h2 {
+  text-align: center;
+  font-family: "Bangers", cursive;
+  font-size: 20px;
+  font-weight: lighter;
+  letter-spacing: 2px;
+  margin-top: -70px;
+}
+
+body {
+  font-family: "Bangers", cursive;
+  font-size: 100px;
+}
+
+.button {
+  cursor: pointer;
+  border: none;
+  text-align: center;
+  font-family: "Bangers", cursive;
+  font-size: 30px;
+  border-radius: 10px;
+  box-shadow: 0 9px #7A7D7C;
+  color: black;
+}
+
+.easy {
+  background-color: forestgreen;
+  padding: 10px 40px;
+}
+
+.easy:hover {
+  background-color: #0C6B17;
+}
+
+.easy:active {
+  background-color: #0C6B17;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
+
+.normal {
+  background-color: darkorange;
+  padding: 10px 20px;
+}
+
+.normal:hover {
+  background-color: #EB6517;
+}
+
+.normal:active {
+  background-color: #EB6517;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
+
+.hard {
+  background-color: #D60000;
+  padding: 10px 35px;
+}
+
+.hard:hover {
+  background-color: #9A0000;
+}
+
+.hard:active {
+  background-color: #9A0000;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
+
+.center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  margin-top: 350px;
+}
+
+.instructions {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+.instructions-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
+
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
