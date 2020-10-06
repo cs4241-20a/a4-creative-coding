@@ -1,0 +1,151 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Tetris with Canvas</title>
+</head>
+<body>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script>
+        var init = false;
+        var myCanv;
+        var context;
+
+        var mode = 1;
+        const mode_game = 1;
+        const mode_gameover = 2;
+
+        var tetrisbox_size = 25;
+        var tetrisbox_top = 50;
+        var tetribox_left = 280;
+
+        var tetrisbox;
+
+        var score;
+
+        var run;
+        var runtime = 500;
+        var level = 1;
+        var exp = 0;
+
+        function tetrisbox_init(){
+            tetrisbox = new Array();
+            for (i = 20; i < 20; i++) {
+                tetrisbox.push(new Array(10));
+                for (j = 0; j < 10; j++) {
+                    tetrisbox[i][j] = 0;
+                }
+            }
+        }
+
+        //5 types of blocks
+        var tetrisblock;
+
+
+        //current block
+        var tetrixblock_this;
+
+        function tetrisblock_init(){
+            tetrisblock = new Array();
+
+            //first block
+            temp = new Array();
+            temp.push(0, 0); 
+            temp.push(0, 1);
+            temp.push(0, 2);
+            temp.push(0, 3);
+            tetrisblock.push(temp);
+
+            //second block
+            temp = new Array();
+            temp.push(0, 0);
+            temp.push(0, 1);
+            temp.push(0, 2);
+            temp.push(1, 1);
+            tetrisblock.push(temp);
+
+            //third block
+            temp = new Array();
+            temp.push(0, 0);
+            temp.push(0, 1);
+            temp.push(1, 1);
+            temp.push(1, 2);
+            tetrisblock.push(temp);
+
+            //fourth block
+            temp = new Array();
+            temp.push(0, 0);
+            temp.push(0, 1);
+            temp.push(1, 0);
+            temp.push(1, 1);
+            tetrisblock.push(temp);
+
+            //fifth block
+            temp = new Array();
+            temp.push(0, 0);
+            temp.push(0, 1);
+            temp.push(1, 0);
+            temp.push(1, 1);
+            tetrisblock.push(temp);
+
+            //sixth block
+            temp = new Array();
+            temp.push(0, 0);
+            temp.push(0, 1);
+            temp.push(0, 2);
+            temp.push(1, 0);
+            tetrisblock.push(temp);
+
+            //last block
+            temp = new Array();
+            temp.push(0, 0);
+            temp.push(0, 1);
+            temp.push(0, 2);
+            temp.push(1, 2);
+            tetrisblock.push(temp);
+        }
+
+        //location block will drop
+        var tetrisblock_num = 1;
+        var tetrisblock_x = 3;
+        var tetrisblock_y = 0;
+
+        var bgImage = new Image();
+        var blockImage = new Array();
+
+        function init() {
+            if (init == false) {
+                myCanv = document.getElementById("MyCanv");
+                context = myCanv.getContext("2d");
+
+                //images of blocks
+
+
+                //initalizing blocks
+                tetrisblock_init();
+                tetrisbox_init();
+                tetrisblock_num = Math.floor(Math.random() * 6.9);
+                tetrisblock_this = tetrisblock[tetrisblock_num].slice();
+                score = 0;
+                init = true;
+            }
+        }
+
+        function checkErr() {
+            var size = tetrisblock_this.length;
+            for (i = 0; i < size; i++) {
+                check_x = tetrisblock_x + tetrisblock.this[i + 1];
+                check_y = tetrisblock_y + tetrisblock.this[i];
+                if (check_y < 0)
+                    continue;
+                //collision between blocks
+                if (check_x < 0 || check_x >= 10 || check_y >= 20 || tetrisbox[check_y][check_x] != 0)
+                    return true;
+            }
+        }
+
+
+    </script>
+</body>
+</html>
