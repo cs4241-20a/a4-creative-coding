@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Assignment 4 - Creative Coding</title>
+    <style>
+        body { margin: 0; }
+        /*canvas { display: block; }*/
+        canvas{
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Cinzel:900,600,500"
+          type = "text/css">
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Cormorant:400"
+          type = "text/css">
+    <link type="text/css" href="/style/style.css" rel="stylesheet">
+</head>
+<body>
+<div id="container"></div>
+<div id="overlay">
+    <h1>Welcome to Jialin Song's music visualizer done by threejs</h1>
+    <h2>After click the "play" button below, the song "Golden" will turn on automatically.
+    Certain parameters can be changed with the control gui on the right.
+    Click "help" button for further instructions.
+    The song will only play once. Hit "play_again" to enjoy the song one more time!</h2>
+    <button id="startButton">Play</button>
+</div>
+<script src="/js/three.js"></script>
+<script type="module" src="/js/main.js"></script>
+</body>
+</html>
