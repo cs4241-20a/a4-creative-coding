@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="en" style="height:100%" >
+    <head>
+      <title>Good Game.</title>
+      <style>
+			     body { margin: 0; }
+			     canvas { display: block; }
+
+         #info
+         {
+	          position: absolute;
+	          top: 10px;
+	          width: 100%;
+	          text-align: center;
+	          z-index: 100;
+	          display:block;
+            color:white;
+          }
+		  </style>
+    </head>
+
+    <body>
+        <div id="info">Description</div>
+        <script src="js/three.js"></script>
+		      <script>
+            var scene = new THREE.Scene();
+            var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+            console.log("camera film width: "+camera.getFilmWidth());
+            var ballVelocity = new THREE.Vector3();
+            ballVelocity.set(0.0,0.0,0.0);
+            var gCollisionPlanes = [];
+            var preMouseX = 0.0;
+            var preMouseY = 0.0;
+            var newMouseX = 0.0;
+            var newMouseY = 0.0;
+            var mouseVelocity = new THREE.Vector3();
+
+            var prevdX = 0.0;
+            var prevdY = 0.0;
+            var dX = 0.0;
+            var dY = 0.0;
+
+            var collisionSphere = new THREE.Sphere(new THREE.Vector3(0.0, 0.0, 0.0), 0.5);
+            //console.log("collisionSphere.center: "+collisionSphere.center);
+            var collisionRightPlane = new THREE.Plane(new THREE.Vector3(-1.0, 0.0, 0.0));
+            var collisionUnprojected = new THREE.Plane(new THREE.Vector3(-1.0, 0.0, 0.0));
+            collisionUnprojected.translate(new THREE.Vector3(1.0, 0.0, 0.0));
+
+
+            var maxXVector = new THREE.Vector3(1.0, 0.0, 0.0);
+            var maxXValue = maxXVector.project(camera).x;
+
+            var mouseVelRaycaster = new THREE.Raycaster();
+
+            mouseVelocity.set(0.0, 0.0, 0.0);
+
+            var mouseVelMat = new THREE.LineBasicMaterial({ color: 0x0000ff });
+            var mouseVelPoints = [];
+            mouseVelPoints.push(new THREE.Vector3(0.0, 0.0, 0.0));
+            mouseVelPoints.push(new THREE.Vector3(0.0, 0.0, 0.0));
+            var mouseVelGeometry = new THREE.BufferGeometry();
+            mouseVelGeometry.setFromPoints(mouseVelPoints);
+
+            var mouseVelLine = new THREE.Line(mouseVelGeometry, mouseVelMat);
+
+            var gXVel = 0.1;
+            var gYVel = 0.0;
+
+
+          var renderer = new THREE.WebGLRenderer();
+          renderer.setSize( window.innerWidth, window.innerHeight );
+          document.body.appendChild( renderer.domElement );
+
+          var geometry = new THREE.SphereGeometry(radius=0.2);
+
+          //var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+          var material = new THREE.MeshPhongMaterial( {color: 0x00ff00} )
+          var cube = new THREE.Mesh( geometry, material );
+          cube.position.z = 0.0;
+          scene.add( cube );
+          scene.add( mouseVelLine );
+
+          // const color = 0xFFFFFF;
+          // const intensity = 1;
+          // const light = new THREE.DirectionalLight(color, intensity);
+          // light.position.set(0, 0, 5.0);
+          // light.target.position.set(0, 0, 0);
+          // scene.add(light);
+          // scene.add(light.target);
+
+          var light = new THREE.AmbientLight( 0x404040 ); // soft white light
+
+          scene.add( light );
+
+          const color = 0xFFFFFF;
+          const intensity = 1;
+          const dirLight = new THREE.DirectionalLight(color, intensity);
+          dirLight.position.set(0, 0, 5.0);
+          dirLight.target.position.set(-5.0, -3.0, 0);
+          scene.add(dirLight);
+          scene.add(dirLight.target);
+
+          const dirLight2 = new THREE.DirectionalLight(color, intensity);
+          dirLight2.position.set(0, 0, 5.0);
+          dirLight2.target.position.set(5.0, 3.0, 0);
+          scene.add(dirLight2);
+          scene.add(dirLight2.target);
+
+
+          constructFieldPlanes(scene);
+          constructCollisionPlanes();
+
+          camera.position.z = 5;
+          renderer.render( scene, camera );
+
+          console.log("max x: "+maxXValue);
+          var screenBounds = getScreenBounds();
+          console.log("setting right plane at: "+screenBounds.x);
+          collisionRightPlane.translate(new THREE.Vector3(screenBounds.x, 0.0, 0.0));
+
+          function constructCollisionPlanes()
+          {
+            var topPlane = new THREE.Plane(new THREE.Vector3(0.0, -1.0, 0.0));
+            topPlane.translate(new THREE.Vector3(0.0, 3.0, 0.0));
+
+            var rightPlane = new THREE.Plane(new THREE.Vector3(-1.0, 0.0, 0.0));
+            rightPlane.translate(new THREE.Vector3(5.0, 0.0, 0.0));
+
+            var bottomPlane = new THREE.Plane(new THREE.Vector3(0.0, 1.0, 0.0));
+            bottomPlane.translate(new THREE.Vector3(0.0, -3.0, 0.0));
+
+            var leftPlane = new THREE.Plane(new THREE.Vector3(1.0, 0.0, 0.0));
+            leftPlane.translate(new THREE.Vector3(-5.0, 0.0, 0.0));
+            gCollisionPlanes.push(topPlane);
+            gCollisionPlanes.push(rightPlane);
+            gCollisionPlanes.push(leftPlane);
+            gCollisionPlanes.push(bottomPlane);
+          }
+
+          function constructFieldPlanes(scene)
+          {
+            //var fieldMaterial = new THREE.MeshBasicMaterial({color: 0x34cceb, side: THREE.DoubleSide});
+            var fieldMaterial = new THREE.MeshPhongMaterial({color: 0x34cceb, side: THREE.DoubleSide})
+            var topFieldPlane = new THREE.PlaneGeometry(10, 0.5);
+            var topPlane = new THREE.Mesh(topFieldPlane, fieldMaterial);
+            topPlane.translateY(3.0);
+            topPlane.rotateX(Math.PI/2.0);
+
+            bottomFieldPlane = new THREE.PlaneGeometry(10, 0.5);
+            var bottomPlane = new THREE.Mesh(bottomFieldPlane, fieldMaterial);
+            bottomPlane.translateY(-3.0);
+            bottomPlane.rotateX(Math.PI/2.0);
+            scene.add(bottomPlane);
+
+            var leftFieldPlane = new THREE.PlaneGeometry(6, 0.5);
+            var leftPlane = new THREE.Mesh(leftFieldPlane, fieldMaterial);
+            leftPlane.translateX(-5.0)
+            leftPlane.rotateZ(Math.PI/2.0);
+            leftPlane.rotateX(Math.PI/2.0);
+
+            var rightFieldPlane = new THREE.PlaneGeometry(6, 0.5);
+            var rightPlane = new THREE.Mesh(rightFieldPlane, fieldMaterial);
+            rightPlane.translateX(5.0);
+            rightPlane.rotateZ(Math.PI/2.0);
+            rightPlane.rotateX(Math.PI/2.0);
+
+            var floorMaterial = new THREE.MeshPhongMaterial({color: 0x525252, side: THREE.DoubleSide})
+            var floorFieldPlane = new THREE.PlaneGeometry(10, 6);
+            var floorPlane = new THREE.Mesh(floorFieldPlane, floorMaterial);
+            floorPlane.translateZ(-0.25);
+            scene.add(floorPlane);
+
+            //leftPlane.translateY(-5.0);
+            scene.add(rightPlane);
+            //leftPlane.rotateX(Math.PI/2.0);
+            //leftPlane.rotateZ(Math.PI/2.0);
+            //leftPlane.translateX(-5.0);l
+            //leftPlane.rotateZ(90);
+            scene.add(leftPlane);
+            //topPlane.translateY(20)
+            scene.add(topPlane);
+          }
+
+          //var infoDiv = document.getElementById("info");
+          function animate() {
+	           requestAnimationFrame( animate );
+             //cube.rotation.x += 0.01;
+             //cube.rotation.y += 0.01;
+             var cubePos = cube.position;
+             camera.updateMatrix();
+             camera.updateMatrixWorld();
+             var frustum = new THREE.Frustum();
+             frustum.setFromProjectionMatrix(new THREE.Matrix4().multiplyMatrices(camera.projectionMatrix, camera.matrixWorldInverse));
+
+             collisionSphere.center.x = cubePos.x;
+             collisionSphere.center.y = cubePos.y;
+             cube.translateX(gXVel);
+             cube.translateY(gYVel);
+
+             if(gCollisionPlanes[1].intersectsSphere(collisionSphere))
+             {
+               console.log("Sphere intersecting with right plane!");
+               while(gCollisionPlanes[1].intersectsSphere(collisionSphere))
+               {
+                 collisionSphere.center.x -= 0.01;
+               }
+               cube.position.x = collisionSphere.center.x;
+
+               gXVel = -gXVel;
+             }
+
+             if(gCollisionPlanes[2].intersectsSphere(collisionSphere))
+             {
+
+               while(gCollisionPlanes[2].intersectsSphere(collisionSphere))
+               {
+                 collisionSphere.center.x += 0.01;
+               }
+               cube.position.x = collisionSphere.center.x;
+
+               gXVel = -gXVel;
+
+               console.log("Sphere intersecting with left plane!");
+             }
+             //
+             //
+             // if(!collisionRightPlane.intersectsSphere(collisionSphere))
+             // {
+             //   //console.log("sphere collided with right plane!");
+             //   cube.translateX(0.01);
+             //   //negate it's x velocity.
+             // }else{
+             //   cube.position.x = 0.0;
+             // }
+             // var copySpherePose = new THREE.Vector3();
+             // copySpherePose.copy(cube.position);
+             // //console.log("unprojected x: "+copySpherePose.unproject(camera).x);
+
+
+
+	           renderer.render( scene, camera );
+            }
+            animate();
+
+            function getScreenBounds()
+            {
+              var maxBounds = new THREE.Vector3();
+              maxBounds.set(1.0, 1.0, -1.0);
+              var maxBoundsDistance = (camera.position.z) / maxBounds.z;
+
+              maxBounds.unproject(camera);
+              maxBounds.sub(camera.position).normalize();
+              var maxBoundsVec = new THREE.Vector3();
+              maxBoundsVec.copy(camera.position).add(maxBounds.multiplyScalar(maxBoundsDistance));
+
+              console.log("maxBounds.x: "+maxBoundsVec.x);
+              return maxBoundsVec;
+            }
+
+            window.addEventListener("mousemove", function(event) {
+              //console.log("mouse moved!");
+              var x = (event.clientX / window.innerWidth) * 2 - 1;
+              var y = - (event.clientY / window.innerHeight) * 2 + 1;
+              //console.log("original x: "+x);
+              var mouseVec = new THREE.Vector3();
+              mouseVec.set(x, y, 0.5);
+
+
+
+              mouseVec.unproject(camera);
+
+              mouseVec.sub(camera.position).normalize();
+
+              var distance = camera.position.z / mouseVec.z;
+
+              var posVec = new THREE.Vector3();
+
+              posVec.copy(camera.position).add(mouseVec.multiplyScalar(distance));
+              preMouseX = newMouseX;
+              preMouseY = newMouseY;
+              newMouseX = -posVec.x;
+              newMouseY = -posVec.y;
+
+              prevdX = dX;
+              prevdY = dY;
+              dX = newMouseX - preMouseX;
+              dY = newMouseY - preMouseY;
+              mouseVelocity.x = dX;
+              mouseVelocity.y = dY;
+
+
+              var multVel = mouseVelocity.multiplyScalar(5);
+              if(Math.abs(multVel.x) >= 0.1 && Math.abs(multVel.y) > 0.1)
+              {
+                mouseVelPoints[0].x = newMouseX;
+                mouseVelPoints[0].y = newMouseY;
+                mouseVelPoints[1].x = newMouseX + multVel.x;
+                mouseVelPoints[1].y = newMouseY + multVel.y;
+                //console.log("end x: "+multVel.x+", end y: "+multVel.y);
+                mouseVelGeometry.setFromPoints(mouseVelPoints);
+              }
+              mouseVelRaycaster.set(mouseVelPoints[0].normalize(), mouseVelPoints[1].normalize());
+
+              var intersects = mouseVelRaycaster.intersectObjects(scene.children);
+              if(intersects.length > 0)
+              {
+                for(var i = 0; i < intersects.length; i++)
+                {
+                  var intersected = intersects[i];
+                  var object = intersected.object;
+                  if(object.id == cube.id)
+                  {
+                    //this works
+                    console.log("ball was intersected!");
+                  }
+                }
+                //console.log("mouse velocity vector insersects "+intersects.length+" item(s). ");
+
+              }
+
+
+              //ray cast with mouse velocity, get face it intersects with, do math to transfer velocity.
+
+              //console.log("x: "+x+", y: "+y);
+              document.getElementById("info").innerHTML = "mouse: x: "+newMouseX.toFixed(3)+", y: "+newMouseY.toFixed(3);
+            })
+		  </script>
+    </body>
+
+</html>

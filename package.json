@@ -1,0 +1,12 @@
+{
+  "name": "a4-noah-parker",
+  "version": "v0.0.1",
+  "description": "nparker AT wpi.edu's submission for assignment a4",
+  "author": "Noah Parker",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
