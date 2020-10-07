@@ -1,0 +1,19 @@
+{
+  "name": "a4-jsong2333333",
+  "version": "1.0.0",
+  "description": "This is the final individual assigment of class CS4241",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "node-fetch": "^2.6.1",
+    "three": "latest",
+    "web-audio-beat-detector": "^8.0.28"
+  },
+  "devDependencies": {
+    "dat.gui": "^0.7.7",
+    "request": "^2.88.2"
+  }
+}

@@ -1,0 +1,30 @@
+#overlay{
+    align-content: center;
+    background-color: antiquewhite;
+    height: 100%;
+    width: 100%;
+}
+#startButton{
+    alignment: center;
+    background-color: darkolivegreen;
+    font-family: 'Cormorant', serif;
+    font-weight: 400;
+    font-size: 26px;
+    color: antiquewhite;
+    height: 40px;
+    width: 120px;
+}
+h2{
+    text-align: center;
+    font-family: 'Cormorant', serif;
+    font-weight: 400;
+    font-size: 28px;
+    color: darkolivegreen;
+}
+h1{
+    text-align: center;
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    font-size: 28px;
+    color: blueviolet;
+}
