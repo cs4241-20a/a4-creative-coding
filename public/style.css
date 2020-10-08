@@ -1,0 +1,5 @@
+/* this file is loaded by index.html and styles the page */
+#gameDiv{
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
