@@ -33,19 +33,28 @@
             var preMouseY = 0.0;
             var newMouseX = 0.0;
             var newMouseY = 0.0;
+            var mousePosVec = new THREE.Vector3();
             var mouseVelocity = new THREE.Vector3();
+
+            var bumperGeometry = new THREE.TorusGeometry(0.5, 0.2, 8, 12/*16, 100*/);
+            var bumperMaterial = new THREE.MeshPhongMaterial({color: 0x0000ff});
+            var bumper = new THREE.Mesh(bumperGeometry, bumperMaterial);
+            scene.add(bumper);
+            bumper.position.z = 0.0;
+
+            var currentRayMouseX = 0.0;
+            var currentRayMouseY = 0.0;
 
             var prevdX = 0.0;
             var prevdY = 0.0;
             var dX = 0.0;
             var dY = 0.0;
 
-            var collisionSphere = new THREE.Sphere(new THREE.Vector3(0.0, 0.0, 0.0), 0.5);
+            var collisionSphere = new THREE.Sphere(new THREE.Vector3(0.0, 0.0, 0.0), 0.2);
             //console.log("collisionSphere.center: "+collisionSphere.center);
             var collisionRightPlane = new THREE.Plane(new THREE.Vector3(-1.0, 0.0, 0.0));
             var collisionUnprojected = new THREE.Plane(new THREE.Vector3(-1.0, 0.0, 0.0));
             collisionUnprojected.translate(new THREE.Vector3(1.0, 0.0, 0.0));
-
 
             var maxXVector = new THREE.Vector3(1.0, 0.0, 0.0);
             var maxXValue = maxXVector.project(camera).x;
@@ -63,8 +72,14 @@
 
             var mouseVelLine = new THREE.Line(mouseVelGeometry, mouseVelMat);
 
-            var gXVel = 0.1;
-            var gYVel = 0.0;
+            var collisionMat = new THREE.LineBasicMaterial({color: 0xff0000});
+            var collisionPoints = [];
+            collisionPoints.push(new THREE.Vector3(0.0, 0.0, 0.0));
+            collisionPoints.push(new THREE.Vector3(0.0, 0.0, 0.0));
+            var collisionGeometry = new THREE.BufferGeometry();
+            var collisionLine = new THREE.Line(collisionGeometry, collisionMat);
+            collisionGeometry.setFromPoints(collisionPoints);
+            scene.add(collisionLine);
 
 
           var renderer = new THREE.WebGLRenderer();
@@ -72,6 +87,7 @@
           document.body.appendChild( renderer.domElement );
 
           var geometry = new THREE.SphereGeometry(radius=0.2);
+          geometry.computeFaceNormals();
 
           //var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
           var material = new THREE.MeshPhongMaterial( {color: 0x00ff00} )
@@ -170,22 +186,85 @@
             floorPlane.translateZ(-0.25);
             scene.add(floorPlane);
 
-            //leftPlane.translateY(-5.0);
             scene.add(rightPlane);
-            //leftPlane.rotateX(Math.PI/2.0);
-            //leftPlane.rotateZ(Math.PI/2.0);
-            //leftPlane.translateX(-5.0);l
-            //leftPlane.rotateZ(90);
             scene.add(leftPlane);
-            //topPlane.translateY(20)
             scene.add(topPlane);
           }
+
+          var ballRaycaster = new THREE.Raycaster();
 
           //var infoDiv = document.getElementById("info");
           function animate() {
 	           requestAnimationFrame( animate );
-             //cube.rotation.x += 0.01;
-             //cube.rotation.y += 0.01;
+             ballRaycaster.setFromCamera({x:currentRayMouseX, y:currentRayMouseY}, camera);
+
+             if(bumperGeometry.boundingSphere.intersectsSphere(collisionSphere))
+             {
+               console.log("bumper hit ball!");
+              if(mouseVelocity)
+              {
+                var bumperVel = new THREE.Vector3()
+                bumperVel.copy(mouseVelocity);
+
+                var tangentVector = new THREE.Vector3();
+                tangentVector.y = -(collisionSphere.center.x - bumper.position.x);
+                tangentVector.x = (collisionSphere.center.y - bumper.position.y);
+                tangentVector.normalize();
+
+                var relVelocity = new THREE.Vector3();
+                relVelocity.x = mouseVelocity.x - ballVelocity.x;
+                relVelocity.y = mouseVelocity.y - ballVelocity.y;
+                var length = relVelocity.dot(tangentVector);
+                var componentOnTangent = new THREE.Vector3();
+                componentOnTangent.copy(tangentVector);
+                componentOnTangent.multiplyScalar(length);
+                var componentOffTangent = new THREE.Vector3();
+                componentOffTangent.copy(relVelocity);
+                componentOffTangent.sub(componentOnTangent);
+                ballVelocity.x += componentOffTangent.x;
+                ballVelocity.y += componentOffTangent.y;
+
+
+              }
+
+             }
+            var mouseIntersecting = ballRaycaster.intersectObjects([cube]);
+
+             if(mouseIntersecting.length > 0)
+             {
+               //this works! now we have to figure out the richochet off the face... \n
+               var ballCollision = mouseIntersecting[0];
+               var collisionFace = ballCollision.face;
+               var faceNormal = collisionFace.normal;
+               var mouseVel = new THREE.Vector3();
+               mouseVel.copy(mouseVelocity);
+
+               var uVector = mouseVel.clone()
+               uVector.dot(faceNormal);
+
+               uVector.multiply(mouseVel);
+
+               var wVector = mouseVel.clone()
+               wVector.sub(uVector);
+
+               var vPrime = mouseVel.clone();
+               vPrime.sub(uVector);
+
+               if(mousePosVec)
+               {
+                 //console.log("collision vector updated.");
+                 collisionPoints[0].set(mousePosVec.x, mousePosVec.y, mousePosVec.z);
+                 collisionPoints[1].set(mousePosVec.x + vPrime.x, mousePosVec.y + vPrime.y, mousePosVec.z + vPrime.z);
+                 console.log("start: ("+collisionPoints[0].x+", "+collisionPoints[0].y+", "+collisionPoints[0].z+")");
+                 console.log("end: ("+collisionPoints[1].x+", "+collisionPoints[1].y+", "+collisionPoints[1].z+")");
+                 collisionGeometry.setFromPoints(collisionPoints);
+               }else{
+                 console.log("mousePosVec is null!");
+               }
+
+
+             }
+
              var cubePos = cube.position;
              camera.updateMatrix();
              camera.updateMatrixWorld();
@@ -194,8 +273,31 @@
 
              collisionSphere.center.x = cubePos.x;
              collisionSphere.center.y = cubePos.y;
-             cube.translateX(gXVel);
-             cube.translateY(gYVel);
+             cube.translateX(ballVelocity.x);
+             cube.translateY(ballVelocity.y);
+
+             //top plane
+              if(gCollisionPlanes[0].intersectsSphere(collisionSphere))
+              {
+                while(gCollisionPlanes[0].intersectsSphere(collisionSphere))
+                {
+                  collisionSphere.center.y -= 0.01;
+                }
+                cube.position.y = collisionSphere.center.y;
+
+                ballVelocity.y = -ballVelocity.y;
+              }
+
+              if(gCollisionPlanes[3].intersectsSphere(collisionSphere))
+              {
+                while(gCollisionPlanes[3].intersectsSphere(collisionSphere))
+                {
+                  collisionSphere.center.y += 0.01;
+                }
+                cube.position.y = collisionSphere.center.y;
+
+                ballVelocity.y = -ballVelocity.y;
+              }
 
              if(gCollisionPlanes[1].intersectsSphere(collisionSphere))
              {
@@ -206,7 +308,7 @@
                }
                cube.position.x = collisionSphere.center.x;
 
-               gXVel = -gXVel;
+               ballVelocity.x = -ballVelocity.x;
              }
 
              if(gCollisionPlanes[2].intersectsSphere(collisionSphere))
@@ -218,23 +320,11 @@
                }
                cube.position.x = collisionSphere.center.x;
 
-               gXVel = -gXVel;
+               ballVelocity.x = -ballVelocity.x;
 
                console.log("Sphere intersecting with left plane!");
              }
-             //
-             //
-             // if(!collisionRightPlane.intersectsSphere(collisionSphere))
-             // {
-             //   //console.log("sphere collided with right plane!");
-             //   cube.translateX(0.01);
-             //   //negate it's x velocity.
-             // }else{
-             //   cube.position.x = 0.0;
-             // }
-             // var copySpherePose = new THREE.Vector3();
-             // copySpherePose.copy(cube.position);
-             // //console.log("unprojected x: "+copySpherePose.unproject(camera).x);
+
 
 
 
@@ -261,11 +351,11 @@
               //console.log("mouse moved!");
               var x = (event.clientX / window.innerWidth) * 2 - 1;
               var y = - (event.clientY / window.innerHeight) * 2 + 1;
+              currentRayMouseX = x;
+              currentRayMouseY = y;
               //console.log("original x: "+x);
               var mouseVec = new THREE.Vector3();
-              mouseVec.set(x, y, 0.5);
-
-
+              mouseVec.set(x, y, 0.75);
 
               mouseVec.unproject(camera);
 
@@ -276,10 +366,16 @@
               var posVec = new THREE.Vector3();
 
               posVec.copy(camera.position).add(mouseVec.multiplyScalar(distance));
+              mousePosVec.set(posVec.x, posVec.y, posVec.z);
               preMouseX = newMouseX;
               preMouseY = newMouseY;
               newMouseX = -posVec.x;
               newMouseY = -posVec.y;
+
+              bumper.position.x = newMouseX;
+              bumper.position.y = newMouseY;
+              bumperGeometry.boundingSphere.center.x = newMouseX;
+              bumperGeometry.boundingSphere.center.y = newMouseY;
 
               prevdX = dX;
               prevdY = dY;
