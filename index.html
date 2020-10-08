@@ -287,8 +287,74 @@
             }
         }
 
-        function onDraw()
+        function onDraw() {
+            if (init == false) return;
+
+            context.strokeStyle = "#000";
+            context.lineWidth = 1;
+            context.strokeRect(0, 0, myCanv.width - 1, myCanv.height - 1);
+            context.fillStyle = "#fcfcfc";
+            context.fillRect(1, 1, myCanv - 2, myCanv.height - 2);
+            context.drawImage(bgImage, 0, 0);
+
+            //marking blocks
+            for (i = 0; i < 20; i++) {
+                for (j = 0; j < 10; j++) {
+                    if (tetrisbox[i][j] == 0) {
+                        context.fillStyle = "#999";
+                        isblock = 1;
+                    }
+                    else {
+                        isblock = tetrisbox[i][j] - 1;
+                    }
+
+                    var size = tetrisblock_this.length;
+                    for (k = 0; k < size; k += 2) {
+                        if (tetrisblock_y + tetrisblock_this[k] == i && tetrisblock_x + tetrisblock_this[k+1] == j) {
+                            isblock = tetrisblock_num;
+                            break;
+                        }
+                    }
+                    x = tetrisbox_left + j * tetrisbox_size;
+                    y = tetrisbox_top + i * tetrisbox_size;
+
+                    if (isblock == 1) {
+                        context.fillRect(x, y, tetrisbox_size-1, tetrisbox_size - 1);
+                    }
+                    else
+                        context.drawImage(blockImage[isblock], x, y)
+                }
+            }
+            context.font = "bold 30px";
+            context.fillStyle = "#eee";
+            context.strokeStyle = "#fff";
+            context.fillStyle = "blue";
+
+            context.fillText("Score " + score, 50, 90);
+            context.strokeText("Score " + score, 50, 90);
+
+            context.fillText("Score " + level, 50, 90);
+            context.strokeText("Score " + score, 50, 90);
+
+            if (mode == mode_gameover) {
+                context.fillStyle = "red";
+                context.fillText("GAME_OVER", tetrisbox_left + 40, tetrisbox_top + 250);
+            }
+        }
+
+        $(document).ready(function (){
+            Init();
+            runevent = setInterval(run, runtime);
+        });
+
+        $(document).ready(function () {
+            onkeydown(event);
+        });
 
     </script>
+    <canvas id="MyCanvas" width="800" height="600">
+        Canvas not supported
+    </canvas>
+    <span id="debug"></span>
 </body>
 </html>
