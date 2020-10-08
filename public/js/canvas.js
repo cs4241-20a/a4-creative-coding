@@ -1,12 +1,12 @@
 var context;
 
-//Check for the canvas tag onload.
+// Check for the canvas tag onload.
 if (window.addEventListener) {
   window.addEventListener(
     "load",
     function() {
       var canvas, canvaso, contexto;
-
+      
       // Default tool. (chalk, line, rectangle)
       var tool;
       var tool_default = "chalk";
@@ -152,8 +152,8 @@ if (window.addEventListener) {
         };
       };
 
-      // The rectangle tool.
-      tools.rect = function() {
+      // The line tool.
+      tools.line = function() {
         var tool = this;
         this.started = false;
         this.mousedown = function(ev) {
@@ -165,19 +165,15 @@ if (window.addEventListener) {
           if (!tool.started) {
             return;
           }
-          // This creates a rectangle on the canvas.
-          var x = Math.min(ev._x, tool.x0),
-            y = Math.min(ev._y, tool.y0),
-            w = Math.abs(ev._x - tool.x0),
-            h = Math.abs(ev._y - tool.y0);
-          context.clearRect(0, 0, canvas.width, canvas.height); // Clears the rectangle onload.
-
-          if (!w || !h) {
-            return;
-          }
-          context.strokeRect(x, y, w, h);
+          context.clearRect(0, 0, canvas.width, canvas.height);
+          // Begin the line.
+          context.beginPath();
+          context.moveTo(tool.x0, tool.y0);
+          context.lineTo(ev._x, ev._y);
+          context.stroke();
+          context.closePath();
         };
-        // Now when you select the rectangle tool, you can draw rectangles.
+        // Now you can draw lines when the line tool is seletcted.
         this.mouseup = function(ev) {
           if (tool.started) {
             tool.mousemove(ev);
