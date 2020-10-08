@@ -27,10 +27,17 @@
             <p id="party">Party:</p>
             <p id="years">Years in Office:</p>
             <button onclick="toggle()">Switch between House/Senate</button>
+            <button onclick="instructions()">Instructions</button>
         </div>
         <div id="graph"></div>
 
         <script>
+            function instructions() {
+                window.confirm(
+                    'Instructions:\nTo switch between the Senate and House click on the "Switch between House/Senate" button.\nIt might take a few seconds to load the first time you click it. \n\nHovering your mouse over each bubble will update the text box in the top left hand corner with information about that person.'
+                );
+            }
+
             width = window.innerWidth;
             height = window.innerHeight - 100;
 
