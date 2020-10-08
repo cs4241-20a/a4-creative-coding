@@ -2,11 +2,73 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <link rel="stylesheet" href="/style.css">
+    <title>Nobel Prize Laureates Visualization</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
 <body>
+<h1>Nobel Prize Laureates</h1>
+<div class="container">
+    <h3>Gender differences</h3>
+    <div class="row">
+        <div id="genderRatio" class="col-lg">
+            <div id="genderBar"></div>
+            <input type="range" class="form-control-range" step=1 min="1900" max="2019" id="yearGenderSlider" step="20" list="steplist">
+            <datalist id="steplist">
+                <option>1900</option>
+                <option>1950</option>
+                <option>2000</option>
+                <option>1910</option>
+            </datalist>
+        </div>
+        <div class="col-sm" id="genderText">
+            Out of 919 laureates only 53 were women.
+        </div>
+    </div>
+    <hr>
+    <h3>Age of Laureates</h3>
+    <div class="row">
 
+        <div id="ageCol" class="col-8">
+            <div id="ageChart"></div>
+
+        </div>
+        <div class="col-4" id="ageText">
+            <div class="form-check">
+                <div class="catCheck"><input type="checkbox" class="form-check-input" id="chemCheck" checked>
+                    <label class="form-check-label" style="background-color: rgba(69, 179, 162, 0.4)"  for="chemCheck">Chemistry</label></div>
+                <div class="catCheck"><input type="checkbox" class="form-check-input" id="ecoCheck" checked>
+                    <label class="form-check-label" style="background-color: rgba(179, 83, 148, 0.4)" for="ecoCheck">Economic Sciences</label></div>
+                <div class="catCheck"><input type="checkbox" class="form-check-input" id="phyCheck" checked>
+                    <label class="form-check-label" style="background-color: rgba(21, 120, 179, 0.4)" for="phyCheck">Physics</label></div>
+                <div class="catCheck"><input type="checkbox" class="form-check-input" id="litCheck" checked>
+                    <label class="form-check-label" style="background-color: rgba(179, 113, 17, 0.4)" for="litCheck">Literature</label></div>
+                <div class="catCheck"><input type="checkbox" class="form-check-input" id="medCheck" checked>
+                    <label class="form-check-label" style="background-color: rgba(179, 69, 74, 0.4)" for="medCheck">Physiology or Medicine</label></div>
+                <div class="catCheck"><input type="checkbox" class="form-check-input" id="peaceCheck" checked>
+                    <label class="form-check-label" style="background-color: rgba(68, 179, 70, 0.4)" for="peaceCheck">Peace</label></div>
+                <br>
+                <div class="catCheck"><input type="checkbox" class="form-check-input" id="femaleCheck" checked>
+                    <label class="form-check-label"  for="femaleCheck">Highlight female laureates</label></div>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+    <h3>Country of Birth of Laureates</h3>
+    <h4 style= "text-align:center">Year 2019</h4>
+    <div class="row">
+        <div id="countryCol" class="col">
+            <div id="mapChart"></div>
+            <input type="range" class="form-control-range" step=1 min="1900" max="2019" id="yearMapSlider" step="20" >
+
+        </div>
+        </div>
+    </div>
+</div>
 </body>
+<script src="https://d3js.org/d3.v4.js"></script>
+<script src="https://unpkg.com/topojson-client@3"></script>
 <script src="/scripts.js"></script>
-<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 </html>
