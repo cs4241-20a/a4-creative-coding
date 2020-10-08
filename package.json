@@ -1,0 +1,16 @@
+{
+  "name": "SLPaint",
+  "version": "0.0.1",
+  "description": "A simple painter web app.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "engines": {
+    "node": "12.x"
+  },
+  "license": "MIT"
+}
