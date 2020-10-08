@@ -5,9 +5,15 @@ const TOTAL_COLUMNS = TOTAL_ROWS;
 const SHOW_GRID = true; //TODO Add a button for this
 
 function main() {
+    let gridOn = true;
 
-    // Hook up buttons
-    document.getElementById("stepButton").onclick = startSimulation;
+    // Hook up inputs
+    document.getElementById("stepButton").onclick = toggleSimulation;
+    document.getElementById("gridButton").onclick = toggleGrid;
+    document.getElementById("clearButton").onclick = clearCanvas;
+    document.getElementById("rRange").oninput = updateColors;
+    document.getElementById("gRange").oninput = updateColors;
+    document.getElementById("bRange").oninput = updateColors;
 
     // Initialize canvas
     const canvas = document.getElementById('boardDisplay');
@@ -25,8 +31,18 @@ function main() {
     let ctx = canvas.getContext('2d');
     redrawBoardDisplay(boardArray);
 
-    // On click color selection
-    canvas.addEventListener("click", (event) => {
+
+    let paint = false
+    canvas.addEventListener("mousedown", (event) => paint = true);
+    canvas.addEventListener("mouseup", (event) => paint = false);
+    canvas.addEventListener("mousemove", highlightMouseTile);
+    canvas.addEventListener("click", highlightMouseTile);
+
+
+    function highlightMouseTile(event) {
+        if (!paint && event.type !== "click") {
+            return;
+        }
         let rect = canvas.getBoundingClientRect();
 
         let mouseX = Math.floor(event.clientX - rect.left);
@@ -34,7 +50,7 @@ function main() {
 
         boardArray[Math.floor(mouseX / CELL_PIXEL_SIZE)][Math.floor(mouseY / CELL_PIXEL_SIZE)] = 1;
         redrawBoardDisplay(boardArray);
-    })
+    }
 
     // update display with array for next cycle
     function redrawBoardDisplay(updatedArray) {
@@ -46,12 +62,18 @@ function main() {
             for (let c = 0; c < TOTAL_ROWS; c++) {
 
                 if (updatedArray[r][c] === 1) {
-                    ctx.fillStyle = "#b533cc";
+
+                    // get selected color value
+                    let rVal = document.getElementById("rRange").value;
+                    let gVal = document.getElementById("gRange").value;
+                    let bVal = document.getElementById("bRange").value;
+
+                    ctx.fillStyle = `rgb(${rVal},${gVal},${bVal})`;
                     ctx.fillRect((r * CELL_PIXEL_SIZE), (c * CELL_PIXEL_SIZE), CELL_PIXEL_SIZE, CELL_PIXEL_SIZE);
                 }
 
                 // Draw grid
-                if (SHOW_GRID) {
+                if (gridOn) {
                     ctx.strokeStyle = "#ababab";
                     ctx.strokeRect((r * CELL_PIXEL_SIZE), (c * CELL_PIXEL_SIZE), CELL_PIXEL_SIZE, CELL_PIXEL_SIZE);
                 }
@@ -59,10 +81,53 @@ function main() {
         }
     }
 
+
     // Starts the simulation based on what exists in the canvas
-    function startSimulation(e) {
+    let interval = null;
+    function toggleSimulation(e) {
         e.preventDefault();
-        setInterval(runGeneration, 500);
+
+        let icon = document.getElementById("stepIcon");
+        if (interval === null) {
+            interval = setInterval(runGeneration, 100);
+            icon.classList.replace("fa-play", "fa-pause");
+        }
+        else {
+            clearInterval(interval);
+            icon.classList.replace("fa-pause", "fa-play");
+            interval = null;
+        }
+    }
+
+    function toggleGrid(e) {
+        e.preventDefault();
+
+        let icon = document.getElementById("gridIcon");
+        if (gridOn) {
+            gridOn = false;
+            redrawBoardDisplay(boardArray);
+            icon.classList.replace("fa-border-all", "fa-border-none");
+        }
+        else {
+            gridOn = true;
+            redrawBoardDisplay(boardArray);
+            icon.classList.replace("fa-border-none", "fa-border-all");
+        }
+    }
+
+    function clearCanvas(e) {
+        e.preventDefault();
+
+        // Initialize new array with Zeroes
+        let clearedArray = Array(TOTAL_ROWS).fill(0).map(() => Array(TOTAL_ROWS).fill(0));
+        boardArray = clearedArray;
+        redrawBoardDisplay(boardArray);
+    }
+
+
+    function updateColors(e) {
+        e.preventDefault();
+        redrawBoardDisplay(boardArray);
     }
 
     // execute one cycle of the simulation

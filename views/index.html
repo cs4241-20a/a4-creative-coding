@@ -1,16 +1,31 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="utf-8"/>
     <title>Game of Life</title>
     <link rel="stylesheet" href="/style.css">
-    <script src="/main.js"></script>
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+
+    <script src="/main.js"></script>
+    <script src="https://kit.fontawesome.com/0af12b5bbc.js" crossorigin="anonymous"></script>
 </head>
 
 <body onload="main()">
-    <button id="stepButton">Step</button>
+    <button id="stepButton"><i id="stepIcon" class="fas fa-play"></i></button>
+    <button id="gridButton"><i id="gridIcon" class="fas fa-border-all"></i></button>
+    <button id="clearButton"><i class="fas fa-times"></i></button>
+
     <canvas id="boardDisplay" width="640" height="640">Canvas is not supported by this browser!</canvas>
+    <form>
+        <label for="rRange">R</label>
+        <input type="range" min="0" max="255" id="rRange">
+
+        <label for="gRange">G</label>
+        <input type="range" min="0" max="255" id="gRange">
+
+        <label for="bRange">B</label>
+        <input type="range" min="0" max="255" id="bRange">
+    </form>
 </body>
 </html>
