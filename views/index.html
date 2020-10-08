@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Poppins:wght@300&display=swap"
+      rel="stylesheet"
+    />
+
+    <title>SLPaint - Home</title>
+
+    <script type="text/javascript" src="js/canvas.js" defer></script>
+  </head>
+
+  <body>
+    <article>
+      <h1>
+        Welcome to SLPaint!
+      </h1>
+      <p>
+        To change your colors, click on the boxes at the bottom of the canvas.
+        To increase or decrease font size, click on the stroke options at the
+        bottom left of the canvas. To erase, click the pink box at the bottom
+        right. To clear the canvas, click the symbol at the top right of the
+        canvas. To switch between tools, click the dropdown at the top left and select either line, rectangle, or chalk.
+      </p>
+    </article>
+    <!-- Wrapper Begins -->
+    <div id="wrapper">
+      <!-- Clear Canvas Button -->
+      <div id="nuke" title="Clear Canvas">
+        <a href="javascript:location.reload(true)">
+          <img
+            src="https://cdn.glitch.com/c4753541-b45b-4878-bea7-c11378f8ddde%2FRefresh_Reset_Reload_Again_Restart-512.webp?v=1602170153975"
+            alt="Clear Canvas"
+            width="32"
+            height="32"
+          />
+        </a>
+      </div>
+      <div id="blackboardPlaceholder">
+        <p>
+          <!-- Tool Selector -->
+          <select name="selector" id="selector">
+            <option value="chalk">Chalk</option>
+            <option value="line">Line</option>
+            <option value="rect">Rectangle</option>
+          </select>
+        </p>
+
+        <!-- canvas begins -->
+        <canvas id="drawingCanvas" height="532" width="897">
+          <p class="noscript">
+            Make sure your JavaScript is enabled.This web application is
+            currently not supported with your browser. Please use an alternate
+            browser or download a supported browser.
+            <br />
+            Supported browsers:
+            <a href="http://www.google.com/chrome">Google Chrome</a>,
+            <a href="http://www.opera.com">Opera</a>,
+            <a href="http://www.mozilla.com">Firefox</a>,
+            <a href="http://www.apple.com/safari">Safari</a>, <br />and
+            <a href="http://www.konqueror.org">Konqueror</a>.
+          </p>
+        </canvas>
+
+        <!-- Chalk Pieces -->
+        <div id="chalkContainer">
+          <div
+            id="whiteChalk_button"
+            class="chalk"
+            style="background-color: #FFFFFF"
+            onclick="context.strokeStyle = '#FFFFFF';"
+          ></div>
+          <div
+            id="redChalk_button"
+            class="chalk"
+            style="background-color: #F00000"
+            onclick="context.strokeStyle = '#F00000';"
+          ></div>
+          <div
+            id="orangeChalk_button"
+            class="chalk"
+            style="background-color: #ff9600"
+            onclick="context.strokeStyle = '#ff9600';"
+          ></div>
+          <div
+            id="yellowChalk_button"
+            class="chalk"
+            style="background-color: #fff600"
+            onclick="context.strokeStyle = '#fff600';"
+          ></div>
+          <div
+            id="greenChalk_button"
+            class="chalk"
+            style="background-color: #48ff00"
+            onclick="context.strokeStyle = '#48ff00';"
+          ></div>
+          <div
+            id="blueChalk_button"
+            class="chalk"
+            style="background-color: #001eff"
+            onclick="context.strokeStyle = '#001eff';"
+          ></div>
+          <div id="pinkChalk_button">
+            <span
+              class="chalk"
+              style="background-color: #ff00d2"
+              onclick="context.strokeStyle = '#ff00d2';"
+            >
+            </span>
+          </div>
+          <!-- Eraser -->
+          <div
+            id="eraser"
+            onclick="context.strokeStyle = '#424242'; context.lineWidth = '22';"
+          ></div>
+        </div>
+      </div>
+
+      <div id="strokeContainer">
+        <!-- stroke options -->
+        <span
+          id="stroke-subtract"
+          title="Decrease Stroke"
+          onclick="context.lineWidth--;"
+        >
+          -
+        </span>
+        <span
+          id="stroke-add"
+          title="Increase Stroke"
+          onclick="context.lineWidth++;"
+        >
+          +
+        </span>
+
+        <!-- Stroke Weight Panel -->
+        <div id="strokeWeight">
+          <span
+            class="stroke"
+            width="30"
+            height="32"
+            onclick="context.lineWidth = '1.0';"
+          >
+            1.0
+          </span>
+          <span
+            class="stroke"
+            width="30"
+            height="32"
+            onclick="context.lineWidth = '6.0';"
+          >
+            6.0
+          </span>
+          <span
+            class="stroke"
+            width="30"
+            height="32"
+            onclick="context.lineWidth = '9.0';"
+          >
+            9.0
+          </span>
+
+          <span
+            class="stroke"
+            width="30"
+            height="32"
+            onclick="context.lineWidth = '13.0';"
+          >
+            13.0
+          </span>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
