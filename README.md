@@ -23,4 +23,4 @@ from Processing to p5.js.
 - I implemented color selectors for the background and geometry, allowing users to customize the scene to their liking with over 1.6 million available colors for each feature.
 
 ## Images
-![](images/1.PNG?raw=true)
+![](img/1.PNG?raw=true)
