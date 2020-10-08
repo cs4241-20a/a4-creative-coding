@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>CS4241 Assignment 4</title>
+        <meta charset="utf-8" />
+        <!-- <link rel="stylesheet" href="css/style.css" /> -->
+        <!-- https://www.govtrack.us/api/v2/role?current=true&role_type=senator -->
+        <link
+            href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap"
+            rel="stylesheet"
+        />
+        <script src="//d3js.org/d3.v5.min.js"></script>
+        <style>
+            #data {
+                height: 100px;
+                width: 200px;
+                background-color: powderblue;
+            }
+            p {
+                margin: 0 0 0 0;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="data">
+            <p id="name">Name:</p>
+            <p id="party">Party:</p>
+            <p id="years">Years in Office:</p>
+            <button onclick="toggle()">Switch between House/Senate</button>
+            <button onclick="instructions()">Instructions</button>
+        </div>
+        <div id="graph"></div>
+
+        <script>
+            function instructions() {
+                window.confirm(
+                    'Instructions:\nTo switch between the Senate and House click on the "Switch between House/Senate" button.\nIt might take a few seconds to load the first time you click it. \n\nHovering your mouse over each bubble will update the text box in the top left hand corner with information about that person.'
+                );
+            }
+
+            width = window.innerWidth;
+            height = window.innerHeight - 100;
+
+            var svg = d3
+                .select("#graph")
+                .append("svg")
+                .attr("width", width)
+                .attr("height", height)
+                .attr("class", "bubble");
+
+            house = [];
+            senate = [];
+
+            Promise.all([
+                d3.json(
+                    "https://raw.githubusercontent.com/CivilServiceUSA/us-senate/master/us-senate/data/us-senate.json"
+                ),
+                d3.json(
+                    "https://raw.githubusercontent.com/CivilServiceUSA/us-house/master/us-house/data/us-house.json"
+                ),
+            ]).then(function (data) {
+                console.log(data);
+                senate = parseData(data[0]);
+                house = parseData(data[1]);
+                draw(senate);
+            });
+
+            congress = 0;
+            function toggle() {
+                congress = 1 - congress;
+                svg.selectAll("*").remove();
+
+                if (congress) {
+                    draw(senate);
+                } else {
+                    draw(house);
+                }
+            }
+
+            function parseData(data) {
+                return data.map((element) => {
+                    start = new Date(element.entered_office);
+                    today = new Date();
+
+                    diff = Math.round(
+                        (today - start) / (1000 * 60 * 60 * 24 * 356)
+                    );
+
+                    return {
+                        name: element.name,
+                        party:
+                            element.party[0].toUpperCase() +
+                            element.party.substr(1),
+                        years: diff,
+                        website: element.website,
+                        photo_url: element.photo_url,
+                    };
+                });
+            }
+
+            function draw(data) {
+                console.log("test");
+                var bubble = d3.pack(data).size([width, height]).padding(1.5);
+
+                var nodes = d3.hierarchy({ children: data }).sum(function (d) {
+                    return d.years;
+                });
+
+                var node = svg
+                    .selectAll(".node")
+                    .data(bubble(nodes).descendants())
+                    .enter()
+                    .filter(function (d) {
+                        return !d.children;
+                    })
+                    .append("g")
+                    .attr("class", "node")
+                    .attr("transform", function (d) {
+                        return "translate(" + d.x + "," + d.y + ")";
+                    });
+
+                node.on("mouseover", function (d) {
+                    d3.select(this).classed("hover", true);
+                    d3.select(this).attr("opacity", 0.75);
+                    d3.select("#name").text("Name: " + d.data.name);
+                    d3.select("#party").text("Party: " + d.data.party);
+                    d3.select("#years").text(
+                        "Years in Office: " + d.data.years
+                    );
+                })
+                    .on("mouseout", function (d) {
+                        d3.select(this).classed("hover", false);
+                        d3.select(this).attr("opacity", 1);
+                        d3.select("#name").text("Name:");
+                        d3.select("#party").text("Party:");
+                        d3.select("#years").text("Years in Office:");
+                    })
+                    .on("click", function (d) {
+                        window.open(d.data.website, "_blank");
+                    });
+
+                node.append("title").text(function (d) {
+                    return d.data.name + ": " + d.data.party;
+                });
+
+                node.append("svg:pattern")
+                    .attr("id", (d) => d.data.photo_url)
+                    .attr("height", (d) => 2 * d.r)
+                    .attr("width", (d) => 2 * d.r)
+                    .attr("patternUnits", "userSpaceOnUse")
+                    .append("svg:image")
+                    .attr("xlink:href", (d) => d.data.photo_url)
+                    .attr("height", (d) => 2 * d.r)
+                    .attr("width", (d) => 2 * d.r)
+                    .attr("x", 0)
+                    .attr("y", 0);
+                // node.append("circle").attr("r", function (d) {
+                //     return d.r;
+                // });
+
+                node.append("circle")
+                    .attr(
+                        "transform",
+                        (d) => "translate(" + -d.r + "," + -d.r + ")"
+                    )
+                    .attr("cx", (d) => d.r)
+                    .attr("cy", (d) => d.r)
+                    .attr("r", (d) => d.r)
+                    .style("fill", "#fff")
+                    .style("fill", (d) => "url(#" + d.data.photo_url + ")");
+
+                node.append("circle")
+                    .attr("r", (d) => d.r)
+                    .style("fill", function (d, i) {
+                        if (d.data.party === "Independent") return "grey";
+                        return d.data.party === "Republican" ? "red" : "blue";
+                    })
+                    .style("opacity", 0.5);
+
+                node.append("text")
+                    .attr("dy", "1.1em")
+                    .style("text-anchor", "middle")
+                    .text(function (d) {
+                        return d.data.years;
+                    })
+                    .attr("font-family", "Gill Sans", "Gill Sans MT")
+                    .attr("font-size", function (d) {
+                        return d.r / 1.2;
+                    })
+                    .attr("fill", "white");
+            }
+        </script>
+    </body>
+</html>
