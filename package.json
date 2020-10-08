@@ -1,0 +1,12 @@
+{
+  "name": "A4-Creative-Coding-WBY",
+  "version": "1.0.0",
+  "description": "Music Maker",
+  "author": "William Yang",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
