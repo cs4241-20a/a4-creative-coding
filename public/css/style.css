@@ -7,7 +7,7 @@ body {
 .interfacePanel {
     display: inline-block;
     width: 60vw;
-    height: 325px;
+    height: 350px;
     overflow-x: auto;
     overflow-y: hidden;
   }

@@ -10,9 +10,23 @@ const notes = {
     6: 440, //A4
     7: 392 //G4
 };
+const keys = {
+    0: "G5",
+    1: "F#5",
+    2: "E5",
+    3: "D5",
+    4: "C5",
+    5: "B4",
+    6: "A4",
+    7: "G4"
+}
 const context = new AudioContext();
 var gain = .25;
 var decayRate = .5; //speed in seconds
+var multiButton;
+var trackerPanel;
+var play;
+var playing;
 
 function makeChord(row, col, val) { 
     /*Adds/removes (depending on val) the corresponding note (gained from row) to the corresponding chord (gained from col)
@@ -57,15 +71,27 @@ function playChord(col) {
     })
 }
 
+function stopPlaying() {
+    playing = false;
+    clearInterval(play);
+    for (var i = 0; i < 16; i++) {
+        trackerPanel.setValue(0, i, 0);
+    }
+}
+
 // THINGS THAT RUN ON START
 !function() {
     var a = new Interface.Panel({  background:"#000", container:document.querySelector("#notePanel") });            
-    var multiButton = new Interface.MultiButton({ 
+    multiButton = new Interface.MultiButton({ 
     rows:8,
     columns:16,
-    bounds:[.05,.05,.9,.8],
+    bounds:[.05,.05,.9,.75],
     onvaluechange : function(row, col, value) {
-        multiButtonLabel.setValue( 'row : ' + row + ' , col : ' + col + ' , val : ' + value);
+        if(value == 1) {
+            multiButtonLabel.setValue( "Note : " + keys[row]);
+        } else {
+            multiButtonLabel.setValue( "Note : ");
+        }
         makeChord(row, col, value);
     },
     background: 'white',
@@ -73,8 +99,20 @@ function playChord(col) {
     fill: 'yellow'
     });
 
+    trackerPanel = new Interface.MultiButton({
+        rows:1,
+        columns:16,
+        bounds:[.05,.90,.9,.05],
+        onvaluechange : function(row, col, value) {
+            trackerPanel.setValue(row, col, 0);
+        },
+        background: 'white',
+        stroke: 'black',
+        fill: 'red'
+    });
+
     var multiButtonLabel = new Interface.Label({ 
-    bounds:[.05,.9, .9, .1],
+    bounds:[.05,.82,.875,.05],
     hAlign:"left",
     value: "Note :",
     });
@@ -85,19 +123,24 @@ function playChord(col) {
     multiButton._values[i] = Math.random() > .5 ;
     }
 
-    a.add(multiButton, multiButtonLabel);
+    a.add(multiButton, trackerPanel, multiButtonLabel);
+    //a.add(multiButton, multiButtonLabel);
 }()
 
 window.onload = function() {
-    var play;
-    var playing = false;
+    play;
+    playing = false;
     const startButton = document.getElementById("startButton");
     startButton.onclick = function() {
         if(!playing) {
             playing = true;
             var count = 0;
+            var prevCount = 16;
             play = setInterval(function() {
+                trackerPanel.setValue(0, count, 1);
+                trackerPanel.setValue(0, prevCount, 0);
                 playChord(count);
+                prevCount = count;
                 count++;
                 if(count >= 16) {
                     count = 0;
@@ -106,11 +149,31 @@ window.onload = function() {
             }, decayRate*1000)
         }
     }
-        
     
     const stopButton = document.getElementById("stopButton");
     stopButton.onclick = function() {
-        playing = false;
-        clearInterval(play);
+        stopPlaying(playing, play);
+    }
+
+    const clearButton = document.getElementById("clearButton");
+    clearButton.onclick = function() {
+        for(var col = 0; col < 16; col++) {
+            for(var row = 0; row < 8; row++) {
+                multiButton.setValue(row, col, 0);
+            }
+            toPlayArray[col] = [];
+        }
+        stopPlaying(playing, play);
+    }
+
+    const speedInput = document.getElementById("speedInput");
+    speedInput.onchange = function() {
+        decayRate = 1/speedInput.value;
+        stopPlaying(playing, play);
+    }
+
+    const gainInput = document.getElementById("gainInput");
+    gainInput.onchange = function() {
+        gain = gainInput.value;
     }
 }
