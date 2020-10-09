@@ -3,11 +3,19 @@ import {OrbitControls} from '/js/imports/OrbitControls.js';
 import {GUI} from '/js/imports/dat.gui.module.js'; 
 import {GLTFLoader} from '/js/imports/GLTFLoader.js';
 
-let scene, camera, renderer, controls, container;
+let scene, camera, renderer, controls, container, gui;
+let bishop, pawn, knight, rook, queen, king;
+let parentpieces, board = {};
+const squares = {'one': 43, 'two': 31.3, 'three': 18.5, 'four': 6, 'five': -6.5, 'six': -18.5, 'seven': -31.5, 'eight': -44};
+const startingPos = {
+	wr1: {x: squares.one, z: squares.one}, wb1: {x: squares.one, z: squares.two}, wn1: {x: squares.one, z: squares.three}, wq: {x: squares.one, z: squares.four}, wk: {x: squares.one, z: squares.five}, wn2: {x: squares.one, z: squares.six}, wb2: {x: squares.one, z: squares.seven}, wr2: {x: squares.one, z: squares.eight}, 
 
-let pawn, rook, knight, bishop, queen, king;
+	w1: {x: squares.two, z: squares.one}, w2: {x: squares.two, z: squares.two}, w3: {x: squares.two, z: squares.three}, w4: {x: squares.two, z: squares.four}, w5: {x: squares.two, z: squares.five}, w6: {x: squares.two, z: squares.six}, w7: {x: squares.two, z: squares.seven}, w8: {x: squares.two, z: squares.eight},
 
+	br1: {x: squares.eight, z: squares.one}, bb1: {x: squares.eight, z: squares.two}, bn1: {x: squares.eight, z: squares.three}, bq: {x: squares.eight, z: squares.four}, bk: {x: squares.eight, z: squares.five}, bn2: {x: squares.eight, z: squares.six}, bb2: {x: squares.eight, z: squares.seven}, br2: {x: squares.eight, z: squares.eight}, 
 
+	b1: {x: squares.seven, z: squares.one}, b2: {x: squares.seven, z: squares.two}, b3: {x: squares.seven, z: squares.three}, b4: {x: squares.seven, z: squares.four}, b5: {x: squares.seven, z: squares.five}, b6: {x: squares.seven, z: squares.six}, b7: {x: squares.seven, z: squares.seven}, b8: {x: squares.seven, z: squares.eight}
+};
 
 window.onload = () => {
 	init();
@@ -18,26 +26,77 @@ window.onload = () => {
 const load3dPieces = () => {
 	let loader = new GLTFLoader();
 	loader.load('../assets/scene.gltf', (gltf) => {
-		// scene.add(pieces = gltf.scene);
-		console.log('opaisdhfa');
+
 		gltf.scene.traverse((obj) => {
-			if (obj.name === 'PrimaryWhiteBishop001'){
-				bishop = obj;
-			} else if (obj.name === 'PrimaryWhitePawn007'){
-				pawn = obj;
-			} else if (obj.name === 'WhiteKnight001'){
-				knight = obj;
-			} else if (obj.name === 'Rook001'){
-				rook = obj;
-			} else if (obj.name === 'WhiteQueen0'){
-				queen = obj;
-			} else if (obj.name === 'WhiteKing0'){
-				king = obj;
+			// if (!obj.isObject3D) return;
+  			// let prevMaterial = obj.material;
+			obj.material = new THREE.MeshPhongMaterial();
+			// THREE.MeshBasicMaterial.prototype.copy.call(obj.material, prevMaterial);
+			// console.log(obj);
+			switch(obj.name){
+				case 'PrimaryWhiteBishop001':
+					bishop = obj;
+					break;
+				case 'WhiteKnight001':
+					knight = obj;
+					break;
+				case 'PrimaryWhitePawn007':
+					pawn = obj;
+					break;
+				case 'Rook001':
+					rook = obj;
+					break;
+				case 'WhiteQueen':
+					queen = obj;
+					break;
+				case 'WhiteKing':
+					king = obj;
+					break;
+				default:
 			}
 		});
+		initBoard();
+	});
+}
 
+const initBoard = () => {
+	Object.entries(startingPos).forEach((val, ind) => {
+		let piece = val[0][1];
+		let clone;
+
+		switch(piece){
+			case 'r':
+				clone = rook.clone();
+				break;
+			
+			case 'b':
+				clone = bishop.clone();
+				break;
+			
+			case 'n':
+				clone = knight.clone();
+				break;
+			
+			case 'q':
+				clone = queen.clone();
+				break;
+			
+			case 'k':
+				clone = king.clone();
+				break;
+			default:
+				clone = pawn.clone();
+		}
+		console.log
+		// val[0][0] === 'b' ? clone.material.set('skyblue') : null;
+		clone.rotation.x = - Math.PI / 2;
+		clone.position.x = val[1].x
+		clone.position.z = val[1].z;
+		scene.add(clone);
 
 	});
+	// let clone = bishop.clone();
+
 }
 
 const init = () => {
@@ -48,7 +107,7 @@ const init = () => {
 	// scene.fog = new THREE.FogExp2(0xcccccc, 0.0002);
 
 	camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
-	camera.position.set(40, 20, 0);
+	camera.position.set(0, 80, 0);
 	container = document.getElementById( 'ThreeJS' );
 
 	renderer = new THREE.WebGLRenderer();
@@ -73,21 +132,6 @@ const init = () => {
 	// var light = new THREE.AmbientLight(0x222222);
 	// scene.add(light);
 
-	//Pyramids
-	// let geometry = new THREE.CylinderBufferGeometry(0, 10, 30, 4, 1);
-	// let material = new THREE.MeshPhongMaterial({ color: 0xffffff, flatShading: true });
-
-	// for (var i = 0; i < 500; i ++) {
-	// 	var mesh = new THREE.Mesh( geometry, material );
-	// 	mesh.position.x = Math.random() * 1600 - 800;
-	// 	mesh.position.y = 0;
-	// 	mesh.position.z = Math.random() * 1600 - 800;
-	// 	mesh.updateMatrix();
-	// 	mesh.matrixAutoUpdate = false;
-	// 	scene.add( mesh );
-	// }
-	
-
 	//Floor
 	var floorTexture = new THREE.ImageUtils.loadTexture('../assets/checkerboard.jpg');
 	floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping; 
@@ -107,7 +151,7 @@ const init = () => {
 	camera.position.z = 5;
 
 
-	let gui = new GUI({name: 'chessboard'});
+	gui = new GUI({name: 'chessboard'});
 	let white = gui.addFolder('White');
 	// white.add()
 	// gui.autoPlace(true);
