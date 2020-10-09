@@ -13,7 +13,7 @@ var loop;
 
 var words = ["chef", "mutton", "bear", "truck", "car", "tree", "fish", "building", "house", "snake"]
 
-const ROUND_LENGTH = 15
+const ROUND_LENGTH = 60
 
 // Set up initial game state
 var game = {
