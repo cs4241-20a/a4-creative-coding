@@ -6,3 +6,6 @@ This tuning is much different than standard western tuning as there are only 5 n
 If a note isn't sounding right you can simply detune the synth by however many frequencies you want (only use numbers).
 
 The only struggle I had was the fact that I wanted to add reverb as an option but I could not figure out how to implement it in this short amount of time.
+
+I used a simple synth tutorial to help with the structure but changed it by translating it to gamelan tuning.
+https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Simple_synth
