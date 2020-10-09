@@ -1,0 +1,15 @@
+canvas {
+    border: 1px dotted black;
+    cursor:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAABF0lEQVRYhe3WsYqEMBAG4L/Ydh4nvs42Kdxn8iCChRBInsJ3MBIWYetDZGULm+SK1cNil7trjBzzwTSm+XGSSQDGGGOMsR2cAGQALktly7dDOAMYiKgTQjRCiIaIOgDDspZUSUStMaZ3zk11XX9WVXX33o/W2isRtQDKVOHORNSGEGKe5w8AcVtSyhhCiEvI3f/kCcBgjOlfhduGNMb0eLZ71z2ZEVHnvR/fhVvLez8uezLbM+BFCNFUVXX/KWBZljOAjz3D/SmgUmoWQjR4jp/d/LrFzrkpRYu/D4mU8m04KWXUWt+Q4JAAmzHzKmTqMbMqiai11l6dc1NRFFEpNTvnJq31LfWgXh36qlsd+rHAGGOMsX/sC5dFysLg0h0kAAAAAElFTkSuQmCC) 20 20, default;
+}
+
+#chatBox {
+    border: 1px solid grey;
+}
+
+.scroll {
+    height: 36rem;
+    overflow: hidden;
+    overflow-y: scroll;
+    margin-bottom: 2rem;
+}

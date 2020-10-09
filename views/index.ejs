@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+      <!--   Include head with EJS template   -->
+      <%- include("./partials/head"); %>
+  <body>
+      
+    <div class="container" id="app">
+        <div class="row">
+            <div class="col align-self-center" id="playersList">
+                <input type="text" id="nameField" placeholder="Your Name">
+                <button class="btn btn-primary" id="joinButton">Join Game</button>
+
+                <p>Current players:</p>
+                <ul>
+                    <li v-for="p in players">{{ p.name }} ({{ p.correct}} correct)</li>
+                </ul>
+
+                <div v-if="isLeader && !started" id="leaderControls" class="text-center">
+                    <button class="btn btn-success" v-on:click="sendStart()">Start</button>
+                </div>
+            </div>
+
+            <div class="col">
+                <h3 v-if="canDraw">It's your turn to draw!</h3>
+                <h2 v-if="gameFinished" style="color: red">Game over!</h2>
+                <div class="text-center">
+                    <h4>Word: <span v-if="!canDraw" style="letter-spacing: 3px;">{{ word }}</span><span v-else>{{ word }}</span></h4><h4>Time left: {{ timeLeft }}</h4>
+                </div>
+
+                <canvas id="canvasArea" width="600" height="600"></canvas>
+            </div>
+            
+            <div class="col">
+                <h3>Chat</h3>
+                <div class="align-self-baseline scroll" id="guessBox">
+                    <p v-for="m in messages">
+                        <b v-if="m.correct" style="color: lawngreen">{{ m.player }} guessed the answer!</b>
+                        <span v-else><b>{{ m.player }}:</b> {{ m.message }}</span>
+                    </p>
+                </div>
+                <div style="position:absolute; left:0; bottom:0;">
+                    <input id="messageBox" type="text" maxlength="15" placeholder="Enter your guess!">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container" id="buttonContainer">
+        <button id="clearButton" class="btn btn-primary">Clear</button>
+        <p>Stroke Width</p>
+    </div>
+
+    <script src="scripts.js"></script>
+  </body>
+</html>
