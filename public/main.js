@@ -7,6 +7,7 @@ function main() {
     // Default values for interface inputs
     let gridOn = true;
     let song = document.createElement("audio");
+    song.src = "/megalovania.mp3"
     document.getElementById("bpmDisplay").innerText = "BPM: " + document.getElementById("bpmInput").value.padStart(3, '0');
 
     // Hook up inputs
@@ -145,6 +146,7 @@ function main() {
         let uploadedFile = document.getElementById("mp3Input").files[0];
 
         document.getElementById("nowPlaying").innerText = "Selected song: " + uploadedFile.name;
+        document.getElementById("removeButton").style.display = "inline";
 
         song.src = URL.createObjectURL(uploadedFile);
     }
@@ -167,6 +169,7 @@ function main() {
         song = document.createElement("audio");
 
         document.getElementById("nowPlaying").innerText = "Selected song: none";
+        document.getElementById("removeButton").style.display = "none";
     }
 
     function updateSpeed(e) {

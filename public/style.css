@@ -24,7 +24,7 @@ i {
 }
 
 #rgb {
-    margin-left: 56px;
+    margin-left: 32px;
     display: flex;
     flex-direction: column;
     float: left;
@@ -33,7 +33,7 @@ i {
 #canvasSidebar {
     padding: 5px;
     border: 1px solid white;
-    margin-right: 56px;
+    margin-right: 32px;
     margin-left: 20px;
     display: flex;
     flex-direction: column;
