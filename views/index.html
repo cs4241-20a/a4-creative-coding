@@ -21,14 +21,17 @@
 <main>
     <div id="canvasSidebar">
         <button id="stepButton" class="sidebarButton"><i id="stepIcon" class="fas fa-play"></i></button>
-        <button id="gridButton" class="sidebarButton"><i id="gridIcon" class="fas fa-border-all"></i></button>
+        <button id="gridButton" class="sidebarButton"><i id="gridIcon" class="fas fa-border-none"></i></button>
         <button id="clearButton" class="sidebarButton"><i class="fas fa-eraser"></i></button>
         <button id="restartButton" class="sidebarButton"><i class="fas fa-redo"></i></button>
         <input type="file" id="mp3Input" class="hidden">
         <label for="mp3Input" id="fileLabel" class="sidebarButton"><i class="fas fa-file-upload"></i></label>
+        <button id="helpButton" class="sidebarButton"><i class="fas fa-question"></i></button>
     </div>
 
     <div id="canvasDiv">
+
+        <img id="helpDisplay" src="/help.png">
         <canvas id="boardDisplay" width="1000" height="500">Canvas is not supported by this browser!</canvas>
 
         <div>
@@ -53,7 +56,7 @@
         <label for="bRange">B</label>
         <input type="range" min="0" max="255" id="bRange">
 
-        <img alt="Sans GIF" id="sans" src="/sans.gif">
+        <img alt="Sans GIF" id="sans" src="/sans-still.png">
     </div>
 </main>
 

@@ -5,7 +5,8 @@ const TOTAL_ROWS = 50;
 function main() {
 
     // Default values for interface inputs
-    let gridOn = true;
+    let helpShown = true;
+    let gridOn = false;
     let song = document.createElement("audio");
     song.src = "/megalovania.mp3"
     document.getElementById("bpmDisplay").innerText = "BPM: " + document.getElementById("bpmInput").value.padStart(3, '0');
@@ -16,9 +17,11 @@ function main() {
     document.getElementById("gridButton").onclick = toggleGrid;
     document.getElementById("clearButton").onclick = clearCanvas;
     document.getElementById("mp3Input").onchange = updateAudio;
+    document.getElementById("helpButton").onclick = toggleHelp;
     document.getElementById("rRange").oninput = updateColors;
     document.getElementById("gRange").oninput = updateColors;
     document.getElementById("bRange").oninput = updateColors;
+    document.getElementById("helpDisplay").onclick = hideHelp;
     document.getElementById("removeButton").onclick = removeSong;
     document.getElementById("bpmInput").onchange = updateSpeed;
 
@@ -96,16 +99,20 @@ function main() {
         e.preventDefault();
 
         let icon = document.getElementById("stepIcon");
+        let sans = document.getElementById("sans");
+
         if (interval === null) {
             interval = setInterval(runGeneration, intervalMS);
             icon.classList.replace("fa-play", "fa-pause");
             song.play().then().catch(()=>console.log("NO AUDIO FILE SPECIFIED"));
+            sans.src = "/sans.gif";
         }
         else {
             clearInterval(interval);
             icon.classList.replace("fa-pause", "fa-play");
             interval = null;
             song.pause();
+            sans.src = "/sans-still.png";
         }
     }
 
@@ -151,9 +158,29 @@ function main() {
         song.src = URL.createObjectURL(uploadedFile);
     }
 
+    function toggleHelp(e) {
+        e.preventDefault();
+
+        let helpDisplay = document.getElementById("helpDisplay");
+
+        if (helpShown) {
+            helpDisplay.style.display = "none";
+        }
+        else {
+            helpDisplay.style.display = "block";
+        }
+
+        helpShown = !helpShown;
+    }
     function updateColors(e) {
         e.preventDefault();
         redrawBoardDisplay(boardArray);
+    }
+
+    function hideHelp(e) {
+        e.preventDefault();
+        document.getElementById("helpDisplay").style.display = "none";
+        helpShown = false;
     }
 
     function removeSong(e) {
