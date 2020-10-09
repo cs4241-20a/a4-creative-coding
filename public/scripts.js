@@ -9,7 +9,7 @@ var color = "#000000"
 var colors = ["#000000", "#990000", "#009900", "#000099", "#FF0000", "#00FF00", "#0000FF"]
 
 // WEBSOCKET
-const ws = new WebSocket('wss://sdmoran-a4-creative-coding.glitch.me/:3333');
+const ws = new WebSocket('wss://sdmoran-a4-creative-coding.glitch.me/ws:3333');
 
 // Vue app, yay Vue!
 const app = new Vue({
