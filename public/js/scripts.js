@@ -27,6 +27,9 @@ var multiButton;
 var trackerPanel;
 var play;
 var playing;
+var oscType = 'sine';
+var count = 0;
+var prevCount = 16;
 
 function makeChord(row, col, val) { 
     /*Adds/removes (depending on val) the corresponding note (gained from row) to the corresponding chord (gained from col)
@@ -53,7 +56,7 @@ function playNote(frequency) {
     //decayrate in seconds
 
     oscillator.frequency.value = frequency;
-    oscillator.type = 'sine'
+    oscillator.type = oscType;
     envelop.gain.value = gain;
 
     oscillator.connect(envelop);
@@ -74,9 +77,17 @@ function playChord(col) {
 function stopPlaying() {
     playing = false;
     clearInterval(play);
-    for (var i = 0; i < 16; i++) {
-        trackerPanel.setValue(0, i, 0);
-    }
+}
+
+function startPlaying() {
+    trackerPanel.setValue(0, count, 1);
+                trackerPanel.setValue(0, prevCount, 0);
+                playChord(count);
+                prevCount = count;
+                count++;
+                if(count >= 16) {
+                    count = 0;
+                }
 }
 
 // THINGS THAT RUN ON START
@@ -128,25 +139,12 @@ function stopPlaying() {
 }()
 
 window.onload = function() {
-    play;
-    playing = false;
+    console.log("page loaded!");
     const startButton = document.getElementById("startButton");
     startButton.onclick = function() {
         if(!playing) {
             playing = true;
-            var count = 0;
-            var prevCount = 16;
-            play = setInterval(function() {
-                trackerPanel.setValue(0, count, 1);
-                trackerPanel.setValue(0, prevCount, 0);
-                playChord(count);
-                prevCount = count;
-                count++;
-                if(count >= 16) {
-                    count = 0;
-                }
-                //console.log(count);
-            }, decayRate*1000)
+            play = setInterval(startPlaying, decayRate*1000)
         }
     }
     
@@ -162,18 +160,33 @@ window.onload = function() {
                 multiButton.setValue(row, col, 0);
             }
             toPlayArray[col] = [];
+            trackerPanel.setValue(0, col, 0);
         }
+        count = 0;
+        prevCount = 16;
         stopPlaying(playing, play);
     }
 
     const speedInput = document.getElementById("speedInput");
     speedInput.onchange = function() {
         decayRate = 1/speedInput.value;
-        stopPlaying(playing, play);
+        if(playing) {
+            stopPlaying(playing, play);
+            playing = true;
+            play = setInterval(startPlaying, decayRate*1000);
+        }
+    }
+    speedInput.onsubmit = function() {
+        console.log('test');
     }
 
     const gainInput = document.getElementById("gainInput");
     gainInput.onchange = function() {
         gain = gainInput.value;
+    }
+
+    const waveInput = document.getElementById("waveTypes");
+    waveInput.onchange = function() {
+        oscType = waveInput.value;
     }
 }
