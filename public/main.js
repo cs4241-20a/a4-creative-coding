@@ -5,15 +5,22 @@ const TOTAL_COLUMNS = TOTAL_ROWS;
 const SHOW_GRID = true; //TODO Add a button for this
 
 function main() {
+
+    // Default values for interface inputs
     let gridOn = true;
+    let song = document.createElement("audio");
 
     // Hook up inputs
     document.getElementById("stepButton").onclick = toggleSimulation;
+    document.getElementById("restartButton").onclick = restartAudio;
     document.getElementById("gridButton").onclick = toggleGrid;
     document.getElementById("clearButton").onclick = clearCanvas;
+    document.getElementById("mp3Input").onchange = updateAudio;
     document.getElementById("rRange").oninput = updateColors;
     document.getElementById("gRange").oninput = updateColors;
     document.getElementById("bRange").oninput = updateColors;
+    document.getElementById("removeButton").onclick = removeSong;
+    document.getElementById("bpmInput").onchange = updateSpeed;
 
     // Initialize canvas
     const canvas = document.getElementById('boardDisplay');
@@ -84,19 +91,29 @@ function main() {
 
     // Starts the simulation based on what exists in the canvas
     let interval = null;
+    let intervalMS = 500;
     function toggleSimulation(e) {
         e.preventDefault();
 
         let icon = document.getElementById("stepIcon");
         if (interval === null) {
-            interval = setInterval(runGeneration, 100);
+            interval = setInterval(runGeneration, intervalMS);
             icon.classList.replace("fa-play", "fa-pause");
+            song.play().then().catch(()=>console.log("NO AUDIO FILE SPECIFIED"));
         }
         else {
             clearInterval(interval);
             icon.classList.replace("fa-pause", "fa-play");
             interval = null;
+            song.pause();
         }
+    }
+
+    function restartAudio(e) {
+        e.preventDefault();
+        song.currentTime = 0;
+        toggleSimulation(e);    // Trigger cell propagation immediately to ensure same tempo
+        toggleSimulation(e);    // Need to call again to reset icon to original status
     }
 
     function toggleGrid(e) {
@@ -119,15 +136,49 @@ function main() {
         e.preventDefault();
 
         // Initialize new array with Zeroes
-        let clearedArray = Array(TOTAL_ROWS).fill(0).map(() => Array(TOTAL_ROWS).fill(0));
-        boardArray = clearedArray;
+        boardArray = Array(TOTAL_ROWS).fill(0).map(() => Array(TOTAL_ROWS).fill(0));
         redrawBoardDisplay(boardArray);
     }
 
+    function updateAudio(e) {
+        e.preventDefault();
+
+        let uploadedFile = document.getElementById("mp3Input").files[0];
+
+        document.getElementById("nowPlaying").innerText = "Selected song: " + uploadedFile.name;
+
+        song.src = URL.createObjectURL(uploadedFile);
+    }
 
     function updateColors(e) {
         e.preventDefault();
         redrawBoardDisplay(boardArray);
+    }
+
+    function removeSong(e) {
+        e.preventDefault();
+
+        if (interval != null) {
+            clearInterval(interval);
+            document.getElementById("stepIcon").classList.replace("fa-pause", "fa-play");
+            interval = null;
+        }
+
+        song.pause();
+        song = document.createElement("audio");
+
+        document.getElementById("nowPlaying").innerText = "Selected song: none";
+    }
+
+    function updateSpeed(e) {
+        e.preventDefault();
+        let rangeValue = document.getElementById("bpmInput").value;
+        intervalMS = 60000 / rangeValue;
+        clearInterval(interval);
+        document.getElementById("stepIcon").classList.replace("fa-pause", "fa-play");
+        document.getElementById("bpmDisplay").innerText = "BPM: " + rangeValue.padStart(3, '0');
+        interval = null;
+        song.pause();
     }
 
     // execute one cycle of the simulation

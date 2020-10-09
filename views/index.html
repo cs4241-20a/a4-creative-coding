@@ -13,8 +13,12 @@
 
 <body onload="main()">
     <button id="stepButton"><i id="stepIcon" class="fas fa-play"></i></button>
+    <button id="restartButton"><i class="fas fa-redo"></i></button>
     <button id="gridButton"><i id="gridIcon" class="fas fa-border-all"></i></button>
-    <button id="clearButton"><i class="fas fa-times"></i></button>
+    <button id="clearButton"><i class="fas fa-eraser"></i></button>
+
+    <input type="file" id="mp3Input" class="hidden">
+    <label for="mp3Input" id="fileLabel"><i class="fas fa-file-upload"></i></label>
 
     <canvas id="boardDisplay" width="640" height="640">Canvas is not supported by this browser!</canvas>
     <form>
@@ -27,5 +31,12 @@
         <label for="bRange">B</label>
         <input type="range" min="0" max="255" id="bRange">
     </form>
+
+    <label id="nowPlaying">Selected song: none</label>
+    <button id="removeButton"><i class="fas fa-times"></i></button>
+
+    <label id="bpmDisplay" for="bpmInput">BPM: 200</label>
+    <input type="range" value="200" min="50" max="400" id="bpmInput">
+
 </body>
 </html>

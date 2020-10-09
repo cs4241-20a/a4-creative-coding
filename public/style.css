@@ -3,5 +3,10 @@ canvas {
 }
 
 i {
-    font-size: 24px;
+    font-size: 20px;
+}
+
+.hidden {
+    height: 0;
+    width: 0;
 }
