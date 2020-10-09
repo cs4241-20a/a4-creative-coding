@@ -2,6 +2,7 @@ const express = require('express')
 const WebSocket = require('ws')
 const { v4: uuidv4 } = require('uuid')
 const app = express()
+const expressWs = require('express-ws')(app);
 app.set('view engine', 'ejs');
 const port = process.env.PORT || 3000
 
@@ -9,7 +10,7 @@ const port = process.env.PORT || 3000
 var loop;
 
 // WebSocket server
-const wss = new WebSocket.Server({port: 8000})
+const wss = new WebSocket.Server({port: process.env.WS_PORT})
 
 var words = ["chef", "mutton", "bear", "truck", "car", "tree", "fish", "building", "house", "snake"]
 
@@ -45,7 +46,7 @@ app.listen(port, () => {
 // WEBSOCKET
 var messages = []
 
-wss.on('connection', (ws) => {
+app.ws('/', (ws) => {
     // Generate unique ID and add to list of clients
     var client_id = uuidv4();
 
