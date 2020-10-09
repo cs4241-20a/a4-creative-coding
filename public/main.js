@@ -1,14 +1,13 @@
-const BOARD_PIXEL_SIZE = 640;
-const CELL_PIXEL_SIZE = 16;
-const TOTAL_ROWS = BOARD_PIXEL_SIZE / CELL_PIXEL_SIZE;
-const TOTAL_COLUMNS = TOTAL_ROWS;
-const SHOW_GRID = true; //TODO Add a button for this
+const CELL_PIXEL_SIZE = 20;
+const TOTAL_COLUMNS = 25;
+const TOTAL_ROWS = 50;
 
 function main() {
 
     // Default values for interface inputs
     let gridOn = true;
     let song = document.createElement("audio");
+    document.getElementById("bpmDisplay").innerText = "BPM: " + document.getElementById("bpmInput").value.padStart(3, '0');
 
     // Hook up inputs
     document.getElementById("stepButton").onclick = toggleSimulation;
@@ -26,7 +25,7 @@ function main() {
     const canvas = document.getElementById('boardDisplay');
 
     // Initialize array with Zeroes
-    let boardArray = Array(TOTAL_ROWS).fill(0).map(() => Array(TOTAL_ROWS).fill(0));
+    let boardArray = Array(TOTAL_ROWS).fill(0).map(() => Array(TOTAL_COLUMNS).fill(0));
 
 
     // Check support for canvas
@@ -66,7 +65,7 @@ function main() {
 
         // loop through array and color if cell is alive
         for (let r = 0; r < TOTAL_ROWS; r++) {
-            for (let c = 0; c < TOTAL_ROWS; c++) {
+            for (let c = 0; c < TOTAL_COLUMNS; c++) {
 
                 if (updatedArray[r][c] === 1) {
 
@@ -136,7 +135,7 @@ function main() {
         e.preventDefault();
 
         // Initialize new array with Zeroes
-        boardArray = Array(TOTAL_ROWS).fill(0).map(() => Array(TOTAL_ROWS).fill(0));
+        boardArray = Array(TOTAL_ROWS).fill(0).map(() => Array(TOTAL_COLUMNS).fill(0));
         redrawBoardDisplay(boardArray);
     }
 
@@ -179,6 +178,7 @@ function main() {
         document.getElementById("bpmDisplay").innerText = "BPM: " + rangeValue.padStart(3, '0');
         interval = null;
         song.pause();
+        song.currentTime = 0;
     }
 
     // execute one cycle of the simulation
@@ -186,10 +186,10 @@ function main() {
     function runGeneration() {
 
         // must maintain a separate array of results to avoid conflicts during iteration
-        let newBoardArray = Array(TOTAL_ROWS).fill(0).map(() => Array(TOTAL_ROWS).fill(0));
+        let newBoardArray = Array(TOTAL_ROWS).fill(0).map(() => Array(TOTAL_COLUMNS).fill(0));
 
         for (let r = 0; r < TOTAL_ROWS; r++) {
-            for (let c = 0; c < TOTAL_ROWS; c++) {
+            for (let c = 0; c < TOTAL_COLUMNS; c++) {
                 newBoardArray[r][c] = cellStatus(r,c);
             }
         }
@@ -207,7 +207,7 @@ function main() {
             let neighborRow = r + entry[1];
             let neighborCol = c + entry[0];
 
-            if (neighborRow > TOTAL_ROWS - 1 || neighborRow < 0 || neighborCol > TOTAL_ROWS - 1 || neighborCol < 0) {
+            if (neighborRow > TOTAL_ROWS - 1 || neighborRow < 0 || neighborCol > TOTAL_COLUMNS - 1 || neighborCol < 0) {
                 return; //Outside of bounds
             }
 
