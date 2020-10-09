@@ -14,7 +14,7 @@ $npm start
 ```
 and go to <http://localhost:3000/>
 
-## Not-To-Use Password Generator
+## 3D Audio Visualizer
 
 - The goal of the application:
   - The project is a 3D audio Visualizer that can visualize a default chosen song.
