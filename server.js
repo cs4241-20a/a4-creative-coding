@@ -2,14 +2,14 @@ const express = require('express')
 const WebSocket = require('ws')
 const { v4: uuidv4 } = require('uuid')
 const app = express()
-app.set('view engine', 'ejs');
 const port = process.env.PORT || 3000
+
+
+app.set('view engine', 'ejs');
+
 
 // Used to unset interval when game ends.
 var loop;
-
-// WebSocket server
-const wss = new WebSocket.Server({port: process.env.WS_PORT, path:"/ws"})
 
 var words = ["chef", "mutton", "bear", "truck", "car", "tree", "fish", "building", "house", "snake"]
 
@@ -33,10 +33,11 @@ app.get('/', (req, res) => {
     res.render("index", {title: "Home"})
 })
 
-// Start game
-app.post('/game/start/', (req, res) => {
+const http = require('http')
+const server = http.createServer(app)
 
-})
+// WebSocket server
+const wss = new WebSocket.Server({server})
 
 app.listen(port, () => {
     console.log(`App listening on port ${port}`)
