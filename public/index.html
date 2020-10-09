@@ -4,12 +4,19 @@
         <title>Music Maker</title>
         <meta charset="utf-8">
         <link href="css/style.css" rel="stylesheet" />
-        <script src="js/scripts.js" defer></script>
+        <script type="module" src="js/scripts.js" defer></script>
+        <script src="libraries/interface.min.js"></script>
+        <script type="text/javascript" src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
     </head>
 
     <body>
         <div>
-            <p>test</p>
+            <h1>Music Maker</h1>
+        </div>
+        <div id="notePanel", class='interfacePanel'></div>
+        <div id="buttonPanel">
+            <button type="button" id="startButton">Start</button>
+            <button type="button" id="stopButton">Stop</button>
         </div>
     </body>
 </html>

@@ -1,0 +1,13 @@
+html,
+body {
+    margin: auto;
+    padding: 10px;
+    text-align: center;
+}
+.interfacePanel {
+    display: inline-block;
+    width: 60vw;
+    height: 325px;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
