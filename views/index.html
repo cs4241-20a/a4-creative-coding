@@ -1,0 +1,87 @@
+<!-- This is a static file -->
+<!-- served from your routes in server.js -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="A cool thing made with Glitch" />
+
+    <title>The World's Temperature</title>
+    <!-- import the webpage's stylesheet -->
+    <link rel="stylesheet" href="style.css" />
+    <!-- import the webpage's client-side javascript file -->
+  </head>
+  <body>
+    <script src="https://d3js.org/d3.v3.min.js"></script>
+    <header>
+      <div >
+        <input  type="button" id="help" value="Help" style="float: right;" onclick="displayHelp()">
+      <h1>The World's Anomaly Values Over The Years</h1>
+      </div>
+      <p>
+        The term temperature anomaly means a departure from a reference value or
+        long-term average. A positive anomaly indicates that the observed
+        temperature was warmer than the reference value, while a negative
+        anomaly indicates that the observed temperature was cooler than the
+        reference value.
+      </p>
+      <div>
+        <label>
+          Color:
+        </label>
+        <select id="color" onchange="updateColor()">
+          <option value="#EA593C">Red</option>
+          <option value="#3CBBEA">Blue</option>
+          <option value="#031F29">Black</option>
+        </select>
+        <label>
+          Bar Width:
+        </label>
+        <select id="scale" onchange="updateScale()">
+          <option value="0">N/A</option>
+          <option value="0.1">0.1</option>
+          <option value="0.5">0.5</option>
+          <option value="0.9">0.9</option>
+        </select>
+        <label>
+          Century:
+        </label>
+        <select id="range" onchange="updateRange()">
+          <option value="All">All</option>
+          <option value="1800">1800</option>
+          <option value="1900">1900</option>
+          <option value="2000">2000</option>
+        </select>
+        <label>
+          High/Low:
+        </label>
+        <select id="top" onchange="updateRange()">
+          <option value="0">All</option>
+          <option value="1">Highest 5</option>
+          <option value="2">Lowest 5</option>
+        </select>
+        <label>
+          Sort:
+        </label>
+        <select id="sort" onchange="updateRange()">
+          <option value="0">N/A</option>
+          <option value="1">Descending</option>
+          <option value="2">Ascending</option>
+        </select>
+        <label>
+          Value type:
+        </label>
+        <select id="type" onchange="updateRange()">
+          <option value="0">ALL</option>
+          <option value="1">Negative</option>
+          <option value="2">Positive</option>
+        </select>
+      </div>
+      <div class="svg-container">
+        <script src="/script.js" defer></script>
+      </div>
+    </header>
+  </body>
+</html>
