@@ -39,7 +39,7 @@ const server = http.createServer(app)
 // WebSocket server
 const wss = new WebSocket.Server({server})
 
-app.listen(port, () => {
+server.listen(port, () => {
     console.log(`App listening on port ${port}`)
 })
 
