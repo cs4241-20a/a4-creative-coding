@@ -1,6 +1,3 @@
-//Link to Pumped Up Kicks
-//https://cdn.glitch.com/e538f1dc-4c5a-4525-90d1-af598d342c93%2F%5Bontiva.com%5D%20Foster%20The%20People%20-%20Pumped%20up%20Kicks%20(Official%20Music%20Video)-tiny.wav?v=1601949529064
-
 import * as THREE from "/three.module.js"
 import * as dat from "/dat.gui.module.js"
 
