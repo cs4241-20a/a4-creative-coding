@@ -65,9 +65,9 @@ function controller() {
   lightCtrl.open();
 
   const cameraFolder = gui.addFolder("Camera");
-  cameraFolder.add(camera.position, "x", 0, 10, 0.01);
-  cameraFolder.add(camera.position, "y", 0, 10, 0.01);
-  cameraFolder.add(camera.position, "z", 0, 10, 0.01);
+  cameraFolder.add(camera.position, "x", 0, 40, 0.01);
+  cameraFolder.add(camera.position, "y", 0, 40, 0.01);
+  cameraFolder.add(camera.position, "z", 0, 40, 0.01);
   cameraFolder.open();
   var colorFolder = gui.addFolder("MATERIAL");
   var bartemp = { color: 0x6abff };
@@ -95,15 +95,15 @@ function createLights() {
 function animate() {
   renderer.render(scene, camera);
   if (analyser) {
+     if (index == 9) {
+      index = 0;
+    }
     analyser.getByteFrequencyData(frequencyData);
     var height = frequencyData[(index + 1) * 100] / 10;
     scene.children[index].scale.y = height;
     var color = frequencyData[(index + 1) * 100] * params;
     scene.children[index].material.color.set(color);
     index++;
-    if (index == 9) {
-      index = 0;
-    }
   }
   requestAnimationFrame(animate);
 }
