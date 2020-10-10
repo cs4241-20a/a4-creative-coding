@@ -7,7 +7,7 @@ var prev;
 var curr;
 var lineWidth = 10;
 var color = "#000000"
-var colors = ["#000000", "FFFFFF", "#e53935", "#d81b60", " #8e24aa", " #5e35b1", "#3949ab", " #1e88e5", " #00acc1", "#43a047", "#7cb342", " #fdd835", "#ffb300", "#fb8c00", "#f4511e"]
+var colors = ["#000000", "#FFFFFF", "#e53935", "#d81b60", " #8e24aa", " #5e35b1", "#3949ab", " #1e88e5", " #00acc1", "#43a047", "#7cb342", " #fdd835", "#ffb300", "#fb8c00", "#f4511e"]
 
 // WEBSOCKET
 const ws = new WebSocket('wss://' + location.host);
