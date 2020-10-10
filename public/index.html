@@ -1,0 +1,55 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!--Use existing CSS library-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/stylesheet.css" />
+    <script src="/script.js" defer></script>
+    <title>Audio Visualization - Chris Lee</title>
+</head>
+<body>
+    <h1>CS4241 Assignment 4 - Dynamite</h1>
+
+    <button id="help" class="btn btn-dark">Help</button>
+
+    <div id="bar">
+        <label for="theme">Theme: </label>
+        <select name="theme" id="theme">
+            <option value="gray" selected="selected">Gray</option>
+            <option value="red">Red</option>
+            <option value="blue">Blue</option>
+        </select>
+        <label for="placement">Placement:</label>
+        <select name="placement" id="placement">
+            <option value="bottom" selected="selected">Bottom</option>
+            <option value="middle">Middle</option>
+        </select>
+        <label for="size">BarSize:</label>
+        <select name="size" id="size">
+            <option value="default" selected="selected">Default</option>
+            <option value="large">Large</option>
+        </select>
+        <label for="bgcolor">Background Color:</label>
+        <select name="bgcolor" id="bgcolor">
+            <option value="black">Black</option>
+            <option value="white" selected="selected">White</option>
+            <option value="turquoise">Turquoise</option>
+        </select>
+        <label for="height">Height</label>
+        <select name="height" id="height">
+            <option value="low">Low</option>
+            <option value="default" selected="selected">Default</option>
+            <option value="high">High</option>
+        </select>
+        <button id="play">Play</button>
+        <canvas id="canvas"></canvas>
+        <audio id="audio" controls></audio>
+    </div>
+</body>
+
+<!--Optional Javascript-->
+</html>
