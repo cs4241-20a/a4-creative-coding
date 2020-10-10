@@ -42,18 +42,22 @@
     <div class="row">
         <div id="genderRatio" class="col-lg">
             <div id="genderBar"></div>
-            <input type="range" class="form-control-range" step=1 min="1901" max="2020" id="yearGenderSlider" step="20" list="steplist">
-            <datalist id="steplist">
-                <option>1900</option>
-                <option>1950</option>
-                <option>2000</option>
-                <option>1910</option>
-            </datalist>
+            <input type="range" class="form-control-range" step="1" min="1901" max="2020" id="yearGenderSlider" >
+        
         </div>
         <div class="col-sm" id="genderText">
             Out of 919 laureates only 53 were women.
         </div>
     </div>
+      <hr>
+    <h3>Country of Birth of Laureates</h3>
+    <h4 id="yearText" style= "text-align:center">Year 2019</h4>
+    <div class="row">
+        <div id="countryCol" class="col">
+            <input type="range" class="form-control-range" step="1" min="1900" max="2020" id="yearMapSlider" >
+            <div id="mapChart"></div>
+        </div>
+        </div>
     <hr>
     <h3>Age of Laureates</h3>
     <div class="row">
@@ -82,20 +86,10 @@
             </div>
         </div>
     </div>
+  </div>
 
-    <hr>
-    <h3>Country of Birth of Laureates</h3>
-    <h4 id="yearText" style= "text-align:center">Year 2019</h4>
-    <div class="row">
-        <div id="countryCol" class="col">
-            <input type="range" class="form-control-range" step=1 min="1900" max="2020" id="yearMapSlider" step="20" >
-            <div id="mapChart"></div>
-        </div>
-        </div>
-    </div>
-</div>
 </body>
 <script src="https://d3js.org/d3.v4.js"></script>
 <script src="https://unpkg.com/topojson-client@3"></script>
-<script src="/scripts.js"></script>
+<script src="/script.js"></script>
 </html>

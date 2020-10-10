@@ -1,5 +1,5 @@
-const reqString = "http://api.nobelprize.org/v1/laureate.json"
-const mapReqString = "world.geojson"
+const reqString = "https://cdn.glitch.com/7df6e420-19a2-4e4b-a270-d8a6da88b2f1%2Fdata.json?v=1602360003586"
+const mapReqString = "https://cdn.glitch.com/7df6e420-19a2-4e4b-a270-d8a6da88b2f1%2Fworld.geojson?v=1602359300639"
 let laureateData = null
 let map = null
 
@@ -16,6 +16,8 @@ let byYear = {}
 let genderSlider = document.getElementById("yearGenderSlider")
 let mapSlider = document.getElementById("yearMapSlider")
 let helpBtn = document.getElementById("helpBtn")
+
+const d3= window.d3
 
 window.onload = function () {
     d3.json(reqString, function (data) {
@@ -48,7 +50,7 @@ function setUp() {
 }
 
 function mapSetUp() {
-    document.getElementById("mapChart").innerHTML = ""
+    document.getElementById("mapChart").getElementsByTagName("svg").innerHTML = ""
     let height = 500
     let width = +d3.select('#mapChart').style('width').slice(0, -2)
 
@@ -69,7 +71,7 @@ function mapSetUp() {
 }
 
 const getAges = function () {
-    for (section of Object.keys(laureateData.laureates)) {
+    for (let section of Object.keys(laureateData.laureates)) {
         laureateData.laureates[section].prizes.forEach(prize => {
             let award = {
                 name: laureateData.laureates[section].firstname + " " + laureateData.laureates[section].surname,
@@ -130,7 +132,7 @@ const getAges = function () {
 
 const getGender = function (year) {
     let women = 0, men = 0
-    for (section of Object.keys(laureateData.laureates)) {
+    for (let section of Object.keys(laureateData.laureates)) {
         if (laureateData.laureates[section].prizes[0].year > year) {
             break
         }
