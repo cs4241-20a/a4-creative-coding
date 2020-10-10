@@ -72,6 +72,7 @@ window.onload = function() {
             const colorButton = document.createElement('button');
             colorButton.innerText = "x";
             colorButton.id = `colorButton${i}`
+            colorButton.classList += "btn"
             colorButton.style = `background-color: ${colors[i]}; color: ${colors[i]}`;
             document.getElementById('buttonContainer').appendChild(colorButton);
             document.getElementById(`colorButton${i}`).addEventListener("click", function() {color = colors[i]});
