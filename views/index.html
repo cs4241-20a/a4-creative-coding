@@ -1,0 +1,93 @@
+<!-- This is a static file -->
+<!-- served from your routes in server.js -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="A cool thing made with Glitch" />
+
+    <script src="https://d3js.org/d3.v3.min.js"></script>
+    <title>Flight Data 06/2003</title>
+
+    <link
+      id="favicon"
+      rel="icon"
+      href="https://cdn.glitch.com/3eb8bac8-5a92-4f9f-a844-edad12693a1b%2FAP.PNG?v=1602085291766"
+      type="image/x-icon"
+    />
+    <!-- import the webpage's stylesheet -->
+    <link rel="stylesheet" href="/style.css" />
+
+    <!-- import the webpage's client-side javascript file -->
+    <script src="/script.js" defer></script>
+  </head>
+  <body>
+    <header>
+      <div>
+        <input
+          id="H"
+          type="button"
+          value="Help"
+          onclick="showDocumentation()"
+        />
+        <h1>Flight data for June 2003</h1>
+      </div>
+    </header>
+    <div>
+      <span class="label">Scope: </span>
+      <select name="airfly" id="airfly" onchange="parameter1()">
+        <option value="none">Select one</option>
+        <option value="All Flights">All Flights</option>
+        <option value="CompData">Complementary Data</option>
+      </select>
+      <span class="label">Flight type: </span>
+      <select name="flights" id="flights" onchange="parameter1()">
+        <option value="none">Select one</option>
+        <option value="OnTime">On Time</option>
+        <option value="Cancelled">Cancelled</option>
+        <option value="Delayed">Delayed</option>
+      </select>
+    </div>
+    <div>
+      <span class="label">Extra data: </span>
+      <select name="data" id="data" onchange="parameter1()">
+        <option value="none">Select one</option>
+        <option value="Carriers">Amount of Carriers with Delays</option>
+        <option value="Minutes">Minutes Delayed</option>
+      </select>
+    </div>
+    <div>
+      <span class="label">Size: </span>
+      <select name="Size" id="Size" onchange="parameter1()">
+        <option value="Regular">Regular (default)</option>
+        <option value="Large">Large</option>
+      </select>
+      <span class="label">Color: </span>
+      <select name="Color" id="Color" onchange="parameter1()">
+        <option value="steelblue">Steel Blue (default)</option>
+        <option value="crimson">Crimson</option>
+      </select>
+      <span class="label">Compare Grid: </span>
+      <select name="Grid" id="Grid" onchange="parameter1()">
+        <option value="nogrid">None (default)</option>
+        <option value="grid">Grid</option>
+      </select>
+    </div>
+    <br />
+    <br />
+    <style>
+      .axis {
+        font: 10px sans-serif;
+      }
+
+      .axis path,
+      .axis line {
+        fill: none;
+        stroke: #000;
+        shape-rendering: crispEdges;
+      }
+    </style>
+  </body>
+</html>
