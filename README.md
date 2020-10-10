@@ -1,7 +1,7 @@
 ## A4 Creative Coding: Conway's Game of Life
 Noah Olson - noahvolson - nvolson
 
-Glitch Link: REPLACE ME
+Glitch Link: https://a4-noah-olson.glitch.me
 
 Goal: Sync Conway's Game of Life with music to provide an audiovisual experience
 
