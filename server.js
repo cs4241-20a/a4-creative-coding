@@ -10,7 +10,7 @@ app.set('view engine', 'ejs');
 // Used to unset interval when game ends.
 var loop;
 
-var words = ["chef", "mutton", "bear", "truck", "car", "tree", "fish", "building", "house", "snake"]
+var words = ["chef", "mutton", "bear", "truck", "car", "tree", "fish", "building", "house", ""]
 
 // In seconds
 const ROUND_LENGTH = 60
