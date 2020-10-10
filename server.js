@@ -14,6 +14,7 @@ var words = ["chef", "mutton", "bear", "truck", "car", "tree", "fish", "building
 
 // In seconds
 const ROUND_LENGTH = 60
+const MIN_PLAYERS = 2
 
 // Set up initial game state
 var game = {
@@ -75,10 +76,7 @@ wss.on('connection', (ws) => {
           
             // First player is leader
             const isLeader = game.players.length < 1
-            if(isLeader) {
-                game.leader = player;
-            }
-            
+
             const player = {
                 id: client_id,
                 socket: ws,
@@ -88,6 +86,10 @@ wss.on('connection', (ws) => {
                 score: 0,
             }
 
+            if(isLeader) {
+                game.leader = player;
+            }
+            
             game.players.push(player);
 
             console.log("Registered new player!")
@@ -114,7 +116,7 @@ wss.on('connection', (ws) => {
         }
         
         // Start game. Only leader can do this, and only if there are at least MIN_PLAYERS connected.
-        else if(obj.command === "START" && obj.id === game.leader.id && game.players.) {
+        else if(obj.command === "START" && obj.id === game.leader.id && game.players.length >= MIN_PLAYERS) {
             console.log("Game starting!")
             tick();
             sendWordToClients();
@@ -122,7 +124,9 @@ wss.on('connection', (ws) => {
             loop = setInterval(gameLoop, 1000);
         }
 
+        // Handle guess, only if game is started
         else if(obj.command === "GUESS" && game.started) {
+            // Figure out which player is guessing
             const player = game.players.find(p => p.id === obj.id);
 
             // Don't let leader guess & don't let players guess more than once
@@ -130,7 +134,7 @@ wss.on('connection', (ws) => {
                 return;
             }
 
-            // Correct guess
+            // Correct guess - record it and notify clients
             else if(obj.guess === words[game.answerIdx]) {
                 player.correct++;
                 game.correctPlayers.push(player);
@@ -142,7 +146,8 @@ wss.on('connection', (ws) => {
                     }
                 ))
             }
-            // Incorrect guess
+          
+            // Incorrect guess - still notify clients because it goes into chat
             else {
                 sendToClients(JSON.stringify(
                     {
@@ -194,7 +199,7 @@ function sendToClient(id, msg) {
     }
 }
 
-// Get word, blanked out except for specified position
+// Get word, blanked out except for specified positions if given
 function getBlankedWord(word, revealLetters=[]) {
     console.log("Word: %s", word)
     let blankedWord = "_".repeat(word.length);
@@ -244,6 +249,7 @@ function tick() {
     }))
 }
 
+// Ends game and resets values for the next round
 function endGame() {
     // Reset values
     game.started = false;
@@ -260,7 +266,6 @@ function endGame() {
 // Actual gameplay loop. Starts when leader hits start.
 const gameLoop = function() {
     game.timeLeft--;
-    console.log(game.timeLeft);
     tick();
     // Check length -1 because currently drawing player doesn't get to guess
     if(game.correctPlayers.length === game.players.length - 1 || game.timeLeft === 0) {
@@ -268,7 +273,6 @@ const gameLoop = function() {
             endGame();
         }
         else {
-            // Go to next question
             nextQuestion();
         }
     }
