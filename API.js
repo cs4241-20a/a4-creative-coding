@@ -10,15 +10,25 @@ const uri = `mongodb+srv://${user}:${password}@${host}/${database}?retryWrites=t
 
 const client = new MongoClient(uri);
 
-client.connect()
-.then(() => {
-  let words =
-    "alligator, alpaca, angler fish, ant, anteater, antelope, armadillo, bald eagle, barn owl, bat, bearded dragon, beaver, bee, beetle, bigfoot, bird, bison, boar, brontosaurus, bull, bulldog, butterfly, camel, cat, caterpillar, catfish, centipede, chameleon, cheetah, chicken, chicken turtle, chihuahua, clown fish, cobra, cockroach, cow, crab, crocodile, crow, dalmatian, deer, dinosaur, dog, dolphin, donkey, dragon, dragonfly, duck, eagle, eel, elephant, firefly, flamingo, flea, fly, flying fox, fox, frog, gazelle, gecko, giant anteater, giant panda, giant tortoise, giraffe, goat, golden hamster, goldfish, goose, grasshopper, hammerhead shark, hamster, hedgehog, hen, hippo, horse, hummingbird, hyena, jaguar, jellyfish, kangaroo, killer whale, king crab, king kong, king penguin, king vulture, kitten, koala, kraken, lamb, leech, lemur, leopard, lion, lizard, llama, loch ness monster, lynx, maggot, mammoth, mantis, meerkat, mole, monkey, moose, mosquito, moth, mountain chicken, mountain zebra, mouse, naked cat, naked mole rat, narwhal, octopus, orangutan, orca, ostrich, otter, owl, panda, panther, parrot, peacock, pelican, penguin, pig, pigeon, piranha, platypus, polar bear, pony, poodle, porcupine, puffer fish, puma, puppy, python, rabbit, raccoon, ram, rat, rattlesnake, red panda, reindeer, rhinoceros, rooster, satanic leaf gecko, scorpion, sea lion, seagull, seal, shark, sheep, sheep dog, shiba, skunk, sloth, snail, snake, snapping turtle, spider, spider monkey, spinosaurus, squid, squirrel, stegosaurus, stingray, stink bug, stork, sun bear, superworm, swan, swordfish, tadpole, tarantula, termite, tick, tiger, tiger beetle, tiger fish, tortoise, toucan, triceratops, trilobite, turkey, turtle, tyrannosaurus rex, unicorn, vulture, walrus, warthog, wasp, water scorpion, water snake, whale, whale shark, wolf, woodpecker, worm, yeti, zebra"
-  let wordArr = words.split(", ")
-  for(let i = 0; i < wordArr.length; i++) {
-    console.log(wordArr[i])
-  }
-});
+
+// try {
+// client.connect()
+// .then(() => {
+//   let words =
+//       // "aerobics, archer, arena, arrow, athlete, badminton, ball, baseball, baseball bat, basketball, baton, batter, bicycle, bike, biker, billiards, bobsleigh, boomerang, bow, bowling, boxing, canoe, cathcer, chest plate, club, coach, competitor, curling, cyclist, dartboard, darts, deadlifting, diving, dodgeball, dugout, dumbbell, e-sports, end zone, exercise, fencing, field, field hockey, figure skating, finish, fitness, football, formula one, free throw, frisbee, goal, goalie, golf, gym, gymnast, half time, hammer throw, handball, hang gliding, hardball, helmet, high jump, hole in one, home run, home team, hurdle, ice hockey, ice skating, jogging, judo, jump rope, karate, keeper, kitesurfing, kneepads, kung fu, lacrosse, lawn bowling, loser, marathon, nascar, off season, offside, olympics, overtime, penalty, ping pong, pit crew, pit stop, pitcher, pole vault, puck, race, rafting, rally, referee, rock climbing, roller derby, roller skating, rugby, sailing, score, shoulder pad, ski, snorkeling, snowboarding, soccer, softball, somersault, stadium, start, studded shoes, sumo wrestling, surfing, swimming, synchronized swimming, table tennis, target, team, teammate, tee, tennis racket, trampoline, triathlon, tug of war, ultramarathon, volley ball, wakeboarding, water polo, water ski, weightlifting, wetsuit, windsurfing, winner, yoga"
+//       //"apple, apple juice, apple pie, apple sauce, asparagus, avocado, bacon, bagel, baguette, baked beans, baked potato, banana, banana bread, banana split, barbecue sauce, bean, beer, beet, bell pepper, biscuit, blackberry, blueberry, bread, broccoli, brownie, bubblegum, burrito, butter, cabbage, cake, candy necklace, caramel apple, carrot, cauliflower, caviar, celery, cereal, cheese, cheeseburger, cheesecake, cherry, chicken burger, chicken nugget, chili, chocolate, chocolate bunny, chocolate cake, chocolate egg, chocolate milk, churro, citrus, cocktail, coffee, cookie, corn, corn dog, cotton candy, crab stick, cranberry, croissant, cucumber, cupcake, curry, donut, egg, energy drink, fish and chips, fish burger ,fish sauce, fondue, french fries, french toast, frog butt, fruitcake, garlic, garlic bread, grape, grapefruit, gravy, grilled cheese, grilled chicken, guacamole, gummy bear, gummy worm, ham, hamburger, hash brown, honey, hot chocolate, hot dog, hot sauce, ice cream, ice cream cake, ice cube, iced tea, jalapeno, jam, jawbreaker, jelly, kebab, ketchup, kiwi, lamb chops, lasagna, lemon, lemonade, lettuce, lime, liquorish, lollipop, mac and cheese, macaroni, maple syrup, margarine, martini, mashed potatoes, mayonnaise, meatball, meatloaf, melon, milk, milkshake, monkey brain, mushroom, mustard, nacho, noodle, olive, omelet, onion, onion ring, orange, orange juice, oyster sauce, pancake, papaya, peach, peanut butter, pear, peas, pepper, pepperoni, pickle, pie, pigs in a blanket, pineapple, pizza, plum, pomegranate, popcorn, popcorn chicken, potato, potato chip, prawn cracker, pretzel, prune, pudding, pumpkin pie, radish, raisin, ranch sauce, raspberry, ravioli, relish, rice, salsa, salt, sandwich, sausage, scrambled egg, shrimp, smoothie, soda, soup, space cake, spaghetti, spare ribs, sprout, star fruit, steak, strawberry, stroop waffle, stuffing, sugar, sushi, sweet potato, taco, tail fin soup, tangerine, tea, toast, tomato, turkey, turnip, vodka, waffle, wasabi, watermelon, whipped cream, whiskey, wine, yogurt"
+//   let wordArr = words.split(", ")
+//   let docs = []
+//   for(let i = 0; i < wordArr.length; i++) {
+//     let doc = {word: wordArr[i]}
+//     docs.push(doc)
+//   }
+//     client.db("a4-webware").collection("words").insertMany(docs)
+  
+// })
+// } catch(e) {
+//   console.log(e)
+// }
 
 
 
