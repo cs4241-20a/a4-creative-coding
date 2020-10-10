@@ -3,6 +3,7 @@ const WebSocket = require('ws')
 const { v4: uuidv4 } = require('uuid')
 const app = express()
 const port = process.env.PORT || 3000
+const API = require("./API")
 
 // Use ejs as render engine
 app.set('view engine', 'ejs');
@@ -10,7 +11,12 @@ app.set('view engine', 'ejs');
 // Used to unset interval when game ends.
 var loop;
 
-var words = ["chef", "mutton", "bear", "truck", "car", "tree", "fish", "building", "house", ""]
+let words;
+setTimeout(() => {
+  words = API.getWords(4)
+  console.log(words)
+}, 4000)
+
 
 // In seconds
 const ROUND_LENGTH = 60

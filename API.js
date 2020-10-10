@@ -9,11 +9,14 @@ const database = process.env.MONGODB_DATABASE
 const uri = `mongodb+srv://${user}:${password}@${host}/${database}?retryWrites=true&w=majority`
 
 const client = new MongoClient(uri);
-client.connect();
+
+let conn = client.connect();
 
 // Get the specified number of words from the db
 const getWords = function(num) {
   var queryDoc = {};
   
-  return client.db("a4-webware").collection("words").find().toAray();
+  return client.db("a4-webware").collection("words").query({size: 3}).toAray();
 }
+
+exports.getWords = getWords;
