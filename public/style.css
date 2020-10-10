@@ -13,3 +13,8 @@ canvas {
     overflow-y: scroll;
     margin-bottom: 2rem;
 }
+
+.btn {
+  margin: 1px;
+  border: 1px solid black;
+}

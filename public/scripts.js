@@ -58,12 +58,12 @@ window.onload = function() {
         }
 
         // Setup stroke buttons
-        for(let i = 5; i <= 45; i+= 10) {
+        for(let i = 10; i <= 50; i+= 10) {
             const strokeButton = document.createElement('button');
             strokeButton.innerText = i;
             strokeButton.id = `strokeButton${i}`
             strokeButton.classList = "btn btn-primary"
-            document.getElementById('buttonContainer').appendChild(strokeButton);
+            document.getElementById('strokeButtonContainer').appendChild(strokeButton);
             document.getElementById(`strokeButton${i}`).addEventListener("click", function() {lineWidth = i});
         }
 
@@ -73,8 +73,8 @@ window.onload = function() {
             colorButton.innerText = "x";
             colorButton.id = `colorButton${i}`
             colorButton.classList += "btn"
-            colorButton.style = `background-color: ${colors[i]}; color: ${colors[i]}`;
-            document.getElementById('buttonContainer').appendChild(colorButton);
+            colorButton.style = `background-color: ${colors[i]}; color: ${colors[i]}; border: 1px black solid;`;
+            document.getElementById('colorButtonContainer').appendChild(colorButton);
             document.getElementById(`colorButton${i}`).addEventListener("click", function() {color = colors[i]});
         }
 
