@@ -1,0 +1,195 @@
+<html>
+
+<head>
+    <script src="NexusUI.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Sansita+Swashed:wght@500&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r83/three.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.2/dat.gui.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <title>CS 4241 Assignment 4</title>
+</head>
+
+<body>
+
+    <button onclick="helpButtonPiano()">Help Piano</button>
+    <button onclick="helpButtonUser()">Help GUI</button>
+
+    <h1 id="data"></h1>
+
+    <div id="soundChoices">
+        <input type="radio" checked name="waveform" id="Sine" value="Sine">
+        <label for="Sine">Sine</label>
+
+        <input type="radio" name="waveform" id="Square" value="Square">
+        <label for="Square">Square</label>
+
+        <input type="radio" name="waveform" id="Sawtooth" value="Sawtooth">
+        <label for="Sawtooth">Sawtooth</label>
+
+        <input type="radio" name="waveform" id="Triangle" value="Triangle">
+        <label for="Triangle">Triangle</label>
+
+    </div>
+    <br>
+    <br>
+
+    <div id="target">
+    </div>
+
+</body>
+
+</html>
+
+
+<script type="text/javascript">
+    function helpButtonPiano() {
+        alert("Welcome to the virtual piano expierence! To play the piano first click on the type of sound you want. Then click down on the notes to start making music!")
+    }
+
+    function helpButtonUser() {
+        alert("Welcome to the virtual piano expierence! The controls on the side allow you to change the title in many ways. Explore and have fun!")
+    }
+
+    //getting h1 element so user can change it how they want
+    var data = document.getElementById('data');
+    var text;
+
+    //to start off the header
+    var sampleText = function() {
+        this.message = "Play the Piano";
+        this.color = "#ff0000";
+        this.fontSize = 24;
+        this.border = false;
+        this.fontFamily = "sans-serif";
+        this.letterSpacing = 0;
+    };
+
+    //using user inputs change the h1 header
+    function setValue() {
+        data.innerHTML = text.message;
+        data.style.color = text.color;
+        data.style.fontSize = text.fontSize + "px";
+        data.style.fontFamily = text.fontFamily;
+        data.style.letterSpacing = text.letterSpacing + "px";
+        if (text.border) {
+            data.style.border = "solid 1px black";
+            data.style.padding = "10px";
+        } else {
+            data.style.border = "none";
+            data.style.padding = "0px";
+        }
+    }
+
+
+    //////////////PIANO CODE///////////////////
+    var context = new(window.AudioContext || window.webkitAudioContext)();
+
+    var gain = context.createGain();
+    //can set volume level here
+
+    window.onload = function() {
+
+        //takes in user inputs
+        text = new sampleText();
+        setValue();
+        var gui = new dat.GUI();
+        gui.add(text, 'message').onChange(setValue);
+        gui.addColor(text, 'color').onChange(setValue);
+        gui.add(text, 'fontSize', 6, 48).onChange(setValue);
+        gui.add(text, 'letterSpacing', 0, 20).onChange(setValue);
+        gui.add(text, 'border').onChange(setValue);
+        gui.add(text, 'fontFamily', ["sans-serif", "serif", "cursive", "monospace"]).onChange(setValue);
+
+
+
+
+        var piano = new Nexus.Piano('#target', {
+            'size': [700, 500],
+            'mode': 'button', // 'button', 'toggle', or 'impulse'
+            'lowNote': 400,
+            'highNote': 420
+        })
+
+        //what radio button is checked
+        var soundValue = document.getElementById('soundChoices').checked;
+
+        helpButtonPiano()
+        helpButtonUser()
+
+        //every time a note is clicked
+        piano.on('change', function(v) {
+
+
+            oscillator = context.createOscillator();
+            oscillator.connect(gain);
+            //what note was pressed
+            gain.connect(context.destination);
+
+
+            //choose the oscillator type based on what radio button was choosen
+            if (document.getElementById('Sine').checked) {
+                oscillator.type = "sine";
+            } else if (document.getElementById('Square').checked) {
+                oscillator.type = "square";
+            } else if (document.getElementById('Sawtooth').checked) {
+                oscillator.type = "sawtooth";
+            } else if (document.getElementById('Triangle').checked) {
+                oscillator.type = "triangle";
+            }
+
+            //set frequency value based on note on board
+            //frequencies set to actual piano frequencies
+            if (v.note === 400) {
+                oscillator.frequency.value = 329.63;
+            } else if (v.note === 401) {
+                oscillator.frequency.value = 349.23;
+            } else if (v.note === 402) {
+                oscillator.frequency.value = 370;
+            } else if (v.note === 403) {
+                oscillator.frequency.value = 392;
+            } else if (v.note === 404) {
+                oscillator.frequency.value = 415;
+            } else if (v.note === 405) {
+                oscillator.frequency.value = 440;
+            } else if (v.note === 406) {
+                oscillator.frequency.value = 466;
+            } else if (v.note === 407) {
+                oscillator.frequency.value = 493.88;
+            } else if (v.note === 408) {
+                oscillator.frequency.value = 523.25;
+            } else if (v.note === 409) {
+                oscillator.frequency.value = 554;
+            } else if (v.note === 410) {
+                oscillator.frequency.value = 587.33;
+            } else if (v.note === 411) {
+                oscillator.frequency.value = 622;
+            } else if (v.note === 412) {
+                oscillator.frequency.value = 659.26;
+            } else if (v.note === 413) {
+                oscillator.frequency.value = 698.46;
+            } else if (v.note === 414) {
+                oscillator.frequency.value = 740;
+            } else if (v.note === 415) {
+                oscillator.frequency.value = 783.99;
+            } else if (v.note === 416) {
+                oscillator.frequency.value = 831;
+            } else if (v.note === 417) {
+                oscillator.frequency.value = 880;
+            } else if (v.note === 418) {
+                oscillator.frequency.value = 932;
+            } else if (v.note === 419) {
+                oscillator.frequency.value = 987.77;
+            } else if (v.note === 420) {
+                oscillator.frequency.value = 1046.50;
+            } else { //if not a note then just play the frequency of the note value
+                oscillator.frequency.value = v.note;
+            }
+
+            oscillator.connect(context.destination);
+            oscillator.start();
+            //stop after a certian amount of time
+            oscillator.stop(context.currentTime + .5);
+
+        })
+    }
+</script>
