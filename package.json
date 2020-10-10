@@ -1,0 +1,24 @@
+{
+  "name": "a4-noah-olson",
+  "version": "0.0.1",
+  "description": "an audiovisualizer for Conway's Game of Life by Noah Olson",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "engines": {
+    "node": "12.x"
+  },
+  "repository": {
+    "url": "https://github.com/noahvolson/a4-creative-coding.git"
+  },
+  "license": "MIT",
+  "keywords": [
+    "node",
+    "glitch",
+    "express"
+  ]
+}
