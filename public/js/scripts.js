@@ -8,11 +8,11 @@ let bishop, pawn, knight, rook, queen, king;
 let parentpieces, board = {};
 const squares = {'one': 43, 'two': 31.3, 'three': 18.5, 'four': 6, 'five': -6.5, 'six': -18.5, 'seven': -31.5, 'eight': -44};
 const startingPos = {
-	wr1: {x: squares.one, z: squares.one}, wb1: {x: squares.one, z: squares.two}, wn1: {x: squares.one, z: squares.three}, wq: {x: squares.one, z: squares.four}, wk: {x: squares.one, z: squares.five}, wn2: {x: squares.one, z: squares.six}, wb2: {x: squares.one, z: squares.seven}, wr2: {x: squares.one, z: squares.eight}, 
+	wr1: {x: squares.one, z: squares.one}, wn1: {x: squares.one, z: squares.two}, wb1: {x: squares.one, z: squares.three}, wq: {x: squares.one, z: squares.four}, wk: {x: squares.one, z: squares.five}, wb2: {x: squares.one, z: squares.six}, wn2: {x: squares.one, z: squares.seven}, wr2: {x: squares.one, z: squares.eight}, 
 
 	w1: {x: squares.two, z: squares.one}, w2: {x: squares.two, z: squares.two}, w3: {x: squares.two, z: squares.three}, w4: {x: squares.two, z: squares.four}, w5: {x: squares.two, z: squares.five}, w6: {x: squares.two, z: squares.six}, w7: {x: squares.two, z: squares.seven}, w8: {x: squares.two, z: squares.eight},
 
-	br1: {x: squares.eight, z: squares.one}, bb1: {x: squares.eight, z: squares.two}, bn1: {x: squares.eight, z: squares.three}, bq: {x: squares.eight, z: squares.four}, bk: {x: squares.eight, z: squares.five}, bn2: {x: squares.eight, z: squares.six}, bb2: {x: squares.eight, z: squares.seven}, br2: {x: squares.eight, z: squares.eight}, 
+	br1: {x: squares.eight, z: squares.one}, bn1: {x: squares.eight, z: squares.two}, bb1: {x: squares.eight, z: squares.three}, bq: {x: squares.eight, z: squares.five}, bk: {x: squares.eight, z: squares.four}, bb2: {x: squares.eight, z: squares.six}, bn2: {x: squares.eight, z: squares.seven}, br2: {x: squares.eight, z: squares.eight}, 
 
 	b1: {x: squares.seven, z: squares.one}, b2: {x: squares.seven, z: squares.two}, b3: {x: squares.seven, z: squares.three}, b4: {x: squares.seven, z: squares.four}, b5: {x: squares.seven, z: squares.five}, b6: {x: squares.seven, z: squares.six}, b7: {x: squares.seven, z: squares.seven}, b8: {x: squares.seven, z: squares.eight}
 };
@@ -28,28 +28,35 @@ const load3dPieces = () => {
 	loader.load('../assets/scene.gltf', (gltf) => {
 
 		gltf.scene.traverse((obj) => {
-			// if (!obj.isObject3D) return;
+			// if (!(obj instanceof THREE.Mesh)) console.log(obj);
   			// let prevMaterial = obj.material;
-			obj.material = new THREE.MeshPhongMaterial();
 			// THREE.MeshBasicMaterial.prototype.copy.call(obj.material, prevMaterial);
 			// console.log(obj);
 			switch(obj.name){
 				case 'PrimaryWhiteBishop001':
+					obj.material = new THREE.MeshBasicMaterial({color: 0x00ff00});
 					bishop = obj;
+					// bishop.material.color.set('skyblue');
+					console.log(bishop);
 					break;
 				case 'WhiteKnight001':
+					obj.material = new THREE.MeshBasicMaterial();
 					knight = obj;
 					break;
 				case 'PrimaryWhitePawn007':
+					obj.material = new THREE.MeshBasicMaterial();
 					pawn = obj;
 					break;
 				case 'Rook001':
+					obj.material = new THREE.MeshBasicMaterial();
 					rook = obj;
 					break;
 				case 'WhiteQueen':
+					obj.material = new THREE.MeshBasicMaterial();
 					queen = obj;
 					break;
 				case 'WhiteKing':
+					obj.material = new THREE.MeshBasicMaterial();
 					king = obj;
 					break;
 				default:
@@ -67,20 +74,16 @@ const initBoard = () => {
 		switch(piece){
 			case 'r':
 				clone = rook.clone();
-				break;
-			
+				break;			
 			case 'b':
 				clone = bishop.clone();
-				break;
-			
+				break;			
 			case 'n':
 				clone = knight.clone();
-				break;
-			
+				break;			
 			case 'q':
 				clone = queen.clone();
 				break;
-			
 			case 'k':
 				clone = king.clone();
 				break;
@@ -90,6 +93,7 @@ const initBoard = () => {
 		console.log
 		// val[0][0] === 'b' ? clone.material.set('skyblue') : null;
 		clone.rotation.x = - Math.PI / 2;
+		clone.rotation.z = - Math.PI / 2;
 		clone.position.x = val[1].x
 		clone.position.z = val[1].z;
 		scene.add(clone);
