@@ -13,9 +13,11 @@ var loop;
 
 let words;
 setTimeout(() => {
-  words = API.getWords(4)
-  console.log(words)
-}, 4000)
+  API.getWords(5).then((w) => {
+    words = w
+    console.log(words)
+  })
+}, 1000)
 
 
 // In seconds
