@@ -4,15 +4,15 @@ const { v4: uuidv4 } = require('uuid')
 const app = express()
 const port = process.env.PORT || 3000
 
-
+// Use ejs as render engine
 app.set('view engine', 'ejs');
-
 
 // Used to unset interval when game ends.
 var loop;
 
 var words = ["chef", "mutton", "bear", "truck", "car", "tree", "fish", "building", "house", "snake"]
 
+// In seconds
 const ROUND_LENGTH = 60
 
 // Set up initial game state
@@ -26,25 +26,29 @@ var game = {
     started: true,
 }
 
-// NODE SERVER
+// Keep track of messages previously sent by clients
+var messages = []
+
+
+// Make static files in public/ directory available
 app.use(express.static("public"))
 
 app.get('/', (req, res) => {
     res.render("index", {title: "Home"})
 })
 
+// Create HTTP server so WebSocket works not-just-locally
 const http = require('http')
 const server = http.createServer(app)
 
 // WebSocket server
 const wss = new WebSocket.Server({server})
 
+// SERVER, not APP, listens, which includes websocket
 server.listen(port, () => {
     console.log(`App listening on port ${port}`)
 })
 
-// WEBSOCKET
-var messages = []
 
 wss.on('connection', (ws) => {
     // Generate unique ID and add to list of clients
@@ -53,17 +57,28 @@ wss.on('connection', (ws) => {
     console.log("New client connected!")
     console.log("Total clients connected: %d", wss.clients.size)
 
+    // When new client connects, send them all previous messages
     for(let i = 0; i < messages.length; i++) {
         ws.send(messages[i])
     }
-
+  
     ws.on('message', (message) => {
         const obj = JSON.parse(message)
         
+        // OK hear me out on this; I almost used a switch statement, but decided not
+        // to because some commands also need other conditions to be met in order to
+        // do anything, which would need ANOTHER if statement after the "case x:". So
+        // I did it this way. :)
+        
+        // Add new player to game state and send unique ID to client
         if(obj["command"] === "NEW_PLAYER") {
-            // Add new player to game state and send unique ID to client
+          
+            // First player is leader
             const isLeader = game.players.length < 1
-
+            if(isLeader) {
+                game.leader = player;
+            }
+            
             const player = {
                 id: client_id,
                 socket: ws,
@@ -75,19 +90,17 @@ wss.on('connection', (ws) => {
 
             game.players.push(player);
 
+            console.log("Registered new player!")
+            console.log("Playername: %s", obj.name)
+          
+            // Tell client the player's ID and if they're leader
             ws.send(JSON.stringify({
                 command: "ID",
                 id: client_id,
                 isLeader: isLeader,
             }))
 
-            if(isLeader) {
-                game.leader = player;
-            }
-
-            console.log("Registered new player!")
-            console.log("Playername: %s", obj.name)
-
+            // Send update list of players to each client
             var players = game.players.map(p => {
                 return {name: p.name, correct: p.correct};
             })
@@ -100,8 +113,8 @@ wss.on('connection', (ws) => {
             )
         }
         
-        // Start game
-        else if(obj.command === "START" && obj.id === game.leader.id) {
+        // Start game. Only leader can do this, and only if there are at least MIN_PLAYERS connected.
+        else if(obj.command === "START" && obj.id === game.leader.id && game.players.) {
             console.log("Game starting!")
             tick();
             sendWordToClients();
