@@ -1,0 +1,19 @@
+{
+  "name": "cs-4241-4th-assignment",
+  "version": "0.1.0",
+  "description": "WPI CS 4241 fourth assignment",
+  "author": "Seungho Lee",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "~4.16.1",
+    "express-session": "~1.16.2",
+    "serve-favicon": "~2.5.0",
+    "three": "^0.108.0",
+    "morgan": "latest"
+  },
+  "devDependencies": {
+    "eslint": "^6.4.0"
+  }
+}
