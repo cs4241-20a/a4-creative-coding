@@ -1,7 +1,7 @@
 const reqString = "http://api.nobelprize.org/v1/laureate.json"
-const mapReqString = "https://datahub.io/core/geo-countries/datapackage.json"
+const mapReqString = "world.geojson"
 let laureateData = null
-let map  = null
+let map = null
 
 let physicsLaureates = []
 let ecoLaureates = []
@@ -11,7 +11,11 @@ let peaceLaureates = []
 let medLaureates = []
 let femaleLaureates = []
 let maleLaureates = []
-let universities = {}
+let byYear = {}
+
+let genderSlider = document.getElementById("yearGenderSlider")
+let mapSlider = document.getElementById("yearMapSlider")
+let helpBtn = document.getElementById("helpBtn")
 
 window.onload = function () {
     d3.json(reqString, function (data) {
@@ -19,81 +23,106 @@ window.onload = function () {
         setUp()
     })
 
-
-    d3.json("https://unpkg.com/world-atlas@1/world/110m.json", function(error, topology) {
-       map =topology
-       mapSetUp()
+    d3.json(mapReqString, function (error, topology) {
+        map = topology
+        mapSetUp()
 
     });
+
+    genderSlider.oninput = genderSliderControl
+    mapSlider.oninput = mapSliderControl
+
+    Array.from(document.getElementsByClassName("catCheck")).forEach((e => e.onchange = ageGraphControl))
+    $('#exampleModal').modal('show');
 }
+
 
 function setUp() {
     getAges()
     ageGraphControl()
-    genderSlider.value = 2019
+    genderSlider.value = 2020
     genderSliderControl()
     getGender(2019)
+    mapSlider.value = 2020
+    mapSliderControl()
 }
 
 function mapSetUp() {
     document.getElementById("mapChart").innerHTML = ""
-    height = 500
+    let height = 500
     let width = +d3.select('#mapChart').style('width').slice(0, -2)
 
-    var projection = d3.geoMercator()
-        .translate([width / 2.2, height / 1.5]);
+    let projection = d3.geoEquirectangular();
 
-    var path = d3.geoPath()
+    let geoGenerator = d3.geoPath()
         .projection(projection);
 
-    var svg = d3.select("#mapChart").append("svg").attr("width", width).attr("height", 600).attr("class", "map");
-    svg.append('g').selectAll("path")
-        .data(topojson.feature(map, map.objects.countries)
-            .features)
-        .enter()
-        .append("path")
-        .attr("d", path)
+    let svg = d3.select("#mapChart").append("svg").attr("width", width).attr("height", height).attr("class", "map")
+    let g = svg.append('g')
+    let u = g.selectAll('path')
+        .data(map.features);
+
+    u.enter()
+        .append('path')
+        .attr('d', geoGenerator);
+
 }
 
 const getAges = function () {
     for (section of Object.keys(laureateData.laureates)) {
-        console.log(laureateData.laureates[section])
         laureateData.laureates[section].prizes.forEach(prize => {
+            let award = {
+                name: laureateData.laureates[section].firstname + " " + laureateData.laureates[section].surname,
+                category: prize.category,
+                description: prize.motivation,
+                country: laureateData.laureates[section].bornCountry,
+                countryCode: laureateData.laureates[section].bornCountryCode
+            }
+            if (prize.year in byYear) {
+                byYear[prize.year].push(award)
+            } else {
+                byYear[prize.year] = [award]
+            }
+            let name = laureateData.laureates[section].firstname + " " + laureateData.laureates[section].surname
+            if(laureateData.laureates[section].gender == "org"){
+                name = laureateData.laureates[section].firstname
+            }
             if (laureateData.laureates[section].born != null) {
                 let obj = {
                     year: prize.year,
                     age: prize.year - laureateData.laureates[section].born.substring(0, 4),
                     gender: laureateData.laureates[section].gender,
+                    name
                 }
-                if(laureateData.laureates[section].gender === "female"){
+                if (laureateData.laureates[section].gender === "female") {
                     femaleLaureates.push(obj)
-                }else if(laureateData.laureates[section].gender === "male"){
+                } else if (laureateData.laureates[section].gender === "male") {
                     maleLaureates.push(obj)
                 }
-                switch (prize.category) {
-                    case "physics":
-                        physicsLaureates.push(obj)
-                        break
-                    case "chemistry":
-                        chemLaureates.push(obj)
-                        break
-                    case "economics":
-                        ecoLaureates.push(obj)
-                        break
-                    case "medicine":
-                        medLaureates.push(obj)
-                        break
-                    case "peace":
-                        peaceLaureates.push(obj)
-                        break
-                    case "literature":
-                        litLaureates.push(obj)
-                        break
+                if (laureateData.laureates[section].gender != "org") {
+                    switch (prize.category) {
+                        case "physics":
+                            physicsLaureates.push(obj)
+                            break
+                        case "chemistry":
+                            chemLaureates.push(obj)
+                            break
+                        case "economics":
+                            ecoLaureates.push(obj)
+                            break
+                        case "medicine":
+                            medLaureates.push(obj)
+                            break
+                        case "peace":
+                            peaceLaureates.push(obj)
+                            break
+                        case "literature":
+                            litLaureates.push(obj)
+                            break
+                    }
                 }
             }
-
         })
-
     }
 
 }
@@ -135,6 +164,80 @@ const genderSliderControl = function () {
 
 }
 
+const mapSliderControl = function () {
+
+    let countries = {}
+    document.getElementById("mapChart").innerHTML = ""
+    let year = mapSlider.value
+    document.getElementById("yearText").innerText = "Year " + year
+    let laureates = byYear[year]
+    if (laureates != undefined) {
+        laureates.forEach(l => {
+            let countryGeo = map.features.find(obj => {
+                return obj.properties["ISO_A2"] == l.countryCode
+            })
+            let award = l
+            if (l.countryCode in countries) {
+                countries[l.countryCode].push(award)
+            } else {
+                countries[l.countryCode] = [award]
+            }
+        })
+    }
+
+    var div = d3.select("body").append("div")
+        .attr("class", "tooltip")
+        .style("opacity", 0);
+
+    let height = 500
+    let width = +d3.select('#mapChart').style('width').slice(0, -2)
+
+    let projection = d3.geoEquirectangular();
+
+    let geoGenerator = d3.geoPath()
+        .projection(projection);
+
+    let svg = d3.select("#mapChart").append("svg").attr("width", width).attr("height", height).attr("class", "map")
+    let g = svg.append('g')
+    let u = g.selectAll('path')
+        .data(map.features);
+    u.enter()
+        .append('path')
+        .attr('d', geoGenerator)
+
+    g.selectAll('path').attr("fill", function (d) {
+        if (Object.keys(countries).includes(d.properties.ISO_A2)) {
+            return '#1578b3'
+        }
+        return '#aaa'
+    })
+    g.selectAll('path').on("mouseover", function(d){
+        if (Object.keys(countries).includes(d.properties.ISO_A2)) {
+            div.transition()
+                .duration(200)
+                .style("opacity", .9).style("display", "inline");
+            let text = "";
+            countries[d.properties.ISO_A2].forEach(l => {
+                text += "<b>"+l.name+"</b> " +l.description+ "<br/>"
+                }
+            )
+            div	.html(text )
+                .style("left", (d3.event.pageX) + "px")
+                .style("top", (d3.event.pageY - 28) + "px");
+            d3.select(this).style("fill", "#094bb3")
+        }
+    });
+    g.selectAll('path').on("mouseout", function(d){
+        if (Object.keys(countries).includes(d.properties.ISO_A2)) {
+            div.transition()
+                .duration(500)
+                .style("opacity", 0).style("display", "none");
+            d3.select(this).style("fill", "#0b82b3")
+        }
+    });
+
+}
+
 const ageGraphControl = function () {
 
     let highlightFemale = document.getElementById("femaleCheck").checked
@@ -143,6 +246,10 @@ const ageGraphControl = function () {
     let margin = {top: 10, right: 30, bottom: 30, left: 60},
         width = +d3.select('#ageCol').style('width').slice(0, -2) - margin.left - margin.right,
         height = 400 - margin.top - margin.bottom;
+
+    var div = d3.select("body").append("div")
+        .attr("class", "tooltip")
+        .style("opacity", 0);
 
 // append the svg object to the body of the page
     var svg = d3.select("#ageCol")
@@ -154,45 +261,57 @@ const ageGraphControl = function () {
             "translate(" + margin.left + "," + margin.top + ")");
 
 
-        // Add X axis
-        var x = d3.scaleLinear()
-            .domain([1900, 2020])
-            .range([0, width]);
-        svg.append("g")
-            .attr("transform", "translate(0," + height + ")")
-            .call(d3.axisBottom(x).tickFormat(d3.format(".0f")));
+    // Add X axis
+    var x = d3.scaleLinear()
+        .domain([1900, 2020])
+        .range([0, width]);
+    svg.append("g")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(x).tickFormat(d3.format(".0f")));
 
-        // Add Y axis
-        var y = d3.scaleLinear()
-            .domain([0, 100])
-            .range([height, 0]);
-        svg.append("g")
-            .call(d3.axisLeft(y));
+    // Add Y axis
+    var y = d3.scaleLinear()
+        .domain([0, 100])
+        .range([height, 0]);
+    svg.append("g")
+        .call(d3.axisLeft(y));
 
-        if(document.getElementById("chemCheck").checked){
-            svg.append('g')
-                .selectAll("dot")
-                .data(chemLaureates)
-                .enter()
-                .append("circle")
-                .attr("cx", function (d) {
-                    return x(parseInt(d.year));
-                })
-                .attr("cy", function (d) {
-                    return y(d.age);
-                })
-                .attr("r", function(d){
-                    if(d.gender =="female" && highlightFemale){
-                        return 3
-                    }else if (highlightFemale){
-                        return 1
-                    }else{
-                        return 1.5
-                    }
-                })
-                .style("fill", "#69b3a2")
-        }
-    if(document.getElementById("medCheck").checked){
+    if (document.getElementById("chemCheck").checked) {
+        svg.append('g')
+            .selectAll("dot")
+            .data(chemLaureates)
+            .enter()
+            .append("circle")
+            .attr("cx", function (d) {
+                return x(parseInt(d.year));
+            })
+            .attr("cy", function (d) {
+                return y(d.age);
+            })
+            .attr("r", function (d) {
+                if (d.gender == "female" && highlightFemale) {
+                    return 3
+                } else if (highlightFemale) {
+                    return 1
+                } else {
+                    return 1.5
+                }
+            })
+            .style("fill", "#54b3b2").on("mouseover", function(d){
+            div.transition()
+                .duration(200)
+                .style("opacity", .9);
+            div	.html(d.name + "<br/>" )
+                .style("left", (d3.event.pageX) + "px")
+                .style("top", (d3.event.pageY - 28) + "px");
+        })
+            .on("mouseout", function(d) {
+                div.transition()
+                    .duration(500)
+                    .style("opacity", 0);
+        })
+    }
+    if (document.getElementById("medCheck").checked) {
         svg.append('g')
             .selectAll("dot")
             .data(medLaureates)
@@ -204,18 +323,30 @@ const ageGraphControl = function () {
             .attr("cy", function (d) {
                 return y(d.age);
             })
-            .attr("r", function(d){
-                if(d.gender =="female" && highlightFemale){
+            .attr("r", function (d) {
+                if (d.gender == "female" && highlightFemale) {
                     return 3
-                }else if (highlightFemale){
+                } else if (highlightFemale) {
                     return 1
-                }else{
+                } else {
                     return 1.5
                 }
             })
-            .style("fill", "#b3454a")
+            .style("fill", "#b3454a").on("mouseover", function(d){
+            div.transition()
+                .duration(200)
+                .style("opacity", .9);
+            div	.html(d.name + "<br/>" )
+                .style("left", (d3.event.pageX) + "px")
+                .style("top", (d3.event.pageY - 28) + "px");
+        })
+            .on("mouseout", function(d) {
+                div.transition()
+                    .duration(500)
+                    .style("opacity", 0);
+            })
     }
-    if(document.getElementById("peaceCheck").checked){
+    if (document.getElementById("peaceCheck").checked) {
         svg.append('g')
             .selectAll("dot")
             .data(peaceLaureates)
@@ -227,18 +358,30 @@ const ageGraphControl = function () {
             .attr("cy", function (d) {
                 return y(d.age);
             })
-            .attr("r", function(d){
-                if(d.gender =="female" && highlightFemale){
+            .attr("r", function (d) {
+                if (d.gender == "female" && highlightFemale) {
                     return 3
-                }else if (highlightFemale){
+                } else if (highlightFemale) {
                     return 1
-                }else{
+                } else {
                     return 1.5
                 }
             })
-            .style("fill", "#44b346")
+            .style("fill", "#5ab335").on("mouseover", function(d){
+            div.transition()
+                .duration(200)
+                .style("opacity", .9);
+            div	.html(d.name + "<br/>" )
+                .style("left", (d3.event.pageX) + "px")
+                .style("top", (d3.event.pageY - 28) + "px");
+        })
+            .on("mouseout", function(d) {
+                div.transition()
+                    .duration(500)
+                    .style("opacity", 0);
+            })
     }
-    if(document.getElementById("ecoCheck").checked){
+    if (document.getElementById("ecoCheck").checked) {
         svg.append('g')
             .selectAll("dot")
             .data(ecoLaureates)
@@ -250,18 +393,30 @@ const ageGraphControl = function () {
             .attr("cy", function (d) {
                 return y(d.age);
             })
-            .attr("r", function(d){
-                if(d.gender =="female" && highlightFemale){
+            .attr("r", function (d) {
+                if (d.gender == "female" && highlightFemale) {
                     return 3
-                }else if (highlightFemale){
+                } else if (highlightFemale) {
                     return 1
-                }else{
+                } else {
                     return 1.5
                 }
             })
-            .style("fill", "#b35394")
+            .style("fill", "#9a53b3").on("mouseover", function(d){
+            div.transition()
+                .duration(200)
+                .style("opacity", .9);
+            div	.html(d.name + "<br/>" )
+                .style("left", (d3.event.pageX) + "px")
+                .style("top", (d3.event.pageY - 28) + "px");
+        })
+            .on("mouseout", function(d) {
+                div.transition()
+                    .duration(500)
+                    .style("opacity", 0);
+            })
     }
-    if(document.getElementById("phyCheck").checked){
+    if (document.getElementById("phyCheck").checked) {
         svg.append('g')
             .selectAll("dot")
             .data(physicsLaureates)
@@ -273,18 +428,30 @@ const ageGraphControl = function () {
             .attr("cy", function (d) {
                 return y(d.age);
             })
-            .attr("r", function(d){
-                if(d.gender =="female" && highlightFemale){
+            .attr("r", function (d) {
+                if (d.gender == "female" && highlightFemale) {
                     return 3
-                }else if (highlightFemale){
+                } else if (highlightFemale) {
                     return 1
-                }else{
+                } else {
                     return 1.5
                 }
             })
-            .style("fill", "#1578b3")
+            .style("fill", "#1578b3").on("mouseover", function(d){
+            div.transition()
+                .duration(200)
+                .style("opacity", .9);
+            div	.html(d.name + "<br/>" )
+                .style("left", (d3.event.pageX) + "px")
+                .style("top", (d3.event.pageY - 28) + "px");
+        })
+            .on("mouseout", function(d) {
+                div.transition()
+                    .duration(500)
+                    .style("opacity", 0);
+            })
     }
-    if(document.getElementById("litCheck").checked){
+    if (document.getElementById("litCheck").checked) {
         svg.append('g')
             .selectAll("dot")
             .data(litLaureates)
@@ -296,21 +463,28 @@ const ageGraphControl = function () {
             .attr("cy", function (d) {
                 return y(d.age);
             })
-            .attr("r", function(d){
-                if(d.gender =="female" && highlightFemale){
+            .attr("r", function (d) {
+                if (d.gender == "female" && highlightFemale) {
                     return 3
-                }else if (highlightFemale){
+                } else if (highlightFemale) {
                     return 1
-                }else{
+                } else {
                     return 1.5
                 }
             })
-            .style("fill", "#b37111")
+            .style("fill", "#b38715").on("mouseover", function(d){
+            div.transition()
+                .duration(200)
+                .style("opacity", .9);
+            div	.html(d.name + "<br/>" )
+                .style("left", (d3.event.pageX) + "px")
+                .style("top", (d3.event.pageY - 28) + "px");
+        })
+            .on("mouseout", function(d) {
+                div.transition()
+                    .duration(500)
+                    .style("opacity", 0);
+            })
     }
 
 }
-
-let genderSlider = document.getElementById("yearGenderSlider")
-genderSlider.oninput = genderSliderControl
-
-Array.from(document.getElementsByClassName("catCheck")).forEach((e => e.onchange = ageGraphControl))

@@ -6,15 +6,43 @@
     <title>Nobel Prize Laureates Visualization</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+
 </head>
 <body>
-<h1>Nobel Prize Laureates</h1>
+<!-- Modal from bootstrap documentation -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Nobel Prize Laureates Help</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                This is a visualization of Nobel Prize Laureates dataset created by Adrianna Staszewska for CS 4241. <hr>
+                You can interact with the visualisations in the following ways:
+                <ul><li>Use sliders to change years in the "Gender differences" and "Country of Birth of Laureates"</li>
+                <li>Use checkboxes to filter data</li>
+                    <li>Hover over elements (dots or ares in the mao) to get the information about the laureate</li></ul>
+
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
 <div class="container">
+    <div class="row"><div class = "col-11"><h1>Nobel Prize Laureates</h1></div><div class="col-1" style="margin: auto;"> <button data-toggle="modal" data-target="#exampleModal" class="btn btn-primary" id="helpBtn">Help!</button></div></div>
     <h3>Gender differences</h3>
     <div class="row">
         <div id="genderRatio" class="col-lg">
             <div id="genderBar"></div>
-            <input type="range" class="form-control-range" step=1 min="1900" max="2019" id="yearGenderSlider" step="20" list="steplist">
+            <input type="range" class="form-control-range" step=1 min="1901" max="2020" id="yearGenderSlider" step="20" list="steplist">
             <datalist id="steplist">
                 <option>1900</option>
                 <option>1950</option>
@@ -37,17 +65,17 @@
         <div class="col-4" id="ageText">
             <div class="form-check">
                 <div class="catCheck"><input type="checkbox" class="form-check-input" id="chemCheck" checked>
-                    <label class="form-check-label" style="background-color: rgba(69, 179, 162, 0.4)"  for="chemCheck">Chemistry</label></div>
+                    <label class="form-check-label" style="background-color: rgba(84, 179, 177, 0.4)"  for="chemCheck">Chemistry</label></div>
                 <div class="catCheck"><input type="checkbox" class="form-check-input" id="ecoCheck" checked>
-                    <label class="form-check-label" style="background-color: rgba(179, 83, 148, 0.4)" for="ecoCheck">Economic Sciences</label></div>
+                    <label class="form-check-label" style="background-color: rgba(153, 83, 179, 0.4)" for="ecoCheck">Economic Sciences</label></div>
                 <div class="catCheck"><input type="checkbox" class="form-check-input" id="phyCheck" checked>
                     <label class="form-check-label" style="background-color: rgba(21, 120, 179, 0.4)" for="phyCheck">Physics</label></div>
                 <div class="catCheck"><input type="checkbox" class="form-check-input" id="litCheck" checked>
-                    <label class="form-check-label" style="background-color: rgba(179, 113, 17, 0.4)" for="litCheck">Literature</label></div>
+                    <label class="form-check-label" style="background-color: rgba(179, 134, 21, 0.4)" for="litCheck">Literature</label></div>
                 <div class="catCheck"><input type="checkbox" class="form-check-input" id="medCheck" checked>
                     <label class="form-check-label" style="background-color: rgba(179, 69, 74, 0.4)" for="medCheck">Physiology or Medicine</label></div>
                 <div class="catCheck"><input type="checkbox" class="form-check-input" id="peaceCheck" checked>
-                    <label class="form-check-label" style="background-color: rgba(68, 179, 70, 0.4)" for="peaceCheck">Peace</label></div>
+                    <label class="form-check-label" style="background-color: rgba(91, 179, 53, 0.4)" for="peaceCheck">Peace</label></div>
                 <br>
                 <div class="catCheck"><input type="checkbox" class="form-check-input" id="femaleCheck" checked>
                     <label class="form-check-label"  for="femaleCheck">Highlight female laureates</label></div>
@@ -57,12 +85,11 @@
 
     <hr>
     <h3>Country of Birth of Laureates</h3>
-    <h4 style= "text-align:center">Year 2019</h4>
+    <h4 id="yearText" style= "text-align:center">Year 2019</h4>
     <div class="row">
         <div id="countryCol" class="col">
+            <input type="range" class="form-control-range" step=1 min="1900" max="2020" id="yearMapSlider" step="20" >
             <div id="mapChart"></div>
-            <input type="range" class="form-control-range" step=1 min="1900" max="2019" id="yearMapSlider" step="20" >
-
         </div>
         </div>
     </div>

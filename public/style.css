@@ -87,3 +87,7 @@ input[type=range]:focus::-ms-fill-lower {
 input[type=range]:focus::-ms-fill-upper {
     background: #F2F2F2;
 }
+
+.tooltip{
+    background-color: white;
+}
