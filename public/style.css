@@ -1,0 +1,38 @@
+/* this file is loaded by index.html and styles the page */
+
+* {
+  box-sizing: border-box;
+}
+
+input.H{
+  width: 10%;
+}
+
+span{
+  font-family: sans-serif;
+  font-style: bold;
+  color: white;
+}
+
+
+body {
+  font-family: sans-serif;
+  margin: 2em 1em;
+  line-height: 1.5em;
+  background-color: gray;
+}
+
+h1 {
+  font-style: bold;
+  color: white;
+  max-width: calc(100% - 5rem);
+  line-height: 1.1;
+}
+
+input {
+  border: 1px solid silver;
+  style-float: right;
+  font-size: 16px;
+  padding: 5px;
+  width: 10%;
+}
