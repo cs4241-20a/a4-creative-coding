@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Music Maker</title>
+        <meta charset="utf-8">
+        <link href="//cdn.muicss.com/mui-0.10.3/css/mui.min.css" rel="stylesheet" type="text/css" />
+        <script src="//cdn.muicss.com/mui-0.10.3/js/mui.min.js"></script>
+        <link href="css/style.css" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <script type="module" src="js/scripts.js" defer></script>
+        <script src="libraries/interface.min.js"></script>
+        <script type="text/javascript" src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
+    </head>
+
+    <body>
+        <div class="mui-panel main-panel">
+            <h1>Music Maker</h1>
+            <div id="notePanel", class='interfacePanel'></div>
+            <div>
+                <button type="button" id="startButton" class="mui-btn mui-btn--raised mui-btn--primary">Start</button>
+                <button type="button" id="stopButton" class="mui-btn mui-btn--raised mui-btn--danger">Stop</button>
+            </div>
+            <div>
+                <button type="button" id="clearButton" class="mui-btn mui-btn--raised">Clear</button>
+            </div>
+            <br>
+            <div class="mui-textfield controlPanel">
+                <label for="speedInput">Beats Per Second</label>
+                <input type="number" id="speedInput" value="2" min="0.5" max="12" step="0.5">
+            </div>
+            <div class="mui-textfield controlPanel">
+                <label for="gainInput"><p>Gain (Volume)</p></label>
+                <input type="range" id="gainInput" value="0.25" min="0" max="0.5" step="0.01">
+            </div>
+            <div id="waveTypeSelect" class="mui-select controlPanel">
+                <label for="waveTypes">Audio Wave Type</label>
+                <select id="waveTypes" name="waveTypes">
+                    <option value="sine">Sine</option>
+                    <option value="square">Square</option>
+                    <option value="sawtooth">Sawtooth</option>
+                    <option value="triangle">Triangle</option>
+                </select>
+            </div>
+            <button type="button" id="helpButton" class="mui-btn mui-btn--accent">Instructions</button>
+        </div>
+        <!--Inspired by https://www.w3schools.com/howto/howto_css_modals.asp-->
+        <div id="helpMenu" class="modal-offmenu">
+            <div class="modal-helpmenu">
+                <div class="modal-content">
+                    <span id="closeHelpButton">&times;</span>
+                    <h1>Instructions</h1>
+                </div>
+                <div class="modal-content">
+                    <p>
+                        This is a site that allows you to compose a repeating 4 measure G major song in 4/4 time.<br>
+                        Click anywhere on the 8x16 grid to have that note played when the song is started.<br>
+                        You can see the corresponding note and octave below the main grid when you select a note to be played.<br>
+                        The 1x16 grid represents the 'timestamp' of the song. You manipulate it by clicking anywhere on it.<br>
+                        <br>
+                        <button class="mui-btn mui-btn--primary">Start</button><br> Will start the song at the current timestamp.<br>
+                        <button class="mui-btn mui-btn--danger">Stop</button><br> Will stop the song at the current timestamp.<br>
+                        <button class="mui-btn mui-btn--raised">Clear</button><br> Will stop the song, clear all selected notes, and reset the timestamp.<br>
+                        <br>
+                        <span class="mui-textfield controlPanel">
+                            <label for="exspeedInput">Beats Per Second</label>
+                            <input type="number" id="exspeedInput" value="2" min="0.5" max="12" step="0.5">
+                        </span> Determines the number of columns of notes played per second.
+                        <br>
+                        <br>
+                        <div class="mui-textfield controlPanel">
+                            <label for="exgainInput"><p>Gain (Volume)</p></label>
+                            <input type="range" id="exgainInput" value="0.25" min="0" max="0.5" step="0.01">
+                        </div> Determines the volume of the song.
+                        <br>
+                        <br>
+                        <div id="exwaveTypeSelect" class="mui-select controlPanel">
+                            <label for="exwaveTypes">Audio Wave Type</label>
+                            <select id="exwaveTypes" name="waveTypes">
+                                <option value="sine">Sine</option>
+                                <option value="square">Square</option>
+                                <option value="sawtooth">Sawtooth</option>
+                                <option value="triangle">Triangle</option>
+                            </select>
+                        </div> Determines the type of wave which the note generator will use to generate a note.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
