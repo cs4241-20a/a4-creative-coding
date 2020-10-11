@@ -18,7 +18,8 @@ There were multiple challenges with creating this application. At first, I made 
 ![Color Palette](https://github.com/jstoessel/a4-creative-coding/blob/master/color_palette.png?raw=true)
 
 
-Credits to:
+# Credits to:
+
 Web Dev Simplified for Piano visual tutorial and modal tutorial
 css-tricks.com for slider customization options
 https://pages.mtu.edu/~suits/notefreqs.html for note frequencies
