@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 ## Drawing App
 
 Sam Moran
