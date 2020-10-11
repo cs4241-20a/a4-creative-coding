@@ -1,135 +1,174 @@
-// const freqLevelRange = document.getElementById('freqLevelRange');
-// const freqLevelNumber = document.getElementById('freqLevelNumber');
+//key press buttons for UI keyboard
+const WHITE_KEYS = ['z', 'x', 'c', 'v', 'b', 'n', 'm', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i']
+const BLACK_KEYS = ['s', 'd', 'g', 'h', 'j', '2', '3', '5', '6', '7']
 
-// freqLevelRange.addEventListener('input', syncFreqAmount)
-// freqLevelNumber.addEventListener('input', syncFreqAmount)
+const keys = document.querySelectorAll('.key');
+const whiteKeys = document.querySelectorAll('.key.white');
+const blackKeys = document.querySelectorAll('.key.black');
 
-// function syncFreqAmount(e) {
-//     const val = e.target.value
-//     freqLevelRange.value = val;
-//     freqLevelNumber.value = val;
-// }
+const freqLevelRange = document.getElementById('freqLevelRange');
+const freqLevelNumber = document.getElementById('freqLevelNumber');
 
-// const volLevelRange = document.getElementById('volLevelRange');
-// const volLevelNumber = document.getElementById('volLevelNumber');
+freqLevelRange.addEventListener('input', syncFreqAmount)
+freqLevelNumber.addEventListener('input', syncFreqAmount)
 
-// volLevelRange.addEventListener('input', syncVolAmount)
-// volLevelNumber.addEventListener('input', syncVolAmount)
+function syncFreqAmount(e) {
+    const val = e.target.value
+    freqLevelRange.value = val;
+    freqLevelNumber.value = val;
+}
 
-// //syncs volume range with volume number
-// function syncVolAmount(e) {
-//     const val = e.target.value
-//     volLevelRange.value = val;
-//     volLevelNumber.value = val;
-// }
+const volLevelRange = document.getElementById('volLevelRange');
+const volLevelNumber = document.getElementById('volLevelNumber');
 
-//EVERYTHING IS PLACED INSIDE A DOMContentLoaded EVENT SO THAT WHEN
-//WE getElementById, THE ELEMENTS ARE LOADED & AVAILABLE
-document.addEventListener("DOMContentLoaded", function(event) {
-    //SET UP AUDIO CONTEXT
+volLevelRange.addEventListener('input', syncVolAmount)
+volLevelNumber.addEventListener('input', syncVolAmount)
+
+//syncs volume range with volume number
+function syncVolAmount(e) {
+    const val = e.target.value
+    volLevelRange.value = val;
+    volLevelNumber.value = val;
+}
+
+
+//event listeners to add active effect to keyboard
+document.addEventListener('keydown', e => {
+    if (e.repeat) return
+    const key = e.key;
+    const blackKeyIndex = BLACK_KEYS.indexOf(key)
+    const whiteKeyIndex = WHITE_KEYS.indexOf(key)
+
+    if (whiteKeyIndex > -1)
+        whiteKeys[whiteKeyIndex].classList.add('active');
+    if (blackKeyIndex > -1)
+        blackKeys[blackKeyIndex].classList.add('active');
+});
+
+//event listeners to remove active effect from keyboard
+document.addEventListener('keyup', e => {
+    if (e.repeat) return
+    const key = e.key;
+    const blackKeyIndex = BLACK_KEYS.indexOf(key)
+    const whiteKeyIndex = WHITE_KEYS.indexOf(key)
+
+    if (whiteKeyIndex > -1)
+        whiteKeys[whiteKeyIndex].classList.remove('active')
+    if (blackKeyIndex > -1)
+        blackKeys[blackKeyIndex].classList.remove('active');
+});
+
+
+
+//Initialize audio on window load to avoid null pointers
+function initializeAudio() {
+
+    //Web Audio API utilization
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  
-    //PROCESSING CHAIN
-    const gain = audioCtx.createGain();
+
+    //Process volume and filter
+    const volume = audioCtx.createGain();
     const filter = audioCtx.createBiquadFilter();
-  
-    //CURRENT WAVEFORM OSCILLATOR WILL USE
-    let waveform = 'sawtooth'
-  
+
+    //default waveform
+    let waveform = 'sine'
+
     //OBJECT FOR STORING ACTIVE NOTES
     const activeOscillators = {};
-  
+
     //KEYCODE TO MUSICAL FREQUENCY CONVERSION
     const keyboardFrequencyMap = {
-      '90': 261.625565300598634,  //Z - C
-      '83': 277.182630976872096, //S - C#
-      '88': 293.664767917407560,  //X - D
-      '68': 311.126983722080910, //D - D#
-      '67': 329.627556912869929,  //C - Ez
-      '86': 349.228231433003884,  //V - F
-      '71': 369.994422711634398, //G - F#
-      '66': 391.995435981749294,  //B - G
-      '72': 415.304697579945138, //H - G#
-      '78': 440.000000000000000,  //N - A
-      '74': 466.163761518089916, //J - A#
-      '77': 493.883301256124111,  //M - B
-      '81': 523.251130601197269,  //Q - C
-      '50': 554.365261953744192, //2 - C#
-      '87': 587.329535834815120,  //W - D
-      '51': 622.253967444161821, //3 - D#
-      '69': 659.255113825739859,  //E - E
-      '82': 698.456462866007768,  //R - F
-      '53': 739.988845423268797, //5 - F#
-      '84': 783.990871963498588,  //T - G
-      '54': 830.609395159890277, //6 - G#
-      '89': 880.000000000000000,  //Y - A
-      '55': 932.327523036179832, //7 - A#
-      '85': 987.766602512248223,  //U - B
+        '90': 130.81,  //Z - note: C3
+        '83': 138.59, //S - C3#
+        '88': 146.83,  //X - D3
+        '68': 155.56, //D - D3#
+        '67': 164.81,  //C - E3
+        '86': 174.61,  //V - F3
+        '71': 185.00, //G - F3#
+        '66': 196.00,  //B - G3
+        '72': 207.65, //H - G3#
+        '78': 220.00,  //N - A3
+        '74': 233.08, //J - A3#
+        '77': 246.94,  //M - B3
+        '81': 261.63,  //Q - C4
+        '50': 277.18, //2 - C4#
+        '87': 293.66,  //W - D4
+        '51': 311.13, //3 - D4#
+        '69': 329.63,  //E - E4
+        '82': 349.23,  //R - F4
+        '53': 369.99, //5 - F4#
+        '84': 392.00,  //T - G4
+        '54': 415.30, //6 - G4#
+        '89': 440.00,  //Y - A4
+        '55': 466.16, //7 - A4#
+        '85': 493.88,  //U - B4
+        '73': 523.25, //I - C5
     }
-  
+
     //CONNECTIONS
-    gain.connect(filter);
+    volume.connect(filter);
     filter.connect(audioCtx.destination);
-  
-    //EVENT LISTENERS FOR SYNTH PARAMETER INTERFACE
+
+    //Listens for changes to the volume
+    const volumeControl = document.getElementById('volLevelRange')
+    volumeControl.addEventListener('change', function (event) {
+        volume.gain.setValueAtTime(event.target.value, audioCtx.currentTime)
+    });
+
+    //Listens for changes to the waveform
     const waveformControl = document.getElementById('waveform')
-    waveformControl.addEventListener('change', function(event) {
-      waveform = event.target.value
+    waveformControl.addEventListener('change', function (event) {
+        waveform = event.target.value
     });
-  
-    const gainControl = document.getElementById('gain')
-    gainControl.addEventListener('change', function(event) {
-      gain.gain.setValueAtTime(event.target.value, audioCtx.currentTime)
+
+
+    //Listens for change in pass type
+    const passTypeControl = document.getElementById('passType')
+    passTypeControl.addEventListener('change', function (event) {
+        filter.type = event.target.value
     });
-  
-    const filterTypeControl = document.getElementById('filterType')
-    filterTypeControl.addEventListener('change', function(event) {
-      filter.type = event.target.value
+
+    //Listens for change in frequency
+    const frequencyLevelControl = document.getElementById('freqLevelRange')
+    frequencyLevelControl.addEventListener('change', function (event) {
+        filter.frequency.setValueAtTime(event.target.value, audioCtx.currentTime)
     });
-  
-    const filterFrequencyControl = document.getElementById('filterFrequency')
-    filterFrequencyControl.addEventListener('change', function(event) {
-      filter.frequency.setValueAtTime(event.target.value, audioCtx.currentTime)
-    });
-  
-    //EVENT LISTENERS FOR MUSICAL KEYBOARD
+
+    //Listen for keypresses to play notes
     window.addEventListener('keydown', keyDown, false);
     window.addEventListener('keyup', keyUp, false);
-  
-    //CALLED ON KEYDOWN EVENT - CALLS PLAYNOTE IF KEY PRESSED IS ON MUSICAL
-    //KEYBOARD && THAT KEY IS NOT CURRENTLY ACTIVE
+
+    //When key is pressed, if it's the right key and key is not pressed, play note
     function keyDown(event) {
-      const key = (event.detail || event.which).toString();
-      if (keyboardFrequencyMap[key] && !activeOscillators[key]) {
-        playNote(key);
-      }
+        const key = (event.detail || event.which).toString();
+        if (keyboardFrequencyMap[key] && !activeOscillators[key]) {
+            playNote(key);
+        }
     }
-  
-    //STOPS & DELETES OSCILLATOR ON KEY RELEASE IF KEY RELEASED IS ON MUSICAL
-    //KEYBOARD && THAT KEY IS CURRENTLY ACTIVE
+
+    //When key is released, delete key's oscillator
     function keyUp(event) {
-      const key = (event.detail || event.which).toString();
-      if (keyboardFrequencyMap[key] && activeOscillators[key]) {
-        activeOscillators[key].stop();
-        delete activeOscillators[key];
-      }
+        const key = (event.detail || event.which).toString();
+        if (keyboardFrequencyMap[key] && activeOscillators[key]) {
+            activeOscillators[key].stop();
+            delete activeOscillators[key];
+        }
     }
-  
-    //HANDLES CREATION & STORING OF OSCILLATORS
+
+    //Creates an oscillation for a specific key
     function playNote(key) {
-      const osc = audioCtx.createOscillator();
-      osc.frequency.setValueAtTime(keyboardFrequencyMap[key], audioCtx.currentTime)
-      osc.type = waveform
-      activeOscillators[key] = osc
-      activeOscillators[key].connect(gain)
-      activeOscillators[key].start();
+        const osc = audioCtx.createOscillator();
+        osc.frequency.setValueAtTime(keyboardFrequencyMap[key], audioCtx.currentTime)
+        osc.type = waveform
+        activeOscillators[key] = osc
+        activeOscillators[key].connect(volume)
+        activeOscillators[key].start();
     }
-  
-  });
-  
+};
 
-// window.onload = function () {
-   
+//run functions on window load
+window.onload = function () {
+    initializeAudio();
 
-//     console.log("Loaded!");
-// }
+    console.log("Loaded!");
+}
