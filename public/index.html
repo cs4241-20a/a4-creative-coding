@@ -10,7 +10,7 @@
     <style>
         #data {
             height: 100px;
-            width: 300px;
+            width: 200px;
             background-color: aquamarine;
         }
 
@@ -134,19 +134,6 @@
                     return "blue";
                 })
                 .style("opacity", 0.5);
-
-
-            node.append("text")
-                .attr("dy", "1.1em")
-                .style("text-anchor", "middle")
-                .text(function (s) {
-                    return s.data.population;
-                })
-                .attr("font-family", "Gill Sans", "Gill Sans MT")
-                .attr("font-size", function (s) {
-                    return s.r / 1.2;
-                })
-            .attr("fill", "white")
         }
     </script>
 </body>
