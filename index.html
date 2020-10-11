@@ -1,88 +1,39 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <script src="scripts.js"></script>
+  </head>
+  <body>
 
-<head>
-  <title>Virtual Piano with Audio API</title>
-  <meta charset="X-UA-Compatible" content="ie=edge">
-  <link rel="stylesheet" href="style.css">
-  <script src="scripts.js" type="module"></script>
-  <link rel="shortcut icon" href="">
-</head>
+    <span>Waveform: </span>
+    <select id="waveform">
+      <option value="sine">Sine</option>
+      <option value="square">Square</option>
+      <option value="sawtooth" selected="selected">Sawtooth</option>
+      <option value="triangle">Triangle</option>
+    </select>
+    <br>
 
-<body>
-  <h1 class="title">Welcome to Assignment 4</h1>
+    <span>Gain: </span>
+    <input id="gain" type="range" min="0.0" max="1.0"
+      step="0.01" value="1.0">
+    <br>
+    <br>
 
-  <p id="intro">
-    Welcome to [Piano App]! Here you can mess around on the Piano and play to your heart's content. You can control the
-    Frequency(pitch), Volume, Number of Octaves, and toggle Piano sounds below. Don't worry if you edit too much as you
-    can always reset the application to default with the reset button. Have fun!
-  </p>
+    <span>Filter Type: </span>
+    <select id="filterType">
+      <option value="lowpass" selected="selected">Lowpass</option>
+      <option value="highpass">Highpass</option>
+      <option value="bandpass">Bandpass</option>
+    </select>
+    <br>
 
-  <p class="footer">Application by <a href="https://github.com/jstoessel" target="_">Jordan Stoessel</a>. Random music
-    link <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">here</a>.</p>
-</body>
+    <span>Filter Frequency: </span>
+    <input id="filterFrequency" type="range" min="20.0" max="10000.0"
+      step="0.01" value="1000.0">
+    <br>
 
-<div class="piano" id='pianotable'>
-  <div data-note="C1" class="key white"></div>
-  <div data-note="Db1" class="key black"></div>
-  <div data-note="D1" class="key white"></div>
-  <div data-note="Eb1" class="key black"></div>
-  <div data-note="E1" class="key white"></div>
-  <div data-note="F1" class="key white"></div>
-  <div data-note="Gb1" class="key black"></div>
-  <div data-note="G1" class="key white"></div>
-  <div data-note="Ab1" class="key black"></div>
-  <div data-note="A1" class="key white"></div>
-  <div data-note="Bb1" class="key black"></div>
-  <div data-note="B1" class="key white"></div>
-
-  <audio id="C1" src="notes/C.mp3"></audio>
-  <audio id="Db1" src="notes/Db.mp3"></audio>
-  <audio id="D1" src="notes/D.mp3"></audio>
-  <audio id="Eb1" src="notes/Eb.mp3"></audio>
-  <audio id="E1" src="notes/E.mp3"></audio>
-  <audio id="F1" src="notes/F.mp3"></audio>
-  <audio id="Gb1" src="notes/Gb.mp3"></audio>
-  <audio id="G1" src="notes/G.mp3"></audio>
-  <audio id="Ab1" src="notes/Ab.mp3"></audio>
-  <audio id="A1" src="notes/A.mp3"></audio>
-  <audio id="Bb1" src="notes/Bb.mp3"></audio>
-  <audio id="B1" src="notes/B.mp3"></audio>
-</div>
-
-<div class="controllers">
-  <label for="volumeLevel">Volume</label>
-  <div class="volume-container">
-    <input type="range" min="0" max="100" value="50" id="volLevelRange">
-    <input class="volume-input" type="number" min="0" max="100" value="50" id="volLevelNumber">
-  </div><br>
-
-  <label for="frequencyLevel">Frequency</label>
-  <div class="frequency-container">
-    <input type="range" min="27.5" max="4186" value="262" id="freqLevelRange">
-    <input class="frequency-input" type="number" min="27.5" max="4186" value="262" id="freqLevelNumber">
-  </div><br>
-
-  <div class="octave-container">
-    <label class="octave-radio" for="octaveAmount">Number of Octaves</label><br>
-    <input class="octave-radio" type="radio" name="octaves" id="oneOctave">
-    <label for="oneOctave">1</label>
-    <input class="octave-radio" type="radio" name="octaves" id="twoOctave">
-    <label for="twoOctave">2</label>
-    <input class="octave-radio" type="radio" name="octaves" id="threeOctave">
-    <label for="threeOctave">3</label>
-  </div><br>
-
-
-  <div>
-    <label class="piano-sound-container">Piano Sound
-      <input type="checkbox" id="piano-checkbox">
-      <span class="checkmark"></span>
-    </label>
-  </div>
-  <button id='savebtn'>Save Current Settings</button>
-  <button id='loadbtn'>Load Saved Settings</button>
-  <button id='resetbtn'>Reset Default</button>
-</div>
-
+  </body>
 </html>

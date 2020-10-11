@@ -1,225 +1,135 @@
-console.log("Welcome to assignment 4!")
-const BLACK_KEYS = ['s', 'd', 'g', 'h', 'j']
-const WHITE_KEYS = ['z', 'x', 'c', 'v', 'b', 'n', 'm']
-
-const keys = document.querySelectorAll('.key');
-const whiteKeys = document.querySelectorAll('.key.white');
-const blackKeys = document.querySelectorAll('.key.black');
-
-const freqLevelRange = document.getElementById('freqLevelRange');
-const freqLevelNumber = document.getElementById('freqLevelNumber');
-
-freqLevelRange.addEventListener('input', syncFreqAmount)
-freqLevelNumber.addEventListener('input', syncFreqAmount)
-
-function syncFreqAmount(e) {
-  const val = e.target.value
-  freqLevelRange.value = val;
-  freqLevelNumber.value = val;
-}
-
-const volLevelRange = document.getElementById('volLevelRange');
-const volLevelNumber = document.getElementById('volLevelNumber');
-
-volLevelRange.addEventListener('input', syncVolAmount)
-volLevelNumber.addEventListener('input', syncVolAmount)
-
-function syncVolAmount(e) {
-  const val = e.target.value
-  volLevelRange.value = val;
-  volLevelNumber.value = val;
-}
-
-document.getElementById("freqLevelRange").oninput = function () {
-  this.style.background = 'linear-gradient(to right, #82CFD0 0%, #82CFD0 ' + this.value + '%, #fff ' + this.value + '%, white 100%)'
-};
-
-keys.forEach(key => {
-  key.addEventListener('click', () => playNote(key))
-})
-
-document.addEventListener('keydown', e => {
-  if (e.repeat) return
-  const key = e.key;
-  const blackKeyIndex = BLACK_KEYS.indexOf(key)
-  const whiteKeyIndex = WHITE_KEYS.indexOf(key)
-
-  if (whiteKeyIndex > -1) playNote(whiteKeys[whiteKeyIndex]);
-  if (blackKeyIndex > -1) playNote(blackKeys[blackKeyIndex]);
-
-})
-
-function playNote(key) {
-  const noteAudio = document.getElementById(key.dataset.note);
-  noteAudio.currentTime = 0;
-  noteAudio.play()
-  key.classList.add('active');
-  noteAudio.addEventListener('ended', () => {
-    key.classList.remove('active');
-  })
-}
-
-//gets default settings from server
-const reset = function (e) {
-  //prevent default form action from being carried out
-  // e.preventDefault();
-
-  fetch('/reset', {
-    method: 'GET'
-  })
-    .then(function (res) {
-      //response
-      res.json().then(function (data) {
-        //data
-        console.log("Submit Response:", res);
-        console.log("Returned data: ", data);
-
-        buildPiano(data);
-      })
-    })
-
-  return false;
-}
-
-//gets last saved settings from server
-const load = function (e) {
-  //prevent default form action from being carried out
-  e.preventDefault();
-
-  fetch('/load', {
-    method: 'GET'
-  })
-    .then(function (res) {
-      //response
-      res.json().then(function (data) {
-        //data
-        console.log("Submit Response:", res);
-        console.log("Returned data: ", data);
-
-        buildPiano(data);
-      })
-    })
-
-  return false;
-}
-
 // const freqLevelRange = document.getElementById('freqLevelRange');
 // const freqLevelNumber = document.getElementById('freqLevelNumber');
-//posts current settings to server
-const save = function (e) {
-  //prevent default form action from being carried out
-  e.preventDefault();
 
-  if (document.getElementById('volLevelNumber').value > 100) {
-    alert("Volume cannot be that high");
-    document.getElementById('volLevelNumber').value = 100;
-    document.getElementById('volLevelRange').value = 100;
-  }
+// freqLevelRange.addEventListener('input', syncFreqAmount)
+// freqLevelNumber.addEventListener('input', syncFreqAmount)
 
-  let num_octaves = 0;
-  if (document.getElementById('oneOctave').checked) {
-    num_octaves = 1;
-  } else if (document.getElementById('twoOctave').checked) {
-    num_octaves = 2;
-  } else if (document.getElementById('threeOctave').checked) {
-    num_octaves = 3;
-  } else {
-    console.log("Error, octave somehow not checked");
-  }
+// function syncFreqAmount(e) {
+//     const val = e.target.value
+//     freqLevelRange.value = val;
+//     freqLevelNumber.value = val;
+// }
+
+// const volLevelRange = document.getElementById('volLevelRange');
+// const volLevelNumber = document.getElementById('volLevelNumber');
+
+// volLevelRange.addEventListener('input', syncVolAmount)
+// volLevelNumber.addEventListener('input', syncVolAmount)
+
+// //syncs volume range with volume number
+// function syncVolAmount(e) {
+//     const val = e.target.value
+//     volLevelRange.value = val;
+//     volLevelNumber.value = val;
+// }
+
+//EVERYTHING IS PLACED INSIDE A DOMContentLoaded EVENT SO THAT WHEN
+//WE getElementById, THE ELEMENTS ARE LOADED & AVAILABLE
+document.addEventListener("DOMContentLoaded", function(event) {
+    //SET UP AUDIO CONTEXT
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   
-
-  const userSettings = {
-    volume: document.getElementById('volLevelNumber').value,
-    frequency: document.getElementById('freqLevelNumber').value,
-    octaves: num_octaves,
-    piano: document.getElementById('piano-checkbox').checked
-  }
-  console.log("User settings: " + userSettings)
+    //PROCESSING CHAIN
+    const gain = audioCtx.createGain();
+    const filter = audioCtx.createBiquadFilter();
   
-  fetch('/save', {
-    method: 'POST',
-    body: JSON.stringify(userSettings),
-    headers: {
-      "Content-Type": "application/json"
+    //CURRENT WAVEFORM OSCILLATOR WILL USE
+    let waveform = 'sawtooth'
+  
+    //OBJECT FOR STORING ACTIVE NOTES
+    const activeOscillators = {};
+  
+    //KEYCODE TO MUSICAL FREQUENCY CONVERSION
+    const keyboardFrequencyMap = {
+      '90': 261.625565300598634,  //Z - C
+      '83': 277.182630976872096, //S - C#
+      '88': 293.664767917407560,  //X - D
+      '68': 311.126983722080910, //D - D#
+      '67': 329.627556912869929,  //C - Ez
+      '86': 349.228231433003884,  //V - F
+      '71': 369.994422711634398, //G - F#
+      '66': 391.995435981749294,  //B - G
+      '72': 415.304697579945138, //H - G#
+      '78': 440.000000000000000,  //N - A
+      '74': 466.163761518089916, //J - A#
+      '77': 493.883301256124111,  //M - B
+      '81': 523.251130601197269,  //Q - C
+      '50': 554.365261953744192, //2 - C#
+      '87': 587.329535834815120,  //W - D
+      '51': 622.253967444161821, //3 - D#
+      '69': 659.255113825739859,  //E - E
+      '82': 698.456462866007768,  //R - F
+      '53': 739.988845423268797, //5 - F#
+      '84': 783.990871963498588,  //T - G
+      '54': 830.609395159890277, //6 - G#
+      '89': 880.000000000000000,  //Y - A
+      '55': 932.327523036179832, //7 - A#
+      '85': 987.766602512248223,  //U - B
     }
-  })
-    .then(function (res) {
-      //response
-      res.json().then(function (data) {
-        //data
-        console.log("Submit Response:", res);
-        console.log("Returned data: ", data);
-        alert('Settings saved!');
-      })
-    })
+  
+    //CONNECTIONS
+    gain.connect(filter);
+    filter.connect(audioCtx.destination);
+  
+    //EVENT LISTENERS FOR SYNTH PARAMETER INTERFACE
+    const waveformControl = document.getElementById('waveform')
+    waveformControl.addEventListener('change', function(event) {
+      waveform = event.target.value
+    });
+  
+    const gainControl = document.getElementById('gain')
+    gainControl.addEventListener('change', function(event) {
+      gain.gain.setValueAtTime(event.target.value, audioCtx.currentTime)
+    });
+  
+    const filterTypeControl = document.getElementById('filterType')
+    filterTypeControl.addEventListener('change', function(event) {
+      filter.type = event.target.value
+    });
+  
+    const filterFrequencyControl = document.getElementById('filterFrequency')
+    filterFrequencyControl.addEventListener('change', function(event) {
+      filter.frequency.setValueAtTime(event.target.value, audioCtx.currentTime)
+    });
+  
+    //EVENT LISTENERS FOR MUSICAL KEYBOARD
+    window.addEventListener('keydown', keyDown, false);
+    window.addEventListener('keyup', keyUp, false);
+  
+    //CALLED ON KEYDOWN EVENT - CALLS PLAYNOTE IF KEY PRESSED IS ON MUSICAL
+    //KEYBOARD && THAT KEY IS NOT CURRENTLY ACTIVE
+    function keyDown(event) {
+      const key = (event.detail || event.which).toString();
+      if (keyboardFrequencyMap[key] && !activeOscillators[key]) {
+        playNote(key);
+      }
+    }
+  
+    //STOPS & DELETES OSCILLATOR ON KEY RELEASE IF KEY RELEASED IS ON MUSICAL
+    //KEYBOARD && THAT KEY IS CURRENTLY ACTIVE
+    function keyUp(event) {
+      const key = (event.detail || event.which).toString();
+      if (keyboardFrequencyMap[key] && activeOscillators[key]) {
+        activeOscillators[key].stop();
+        delete activeOscillators[key];
+      }
+    }
+  
+    //HANDLES CREATION & STORING OF OSCILLATORS
+    function playNote(key) {
+      const osc = audioCtx.createOscillator();
+      osc.frequency.setValueAtTime(keyboardFrequencyMap[key], audioCtx.currentTime)
+      osc.type = waveform
+      activeOscillators[key] = osc
+      activeOscillators[key].connect(gain)
+      activeOscillators[key].start();
+    }
+  
+  });
+  
 
-  return false;
-}
+// window.onload = function () {
+   
 
-//builds Piano page with server settings
-function buildPiano(settings) {
-  let piano = document.getElementById('pianotable');
-
-  //set data values from settings
-  document.getElementById('volLevelNumber').value = settings.volume;
-  document.getElementById('volLevelRange').value = settings.volume;
-  document.getElementById('freqLevelNumber').value = settings.frequency;
-  document.getElementById('freqLevelRange').value = settings.frequency;
-
-  //generate octaves here using the int settings.octaves
-  let newPiano = `<div class="piano" id='pianotable'>\n`;
-
-  console.log("Number of octaves: " + settings.octaves);
-  //for adding octaves to virtual piano
-  for (let i = 0; i < settings.octaves; i++) {
-    newPiano += (`<div data-note="C${i+1}" class="key white"></div>\n`);
-    newPiano += (`<div data-note="Db${i+1}" class="key black"></div>\n`);
-    newPiano += (`<div data-note="D${i+1}" class="key white"></div>\n`);
-    newPiano += (`<div data-note="Eb${i+1}" class="key black"></div>\n`);
-    newPiano += (`<div data-note="E${i+1}" class="key white"></div>\n`);
-    newPiano += (`<div data-note="F${i+1}" class="key white"></div>\n`);
-    newPiano += (`<div data-note="Gb${i+1}" class="key black"></div>\n`);
-    newPiano += (`<div data-note="G${i+1}" class="key white"></div>\n`);
-    newPiano += (`<div data-note="Ab${i+1}" class="key black"></div>\n`);
-    newPiano += (`<div data-note="A${i+1}" class="key white"></div>\n`);
-    newPiano += (`<div data-note="Bb${i+1}" class="key black"></div>\n`);
-    newPiano += (`<div data-note="B${i+1}" class="key white"></div>\n`);
-  }
-  newPiano += "\n";
-
-  for (let i = 0; i < settings.octaves; i++) {
-    newPiano += (`<audio id="C${i+1}" src="notes/C.mp3"></audio>\n`);
-    newPiano += (`<audio id="Db${i+1}" src="notes/Db.mp3"></audio>\n`);
-    newPiano += (`<audio id="D${i+1}" src="notes/D.mp3"></audio>\n`);
-    newPiano += (`<audio id="Eb${i+1}" src="notes/Eb.mp3"></audio>\n`);
-    newPiano += (`<audio id="E${i+1}" src="notes/E.mp3"></audio>\n`);
-    newPiano += (`<audio id="F${i+1}" src="notes/F.mp3"></audio>\n`);
-    newPiano += (`<audio id="Gb${i+1}" src="notes/Gb.mp3"></audio>\n`);
-    newPiano += (`<audio id="G${i+1}" src="notes/G.mp3"></audio>\n`);
-    newPiano += (`<audio id="Ab${i+1}" src="notes/Ab.mp3"></audio>\n`);
-    newPiano += (`<audio id="A${i+1}" src="notes/A.mp3"></audio>\n`);
-    newPiano += (`<audio id="Bb${i+1}" src="notes/Bb.mp3"></audio>\n`);
-    newPiano += (`<audio id="B${i+1}" src="notes/B.mp3"></audio>\n`);
-  }
-
-  newPiano += (`</div>`);
-  piano = newPiano;
-  document.getElementById('piano-checkbox').checked = settings.piano;
-
-  console.log("Table populated");
-  console.log(newPiano);
-}
-
-
-window.onload = function () {
-  const savebtn = document.getElementById('savebtn');
-  savebtn.onclick = save;
-  const loadbtn = document.getElementById('loadbtn');
-  loadbtn.onclick = load;
-  const resetbtn = document.getElementById('resetbtn');
-  resetbtn.onclick = reset;
-  reset();
-  document.getElementById('oneOctave').checked = true;
-  document.getElementById('piano-checkbox').checked = true;
-  console.log("Loaded!");
-}
+//     console.log("Loaded!");
+// }
