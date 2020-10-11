@@ -5,29 +5,34 @@ const BLACK_KEYS = ['s', 'd', 'g', 'h', 'j', '2', '3', '5', '6', '7']
 //default waveform, this is to remove undefined warning
 let waveform = 'sine';
 
+//Web Audio API utilization
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+//Process volume and filter
+const volume = audioCtx.createGain();
+const filter = audioCtx.createBiquadFilter();
+const activeOscillators = {};
+
 const keys = document.querySelectorAll('.key');
 const whiteKeys = document.querySelectorAll('.key.white');
 const blackKeys = document.querySelectorAll('.key.black');
 
+//sync range and number
 const freqLevelRange = document.getElementById('freqLevelRange');
 const freqLevelNumber = document.getElementById('freqLevelNumber');
-
 freqLevelRange.addEventListener('input', syncFreqAmount)
 freqLevelNumber.addEventListener('input', syncFreqAmount)
-
 function syncFreqAmount(e) {
     const val = e.target.value
     freqLevelRange.value = val;
     freqLevelNumber.value = val;
 }
 
+//syncs volume range with volume number
 const volLevelRange = document.getElementById('volLevelRange');
 const volLevelNumber = document.getElementById('volLevelNumber');
-
 volLevelRange.addEventListener('input', syncVolAmount)
 volLevelNumber.addEventListener('input', syncVolAmount)
-
-//syncs volume range with volume number
 function syncVolAmount(e) {
     const val = e.target.value
     volLevelRange.value = val;
@@ -64,112 +69,107 @@ document.addEventListener('keyup', e => {
 
 
 //Initialize audio on window load to avoid null pointers
-function initializeAudio() {
+// function initializeAudio() {
 
-    //Web Audio API utilization
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+//Keycode to musical frequency hashmap
+const keyboardFrequencyMap = {
+    '90': 130.81,  //Z - note: C3
+    '83': 138.59, //S - C3#
+    '88': 146.83,  //X - D3
+    '68': 155.56, //D - D3#
+    '67': 164.81,  //C - E3
+    '86': 174.61,  //V - F3
+    '71': 185.00, //G - F3#
+    '66': 196.00,  //B - G3
+    '72': 207.65, //H - G3#
+    '78': 220.00,  //N - A3
+    '74': 233.08, //J - A3#
+    '77': 246.94,  //M - B3
+    '81': 261.63,  //Q - C4
+    '50': 277.18, //2 - C4#
+    '87': 293.66,  //W - D4
+    '51': 311.13, //3 - D4#
+    '69': 329.63,  //E - E4
+    '82': 349.23,  //R - F4
+    '53': 369.99, //5 - F4#
+    '84': 392.00,  //T - G4
+    '54': 415.30, //6 - G4#
+    '89': 440.00,  //Y - A4
+    '55': 466.16, //7 - A4#
+    '85': 493.88,  //U - B4
+    '73': 523.25, //I - C5
+}
 
-    //Process volume and filter
-    const volume = audioCtx.createGain();
-    const filter = audioCtx.createBiquadFilter();
-    const activeOscillators = {};
+volume.connect(filter);
+filter.connect(audioCtx.destination);
 
-    //Keycode to musical frequency hashmap
-    const keyboardFrequencyMap = {
-        '90': 130.81,  //Z - note: C3
-        '83': 138.59, //S - C3#
-        '88': 146.83,  //X - D3
-        '68': 155.56, //D - D3#
-        '67': 164.81,  //C - E3
-        '86': 174.61,  //V - F3
-        '71': 185.00, //G - F3#
-        '66': 196.00,  //B - G3
-        '72': 207.65, //H - G3#
-        '78': 220.00,  //N - A3
-        '74': 233.08, //J - A3#
-        '77': 246.94,  //M - B3
-        '81': 261.63,  //Q - C4
-        '50': 277.18, //2 - C4#
-        '87': 293.66,  //W - D4
-        '51': 311.13, //3 - D4#
-        '69': 329.63,  //E - E4
-        '82': 349.23,  //R - F4
-        '53': 369.99, //5 - F4#
-        '84': 392.00,  //T - G4
-        '54': 415.30, //6 - G4#
-        '89': 440.00,  //Y - A4
-        '55': 466.16, //7 - A4#
-        '85': 493.88,  //U - B4
-        '73': 523.25, //I - C5
+//Listens for changes to the volume on range and number
+const volumeRangeControl = document.getElementById('volLevelRange')
+const volumeNumControl = document.getElementById('volLevelNumber');
+volumeRangeControl.addEventListener('change', function (e) {
+    volume.gain.setValueAtTime(e.target.value, audioCtx.currentTime)
+});
+volumeNumControl.addEventListener('change', function (e) {
+    volume.gain.setValueAtTime(e.target.value, audioCtx.currentTime);
+})
+
+//Listens for changes to the waveform
+const waveformControl = document.getElementById('waveform')
+waveformControl.addEventListener('change', function (event) {
+    waveform = event.target.value
+});
+
+
+//Listens for change in pass type
+const passTypeControl = document.getElementById('passType')
+passTypeControl.addEventListener('change', function (event) {
+    filter.type = event.target.value
+});
+
+//Listens for change in frequency on range and number
+const frequencyRangeControl = document.getElementById('freqLevelRange')
+const frequencyNumControl = document.getElementById('freqLevelNumber');
+frequencyRangeControl.addEventListener('change', function (e) {
+    filter.frequency.setValueAtTime(e.target.value, audioCtx.currentTime)
+});
+frequencyNumControl.addEventListener('change', function (e) {
+    filter.frequency.setValueAtTime(e.target.value, audioCtx.currentTime);
+})
+
+//Listen for keypresses to play notes
+window.addEventListener('keydown', keyDown, false);
+window.addEventListener('keyup', keyUp, false);
+
+//When key is pressed, if it's the right key and key is not pressed, play note
+function keyDown(event) {
+    const key = (event.detail || event.which).toString();
+    if (keyboardFrequencyMap[key] && !activeOscillators[key]) {
+        playNote(key);
     }
+}
 
-    volume.connect(filter);
-    filter.connect(audioCtx.destination);
-
-    //Listens for changes to the volume on range and number
-    const volumeRangeControl = document.getElementById('volLevelRange')
-    const volumeNumControl = document.getElementById('volLevelNumber');
-    volumeRangeControl.addEventListener('change', function(e) {
-        volume.gain.setValueAtTime(e.target.value, audioCtx.currentTime)
-    });
-    volumeNumControl.addEventListener('change', function(e) {
-        volume.gain.setValueAtTime(e.target.value, audioCtx.currentTime);
-    })
-
-    //Listens for changes to the waveform
-    const waveformControl = document.getElementById('waveform')
-    waveformControl.addEventListener('change', function (event) {
-        waveform = event.target.value
-    });
-
-
-    //Listens for change in pass type
-    const passTypeControl = document.getElementById('passType')
-    passTypeControl.addEventListener('change', function (event) {
-        filter.type = event.target.value
-    });
-
-    //Listens for change in frequency on range and number
-    const frequencyRangeControl = document.getElementById('freqLevelRange')
-    const frequencyNumControl = document.getElementById('freqLevelNumber');
-    frequencyRangeControl.addEventListener('change', function(e) {
-        filter.frequency.setValueAtTime(e.target.value, audioCtx.currentTime)
-    });
-    frequencyNumControl.addEventListener('change', function(e) {
-        filter.frequency.setValueAtTime(e.target.value, audioCtx.currentTime);
-    })
-
-    //Listen for keypresses to play notes
-    window.addEventListener('keydown', keyDown, false);
-    window.addEventListener('keyup', keyUp, false);
-
-    //When key is pressed, if it's the right key and key is not pressed, play note
-    function keyDown(event) {
-        const key = (event.detail || event.which).toString();
-        if (keyboardFrequencyMap[key] && !activeOscillators[key]) {
-            playNote(key);
-        }
+//When key is released, delete key's oscillator
+function keyUp(event) {
+    const key = (event.detail || event.which).toString();
+    if (keyboardFrequencyMap[key] && activeOscillators[key]) {
+        activeOscillators[key].stop();
+        delete activeOscillators[key];
     }
+}
 
-    //When key is released, delete key's oscillator
-    function keyUp(event) {
-        const key = (event.detail || event.which).toString();
-        if (keyboardFrequencyMap[key] && activeOscillators[key]) {
-            activeOscillators[key].stop();
-            delete activeOscillators[key];
-        }
-    }
+//Creates an oscillation for a specific key
+function playNote(key) {
+    const osc = audioCtx.createOscillator();
+    osc.frequency.setValueAtTime(keyboardFrequencyMap[key], audioCtx.currentTime)
+    osc.type = waveform
+    activeOscillators[key] = osc
+    activeOscillators[key].connect(volume)
+    activeOscillators[key].start();
+}
+// };
 
-    //Creates an oscillation for a specific key
-    function playNote(key) {
-        const osc = audioCtx.createOscillator();
-        osc.frequency.setValueAtTime(keyboardFrequencyMap[key], audioCtx.currentTime)
-        osc.type = waveform
-        activeOscillators[key] = osc
-        activeOscillators[key].connect(volume)
-        activeOscillators[key].start();
-    }
-};
+
+//Get and post methods:
 
 //gets default settings from server
 const reset = function (e) {
@@ -254,7 +254,9 @@ const save = function (e) {
     return false;
 }
 
-//builds Piano page with server settings
+
+
+//sets html values to server settings
 function setSettings(settings) {
 
     //set data values from settings
@@ -264,15 +266,24 @@ function setSettings(settings) {
     document.getElementById('passType').value = settings.passtype;
     document.getElementById('freqLevelNumber').value = settings.frequency;
     document.getElementById('freqLevelRange').value = settings.frequency;
-    // initializeAudio();
 
+    //updates sound settings with html settings
+    applySettings(settings);
 
     console.log("Settings applied!");
 }
 
+//helper function for dealing with 4 parts of json
+function applySettings(settings) {
+    volume.gain.setValueAtTime(settings.volume, audioCtx.currentTime);
+    waveform = settings.waveform;
+    filter.type = settings.passtype;
+    filter.frequency.setValueAtTime(settings.frequency, audioCtx.currentTime);
+}
+
 //run functions on window load
 window.onload = function () {
-    initializeAudio();
+    // initializeAudio();
     //initialize buttons
     const savebtn = document.getElementById('savebtn');
     savebtn.onclick = save;
