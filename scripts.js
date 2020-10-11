@@ -1,6 +1,7 @@
 //key press buttons for UI keyboard
 const WHITE_KEYS = ['z', 'x', 'c', 'v', 'b', 'n', 'm', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i']
 const BLACK_KEYS = ['s', 'd', 'g', 'h', 'j', '2', '3', '5', '6', '7']
+let waveform;
 
 const keys = document.querySelectorAll('.key');
 const whiteKeys = document.querySelectorAll('.key.white');
@@ -69,14 +70,13 @@ function initializeAudio() {
     //Process volume and filter
     const volume = audioCtx.createGain();
     const filter = audioCtx.createBiquadFilter();
-
-    //default waveform
-    let waveform = 'sine'
-
-    //OBJECT FOR STORING ACTIVE NOTES
     const activeOscillators = {};
 
-    //KEYCODE TO MUSICAL FREQUENCY CONVERSION
+    //default waveform
+    waveform = 'sine'
+
+
+    //Keycode to musical frequency hashmap
     const keyboardFrequencyMap = {
         '90': 130.81,  //Z - note: C3
         '83': 138.59, //S - C3#
@@ -105,7 +105,6 @@ function initializeAudio() {
         '73': 523.25, //I - C5
     }
 
-    //CONNECTIONS
     volume.connect(filter);
     filter.connect(audioCtx.destination);
 
@@ -166,9 +165,100 @@ function initializeAudio() {
     }
 };
 
+//gets default settings from server
+const reset = function (e) {
+    //prevent default form action from being carried out
+    // e.preventDefault();
+  
+    fetch('/reset', {
+      method: 'GET'
+    })
+      .then(function (res) {
+        //response
+        res.json().then(function (data) {
+          //data
+          console.log("Submit Response:", res);
+          console.log("Returned data: ", data);
+  
+          setSettings(data);
+        })
+      })
+  
+    return false;
+  }
+  
+  //gets last saved settings from server
+  const load = function (e) {
+    //prevent default form action from being carried out
+    e.preventDefault();
+  
+    fetch('/load', {
+      method: 'GET'
+    })
+      .then(function (res) {
+        //response
+        res.json().then(function (data) {
+          //data
+          console.log("Submit Response:", res);
+          console.log("Returned data: ", data);
+  
+          setSettings(data);
+        })
+      })
+  
+    return false;
+  }
+  
+  // const freqLevelRange = document.getElementById('freqLevelRange');
+  // const freqLevelNumber = document.getElementById('freqLevelNumber');
+  //posts current settings to server
+  const save = function (e) {
+    //prevent default form action from being carried out
+    e.preventDefault();
+  
+    if (document.getElementById('volLevelNumber').value > 100) {
+      alert("Volume cannot be that high");
+      document.getElementById('volLevelNumber').value = 100;
+      document.getElementById('volLevelRange').value = 100;
+    }
+  
+    const userSettings = {
+      volume: document.getElementById('volLevelNumber').value,
+      waveform: document.getElementById('waveform').value,
+      passtype: document.getElementById('passType').value,
+      frequency: document.getElementById('freqLevelNumber').value
+    }
+    console.log("User settings: " + userSettings)
+    
+    fetch('/save', {
+      method: 'POST',
+      body: JSON.stringify(userSettings),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+      .then(function (res) {
+        //response
+        res.json().then(function (data) {
+          //data
+          console.log("Submit Response:", res);
+          console.log("Returned data: ", data);
+          alert('Settings saved!');
+        })
+      })
+  
+    return false;
+  }
+
 //run functions on window load
 window.onload = function () {
     initializeAudio();
-
+    //initialize buttons
+    const savebtn = document.getElementById('savebtn');
+    savebtn.onclick = save;
+    const loadbtn = document.getElementById('loadbtn');
+    loadbtn.onclick = load;
+    const resetbtn = document.getElementById('resetbtn');
+    resetbtn.onclick = reset;
     console.log("Loaded!");
 }

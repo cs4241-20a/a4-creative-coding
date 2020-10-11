@@ -8,8 +8,8 @@ app.use(express.static('./'));
 app.use(bodyParser.urlencoded({extended: true}));
 
 //simple server for storing settings and defaults
-let settings = { volume: 50, frequency: 262, octaves: 1, piano: true }
-const default_settings = { volume: 50, frequency: 262, octaves: 1, piano: true }
+let settings = { volume: 0.5, waveform: "sine", passtype: "Lowpass", frequency: 1000.0 }
+const default_settings = { volume: 0.5, waveform: "sine", passtype: "Lowpass", frequency: 1000.0 }
 
 
 
@@ -42,9 +42,9 @@ app.post("/save", bodyParser.json(), (req, res) => {
 
     settings = {
         volume: req.body.volume,
-        frequency: req.body.frequency,
-        octaves: req.body.octaves,
-        piano: req.body.piano
+        waveform: req.body.waveform,
+        passtype: req.body.passtype,
+        frequency: req.body.frequency
     }
     
     console.log("These settings saved: " + JSON.stringify(settings));
