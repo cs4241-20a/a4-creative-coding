@@ -1,6 +1,34 @@
 //key press buttons for UI keyboard
 const WHITE_KEYS = ['z', 'x', 'c', 'v', 'b', 'n', 'm', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i']
 const BLACK_KEYS = ['s', 'd', 'g', 'h', 'j', '2', '3', '5', '6', '7']
+//Keycode to musical frequency hashmap
+const keyboardFrequencyMap = {
+    '90': 130.81,  //Z - note: C3
+    '83': 138.59, //S - C3#
+    '88': 146.83,  //X - D3
+    '68': 155.56, //D - D3#
+    '67': 164.81,  //C - E3
+    '86': 174.61,  //V - F3
+    '71': 185.00, //G - F3#
+    '66': 196.00,  //B - G3
+    '72': 207.65, //H - G3#
+    '78': 220.00,  //N - A3
+    '74': 233.08, //J - A3#
+    '77': 246.94,  //M - B3
+    '81': 261.63,  //Q - C4
+    '50': 277.18, //2 - C4#
+    '87': 293.66,  //W - D4
+    '51': 311.13, //3 - D4#
+    '69': 329.63,  //E - E4
+    '82': 349.23,  //R - F4
+    '53': 369.99, //5 - F4#
+    '84': 392.00,  //T - G4
+    '54': 415.30, //6 - G4#
+    '89': 440.00,  //Y - A4
+    '55': 466.16, //7 - A4#
+    '85': 493.88,  //U - B4
+    '73': 523.25, //I - C5
+}
 
 //default waveform, this is to remove undefined warning
 let waveform = 'sine';
@@ -66,40 +94,7 @@ document.addEventListener('keyup', e => {
         blackKeys[blackKeyIndex].classList.remove('active');
 });
 
-
-
-//Initialize audio on window load to avoid null pointers
-// function initializeAudio() {
-
-//Keycode to musical frequency hashmap
-const keyboardFrequencyMap = {
-    '90': 130.81,  //Z - note: C3
-    '83': 138.59, //S - C3#
-    '88': 146.83,  //X - D3
-    '68': 155.56, //D - D3#
-    '67': 164.81,  //C - E3
-    '86': 174.61,  //V - F3
-    '71': 185.00, //G - F3#
-    '66': 196.00,  //B - G3
-    '72': 207.65, //H - G3#
-    '78': 220.00,  //N - A3
-    '74': 233.08, //J - A3#
-    '77': 246.94,  //M - B3
-    '81': 261.63,  //Q - C4
-    '50': 277.18, //2 - C4#
-    '87': 293.66,  //W - D4
-    '51': 311.13, //3 - D4#
-    '69': 329.63,  //E - E4
-    '82': 349.23,  //R - F4
-    '53': 369.99, //5 - F4#
-    '84': 392.00,  //T - G4
-    '54': 415.30, //6 - G4#
-    '89': 440.00,  //Y - A4
-    '55': 466.16, //7 - A4#
-    '85': 493.88,  //U - B4
-    '73': 523.25, //I - C5
-}
-
+//____________________________________WEB_AUDIO_API_CONTROLLING____________________________________
 volume.connect(filter);
 filter.connect(audioCtx.destination);
 
@@ -111,14 +106,13 @@ volumeRangeControl.addEventListener('change', function (e) {
 });
 volumeNumControl.addEventListener('change', function (e) {
     volume.gain.setValueAtTime(e.target.value, audioCtx.currentTime);
-})
+});
 
 //Listens for changes to the waveform
 const waveformControl = document.getElementById('waveform')
 waveformControl.addEventListener('change', function (event) {
     waveform = event.target.value
 });
-
 
 //Listens for change in pass type
 const passTypeControl = document.getElementById('passType')
@@ -166,11 +160,10 @@ function playNote(key) {
     activeOscillators[key].connect(volume)
     activeOscillators[key].start();
 }
-// };
 
 
-//Get and post methods:
 
+//____________________________________GET AND POST METHODS____________________________________
 //gets default settings from server
 const reset = function (e) {
     //prevent default form action from being carried out
@@ -255,7 +248,7 @@ const save = function (e) {
 }
 
 
-
+//____________________________________APPLY_AND_CHANGE_SETTINGS____________________________________
 //sets html values to server settings
 function setSettings(settings) {
 
@@ -269,7 +262,6 @@ function setSettings(settings) {
 
     //updates sound settings with html settings
     applySettings(settings);
-
     console.log("Settings applied!");
 }
 
@@ -283,7 +275,6 @@ function applySettings(settings) {
 
 //run functions on window load
 window.onload = function () {
-    // initializeAudio();
     //initialize buttons
     const savebtn = document.getElementById('savebtn');
     savebtn.onclick = save;
