@@ -6,9 +6,7 @@ var gainNode = audioContext.createGain();
 
 window.onload = function(){
     alert("Wanna be the Piano Man?");
-    alert("Play this piano like you would any electric piano!");
-
-
+    alert("Press on the keys to play some sounds. Play this piano like you would any electric piano!");
     
    var piano = new Nexus.Piano('#target',{
   'size': [600,400],

@@ -1,17 +1,22 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
  <head>
+   <title>
+     Wanna be the Piano Man?</title>
+   <script src = "server.js"></script>
    <script src="NexusUI.js"></script>
    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Sansita+Swashed:wght@500&display=swap" rel="stylesheet">   <link rel="stylesheet" type="text/css" href="style.css">
   <script src = "scripts.js"></script>
   </head>
    <body>
     <div class="help-tip">
-      <p id = "help"> Play this piano like you would any electric piano!</p>
+      <p id = "help"> Press on the keys to play some sounds.
+        Play this piano like you would any electric piano! </p>
       </div>
   
    <h1> Wanna be the Piano Man?</h1>
    <div id = "radiobuttonvalues">
-   <input type = "radio"checked name= "waveform" id = "sine" value = "sine"> sine
+   <input type = "radio" name= "waveform" id = "sine" value = "sine" checked> sine
    <input type = "radio" name= "waveform" value = "square" id = "square"> square
    <input type = "radio" name= "waveform"  id = "triangle" value = "triangle" > triangle
    <input  type = "radio" name= "waveform" id = "sawtooth" value = "sawtooth"> sawtooth
@@ -22,6 +27,6 @@
 <div id = "target">
   </div>
 <h2>"… Sing us a song, you're the piano man <br>
-  Sing us a song tonight"</h2> 
+  Sing us a song tonight" - Billy Joel</h2> 
   </body>
   </html>
