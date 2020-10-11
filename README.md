@@ -1,37 +1,13 @@
-Welcome to Glitch
-=================
+Assignment 4 - Creative Coding: Interactive Multimedia Experiences
+===
 
-Click `Show` in the header to see your app live. Updates to your code will instantly deploy and update live.
+Due: October 11th, by 11:59 PM.
 
-**Glitch** is the friendly community where you'll build the app of your dreams. Glitch lets you instantly create, remix, edit, and host an app, bot or site, and you can invite collaborators or helpers to simultaneously edit code with you.
+## Pradnya Mahurkar: Assignment 4
+https://a4-pradnyamahurkar.glitch.me
 
-Find out more [about Glitch](https://glitch.com/about).
+I used three.js to create a fun geometric pattern in my website. The user can change the pattern by using the functions in the dat.gui window in the top right part of the website. The user gets an alert as soon as he/she accesses the website first, it guides the user about what they can change in the design. He/she can access the details later simply clicking the help button on the top of the screen.
 
-
-Your Project
-------------
-
-### ← README.md
-
-That's this file, where you can tell people what your cool website does and how you built it.
-
-### ← index.html
-
-Where you'll write the content of your website. 
-
-### ← style.css
-
-CSS files add styling rules to your content.
-
-### ← script.js
-
-If you're feeling fancy you can add interactivity to your site with JavaScript.
-
-### ← assets
-
-Drag in `assets`, like images or music, to add them to your project
-
-Made by [Glitch](https://glitch.com/)
--------------------
-
-\ ゜o゜)ノ
+- the goal of the application: A website for the user to enjoy a 3-D pattern and also play with it by changing its features.
+- challenges you faced in realizing the application: It took a while to understand three.js. Some of the shapes that I wanted to show on the website were having problems, so I could not integrate them. I also wanted to change the background from black to white, however, I could not figure out how to do that.
+- Sometimes the help button does not appear in the first go, so if you dont find it just scroll up and you will find it in the top left corner.
