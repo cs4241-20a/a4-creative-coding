@@ -1,0 +1,130 @@
+<!-- This is a static file -->
+<!-- served from your routes in server.js -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A mysterious haunted keyboard">
+    <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Oswald&display=swap" rel="stylesheet">
+    <script src="/NexusUI.js"></script>
+
+    <title>A4: Creative Coding</title>
+
+    <link id="favicon" rel="icon" href="https://glitch.com/edit/favicon-app.ico" type="image/x-icon">
+    <!-- import the webpage's stylesheet -->
+    <link rel="stylesheet" href="/style.css">
+
+    <!-- import the webpage's client-side javascript file -->
+    <script src="/script.js" defer></script>
+  </head>
+  <body>
+    
+    <header class = "name">
+      <h1>cursed keyboard</h1>
+    </header>
+
+    Oscillator shape:<br>
+    <button type = "button" onclick = "Shape(1)">Square</button>
+    <button type = "button" onclick = "Shape(2)">Triangle</button>
+    <button type = "button" onclick = "Shape(3)">Sawtooth</button>
+    <button type = "button" onclick = "Shape(4)">Sine</button>
+   <div class = "container">
+     
+   
+   <div id= "piano"></div>
+    
+    <div id = "ghost">
+    </div> 
+    </div>
+    <button type = "button" onclick = "Ghost()">
+       boo!
+    </button>
+    <div id = "message">
+      
+    </div>
+    
+    
+    
+    <script>
+      window.alert("Cursed Keyboard makes creepy music with just a click.\n\nUse the buttons to change the shape of the oscillator wave.\n\nIf you are wearing headphones, it is reccomended that you turn your volume down to its lowest setting to start. Some frequencies can be unpleasing at loud volumes. \n\nRefresh the page to restart.");
+      
+      var piano = new Nexus.Piano('#piano', {
+        'size': [400, 100]
+      })
+      
+      var audioContext = new AudioContext();
+      var oscillator = audioContext.createOscillator();
+      const gain = audioContext.createGain();
+     
+      oscillator.connect(gain);
+      gain.connect(audioContext.destination);
+      
+      piano.on('change',function(v) {
+        console.log(v);
+        //get the unique frequency value
+        var freq = 100;
+        var x = event.clientX;
+        freq = freq + x;
+        
+        //oscillator.type = 'sawtooth';
+        oscillator.frequency.setValueAtTime(freq, audioContext.currentTime);
+        oscillator.start(0);
+        gain.volume.value = 1;     
+        
+        
+        //make the ghosts dynamically
+        //why doesn't this work.....
+        Ghost();
+      })
+      
+      var ghostCount = 0;
+      
+      function Ghost(scale){
+        //a max of five ghosts can be created. if max is reached, delete all ghosts and restart
+        if (ghostCount === 10){
+          //delete the ghosts
+          var parent = document.getElementById("ghost");
+          var child = document.getElementById("ghostImg");
+          parent.parentNode.removeChild(child)
+          //reset ghostCount
+          ghostCount = 0;
+          //display message that max has reached
+          var message = document.createElement('txt');
+          message = "Max number of ghosts reached";
+          document.getElementById("message").appendChild(message);
+        }else{
+          var img = document.createElement('img'); 
+          img.src =  "https://cdn.glitch.com/4504b488-ef4b-4282-963e-13a33d4acbb3%2Fghost.png?v=1602115005023";
+          img.id = "ghostImg"
+          document.getElementById('ghost').appendChild(img); 
+          ghostCount++;
+        }
+      }
+      
+      function Shape(num){
+        //num 1 = square
+        //    2 = triangle
+        //    3 = sawtooth
+        //    4 = sine
+        switch(num){
+          case 1: 
+            oscillator.type = 'square';
+            break;
+          case 2:
+            oscillator.type = 'triangle';
+            break;
+          case 3:
+            oscillator.type = 'sawtooth';
+            break;
+          case 4:
+            oscillator.type = 'sine';
+            break;
+        }
+      }
+      
+    </script>
+    
+  </body>
+</html>
