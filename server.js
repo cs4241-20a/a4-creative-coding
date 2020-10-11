@@ -11,15 +11,7 @@ app.set('view engine', 'ejs');
 // Used to unset interval when game ends.
 var loop;
 
-// Set on a timeout because server needs time to set up
-let words;
-setTimeout(() => {
-  API.getWords(5).then((w) => {
-    words = w
-    console.log("Got words: ", words)
-  })
-}, 4000)
-
+let words = [];
 
 // In seconds
 const ROUND_LENGTH = 60
@@ -127,11 +119,17 @@ wss.on('connection', (ws) => {
         
         // Start game. Only leader can do this, and only if there are at least MIN_PLAYERS connected.
         else if(obj.command === "START" && obj.id === game.leader.id && game.players.length >= MIN_PLAYERS) {
-            console.log("Game starting!")
-            tick();
-            sendWordToClients();
-            enableDrawing(game.players[game.nowDrawingIdx].id)
-            loop = setInterval(gameLoop, 1000);
+            API.getWords(game.players.length * 3).then((w) => {
+              words = w.map((it) => {
+                return it.word.toLowerCase();
+              })
+              console.log("Got words: ", words)
+              console.log("Game starting!")
+              tick();
+              sendWordToClients();
+              enableDrawing(game.players[game.nowDrawingIdx].id)
+              loop = setInterval(gameLoop, 1000);
+            })
         }
 
         // Handle guess, only if game is started
@@ -145,7 +143,7 @@ wss.on('connection', (ws) => {
             }
 
             // Correct guess - record it and notify clients
-            else if(obj.guess === words[game.answerIdx]) {
+            else if(obj.guess.toLowerCase() === words[game.answerIdx]) {
                 player.correct++;
                 game.correctPlayers.push(player);
                 sendToClients(JSON.stringify(
