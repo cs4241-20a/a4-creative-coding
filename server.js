@@ -17,7 +17,7 @@ setTimeout(() => {
     words = w
     console.log(words)
   })
-}, 1000)
+}, 8000)
 
 
 // In seconds

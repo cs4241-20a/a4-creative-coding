@@ -9,7 +9,7 @@ const database = process.env.MONGODB_DATABASE
 const uri = `mongodb+srv://${user}:${password}@${host}/${database}?retryWrites=true&w=majority`
 
 const client = new MongoClient(uri);
-
+client.connect()
 
 // try {
 // client.connect()
