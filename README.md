@@ -1,6 +1,6 @@
 ## Simple 3D Snake Game
 
-your hosting link e.g. http://a4-charlieroberts.glitch.me
+[Assignment 4](https://a4-yongchengliu.glitch.me/)
 
 ### The goal of the application
 I was very intrested in three.js so I created this snake game (which is kinda the practice game I used for every interactive related dev tools haha)  
