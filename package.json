@@ -1,19 +1,14 @@
 {
-  "name": "online-grader",
-  "version": "2.0.0",
-  "description": "An online gradebook to rival Canvas",
+  "name": "audio-visualizer",
+  "version": "1.0.0",
+  "description": "For all your audio visualizing needs.  That is to say, not much.",
   "author": "Edward Philippo",
   "scripts": {
-    "start": "PORT=80 node server.js"
+    "start": "node server.js"
   },
   "dependencies": {
-    "express": "^4.17.1",
-    "express-lowercase-paths": "^1.0.0",
-    "helmet": "^4.1.1",
-    "mime": "^2.4.6",
-    "passport": "^0.4.1",
-    "passport-github": "^1.1.0",
-    "serve-favicon": "^2.5.0"
+    "dat.gui": "^0.7.7",
+    "express": "^4.17.1"
   },
   "devDependencies": {
     "express-debug": "^1.1.1"

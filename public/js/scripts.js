@@ -1,7 +1,11 @@
-console.log("Assignment 4 launched")
+console.log("Welcome to Edward's Audio Visualizer Experience.  Pleasure to have you aboard.")
 
+// Easy-access global constants
 NUM_SPOKES = 250
 SPOKE_WIDTH = 2
+VOLUME_START = 0.2
+
+
 
 window.onload = function() {
   // Get canvas and let it expand
@@ -9,20 +13,52 @@ window.onload = function() {
   visCanvas.height = window.innerHeight
   visCanvas.width  = window.innerWidth
   
-  // Set up audio and get frequency array
-  let analyzer = init_Audio()
+  // Set up audio and get stuff
+  const { audioContext, analyzer, frequencies, gainNode } = initAudio()
   
-  // Recursively draw the visualizer
-  redrawVisualizer(visCanvas, analyzer, drawCircle)
+  // Set up settings GUI
+  settings = {
+    shape: "Circle",
+    shapeFunc: drawCircle,
+    volume: 1,
+    playback: () => {fullToggle(visCanvas, analyzer, frequencies, audioContext)}
+  }
+  var baseGui = new dat.GUI();
+  let shapeController = baseGui.add(settings, "shape", ["Circle", "Triangle"]).name("Shape")
+  let volumeController = baseGui.add(settings, "volume", 0, 2).name("Volume")
+  baseGui.add(settings, "playback").name("Play/Pause")
+  
+  shapeController.onChange(function(value) {
+    switch (value) {
+        case "Circle":
+          settings.shapeFunc = drawCircle
+          break;
+        case "Triangle":
+          settings.shapeFunc = drawTriangle
+          break;
+        default:
+          console.error("Invalid shape chosen")
+    }
+  });
+  volumeController.onChange(function(vol) {
+    gainNode.gain.value = vol * VOLUME_START;
+  })
+  
+  // TODO: Draw the visualizer initially
+  //redrawVisualizer(visCanvas, analyzer, frequencies)
 }
 
 
 
-function init_Audio() {
-  // Get HTML elements
+function fullToggle(visCanvas, analyzer, frequencies, audioContext) {
+  togglePlayback(audioContext)
+  redrawVisualizer(visCanvas, analyzer, frequencies)
+}
+
+
+
+function initAudio() {
   const audioElement = document.querySelector('audio');
-  const volumeSlider = document.querySelector('#volume');
-  const playButton   = document.querySelector('button');
   
   // Set up Web Audio API stuff
   const AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -30,51 +66,51 @@ function init_Audio() {
   const analyzer = audioContext.createAnalyser();
   const track = audioContext.createMediaElementSource(audioElement);
   const gainNode = audioContext.createGain();
-  
-  // Set audio gain start value
-  gainNode.gain.value = volumeSlider.value;
+  gainNode.gain.value = VOLUME_START //starting value
   
   // Connect stuff together
   track.connect(analyzer);
   analyzer.connect(gainNode);
   gainNode.connect(audioContext.destination);
   
-  // Hook up volume slider
-  volumeSlider.addEventListener('input', function() {
-    gainNode.gain.value = this.value;
-  }, false);
-  
-  // Hook up pause/play button
-  playButton.addEventListener('click', function() {
-    // Check if suspended (likely from autoplay policy)
-    if (audioContext.state === 'suspended') {
-        audioContext.resume();
-    }
-    // Otherwise this button plays or pauses
-    if (this.dataset.playing === 'false') {
-        audioElement.play();
-        this.dataset.playing = 'true';
-    } else if (this.dataset.playing === 'true') {
-        audioElement.pause();
-        this.dataset.playing = 'false';
-    }
-  }, false);
-  
   // Set aside frequency array (global) and return analyzer
-  frequencies = new Uint8Array(analyzer.frequencyBinCount);
-  return analyzer
+  const frequencies = new Uint8Array(analyzer.frequencyBinCount);
+  return { audioContext, analyzer, frequencies, gainNode }
 }
 
-function redrawVisualizer(canvas, analyzer, shapeFunc) {
+
+
+function redrawVisualizer(canvas, analyzer, frequencies) {
   //Update frequency data
   analyzer.getByteFrequencyData(frequencies);
   
+  // If it's paused, stop (don't clear, don't draw, don't reschedule)
+  const audioElement = document.querySelector('audio')
+  if (audioElement.paused) {
+    return
+  }
+  
   //Clear and redraw canvas
   canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height)
-  shapeFunc(canvas, frequencies)
+  settings.shapeFunc(canvas, frequencies)
   
-  // Schedule loop (using lambda because reqAnimFrame takes a function without parameter)
-  window.requestAnimationFrame(() => {redrawVisualizer(canvas, analyzer, shapeFunc)});
+  // Schedule next frame
+  window.requestAnimationFrame(() => {redrawVisualizer(canvas, analyzer, frequencies)});
+}
+
+
+
+function togglePlayback(audioContext) {
+  const audioElement = document.querySelector('audio')
+  
+  if (audioContext.state === 'suspended') {
+      audioContext.resume();
+  }
+  if (!audioElement.paused) {
+    audioElement.pause();
+  } else {
+    audioElement.play();
+  }
 }
 
 
@@ -111,6 +147,7 @@ function drawCircle(canvas, frequencies) {
 
 
 function drawTriangle(canvas, frequencies) {
+  //Who knew triangles could be so complicated
   let context = canvas.getContext("2d")
   
   let shortAxisLen = Math.min(canvas.width, canvas.height)

@@ -3,16 +3,11 @@
   <head>
     <link rel="stylesheet" href="css/style.css">
     <script src="js/scripts.js"></script>
-    <link rel="shortcut icon" href="favicon.ico">
+    <script type="text/javascript" src="js/dat.gui.min.js"></script>
     <title>Audio Visualizer</title>
   </head>
   <header>
     <h1>Audio Visualizer</h1>
-    <button data-playing="false" role="switch" aria-checked="false">
-      <span>Play/Pause</span>
-    </button>
-    <input type="range" id="volume" min="0" max="2.00" value="0.25" step="0.01">
-</button>
   </header>
   <canvas id="visualizer"></canvas>
   <audio src="audio.mp3"></audio>
