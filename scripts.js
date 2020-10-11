@@ -209,6 +209,21 @@ const reset = function (e) {
     return false;
   }
   
+//builds Piano page with server settings
+function setSettings(settings) {
+
+    //set data values from settings
+    document.getElementById('volLevelNumber').value = settings.volume;
+    document.getElementById('volLevelRange').value = settings.volume;
+    document.getElementById('waveform').value = settings.waveform;
+    document.getElementById('passType').value = settings.passType;
+    document.getElementById('freqLevelNumber').value = settings.frequency;
+    document.getElementById('freqLevelRange').value = settings.frequency;
+
+  
+    console.log("Settings applied!");
+  }
+
   // const freqLevelRange = document.getElementById('freqLevelRange');
   // const freqLevelNumber = document.getElementById('freqLevelNumber');
   //posts current settings to server
