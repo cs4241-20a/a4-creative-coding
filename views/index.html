@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>CS4241 Assignment 4</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/style.css">
+  </head>
+  <body>
+    <div >
+      <a ><img src = "/questionmark.png" onmouseover=""></a>
+      <p class = "hide"> 
+        This is a simple 3d snake game. <br>
+        You can change the direction of the snake by sliding your mouse (drag for some distance).<br>
+        <br>
+        For Example, if you slide your mouse from the bottom to somewhere middle, then you can let you snake move in up direction
+        <br>
+        Click "Play" to start playing. <br>
+        There will be a small menu at the right, which allows you to adjust some config by your own preferences <br>
+          1. PlayerSpeed : Max 200, the higher the value, the slower the pace <br>
+          2. PointerCheckThreashold: Used to adjust how long you need to slide in order to change direction (prevent misclicking) <br>
+          3, 4. Start/Stop Animation: Used to pause and restart <br>
+          5，6. Player Head and Cherry Color switch <br>
+        Goal: Gain as much cherry as possible <br>
+      </p> 
+    </div>
+
+    <div class = "play_button_div" >
+      <button id = "play_btn" >PLAY!</button>
+      <strong id = "play_text"> </strong>
+    </div>
+
+    <script> 
+      const button = document.getElementById("play_btn")
+      button.onclick = function(e) {
+        e.preventDefault()
+        window.location.replace("/game")
+      }
+
+      instruction = function(){
+
+      }
+
+    </script>
+  </body>
+</html>
