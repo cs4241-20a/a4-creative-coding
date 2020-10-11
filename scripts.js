@@ -1,6 +1,7 @@
 //key press buttons for UI keyboard
 const WHITE_KEYS = ['z', 'x', 'c', 'v', 'b', 'n', 'm', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i']
 const BLACK_KEYS = ['s', 'd', 'g', 'h', 'j', '2', '3', '5', '6', '7']
+
 //Keycode to musical frequency hashmap
 const keyboardFrequencyMap = {
     '90': 130.81,  //Z - note: C3
