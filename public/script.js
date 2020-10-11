@@ -34,3 +34,27 @@ var analyser = audioCtx.createAnalyser();
 // Bind our analyser to the media element source.
 audioSrc.connect(analyser);
 audioSrc.connect(audioCtx.destination);
+
+
+
+var frequencyData = new Uint8Array(200);
+
+var svgHeight = '300';
+var svgWidth = '1200';
+var barPadding = '1';
+
+function createSvg(parent, height, width) {
+  return d3.select(parent).append('svg').attr('height', height).attr('width', width);
+}
+
+var svg = createSvg('body', svgHeight, svgWidth);
+
+// Create our initial D3 chart.
+svg.selectAll('rect')
+   .data(frequencyData)
+   .enter()
+   .append('rect')
+   .attr('x', function (d, i) {
+      return i * (svgWidth / frequencyData.length);
+   })
+   .attr('width', svgWidth / frequencyData.length - barPadding);
