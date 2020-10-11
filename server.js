@@ -15,6 +15,7 @@ let words = [];
 
 // In seconds
 const ROUND_LENGTH = 60
+const NUM_ROUNDS = 2
 const MIN_PLAYERS = 2
 const MAX_PLAYERS = 8
 
@@ -26,7 +27,8 @@ var game = {
     answerIdx: 0,
     correctPlayers: [],
     timeLeft: ROUND_LENGTH,
-    started: true,
+    numRounds: NUM_ROUNDS,
+    started: false,
 }
 
 // Keep track of messages previously sent by clients
@@ -119,10 +121,15 @@ wss.on('connection', (ws) => {
         
         // Start game. Only leader can do this, and only if there are at least MIN_PLAYERS connected.
         else if(obj.command === "START" && obj.id === game.leader.id && game.players.length >= MIN_PLAYERS) {
+            game.started = true;
+            game.timeLeft = obj.secondsPerRound || ROUND_LENGTH;
+            game.numRounds = obj.numRounds || NUM_ROUNDS;
+          
+            console.log(obj)
             sendToClients(JSON.stringify({
                 command: "START"
             }));
-            API.getWords(game.players.length * 3).then((w) => {
+            API.getWords(game.players.length * game.numRounds).then((w) => {
               words = w.map((it) => {
                 return it.word.toLowerCase();
               })
@@ -285,6 +292,7 @@ const gameLoop = function() {
             endGame();
         }
         else {
+          // If all players have guessed correctly, wait a few seconds before advancing
           clearInterval(loop);
           setTimeout(() => {
             nextQuestion();

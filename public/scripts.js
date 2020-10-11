@@ -28,10 +28,17 @@ const app = new Vue({
     },
     methods: {
         sendStart: function() {
+            let e = document.getElementById("numRounds")
+            let numRounds = e.options[e.selectedIndex].text;
+          
+            e = document.getElementById("secondsPerRound")
+            let secondsPerRound = e.options[e.selectedIndex].text;
+          
             ws.send(JSON.stringify({
                 id: CLIENT_ID,
                 command: "START",
-                // TODO send rounds and round length too
+                numRounds: parseInt(numRounds),
+                secondsPerRound: parseInt(secondsPerRound)
             }))
         }
     }
@@ -162,7 +169,8 @@ ws.onmessage = (message) => {
     }
     else if(obj.command === "CORRECT") {
         app.messages.push({player: obj.name, correct: true})
-        app.players.find((p) => p.name === obj.name).correct++;
+        let correctPlayer = app.players.find((p) => p.name === obj.name)
+        .correct++;
     }
     else if(obj.command === "WORD") {
         app.word = obj.word;
