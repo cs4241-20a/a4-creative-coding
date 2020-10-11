@@ -1,13 +1,62 @@
 html,
 body {
-    margin: auto;
-    padding: 10px;
+    font-family: 'Rajdhani', sans-serif;
     text-align: center;
 }
 .interfacePanel {
-    display: inline-block;
-    width: 60vw;
+    margin: 0 auto;
     height: 350px;
     overflow-x: auto;
     overflow-y: hidden;
-  }
+}
+.main-panel {
+    background-color: lightcyan;
+    min-width: 300px;
+    margin: 15vh 20vh;
+}
+.controlPanel {
+    min-width: 125px;
+    max-width: 200px;
+    margin: 0 auto;
+    padding-bottom: 1%;
+}
+
+/*Help Menu Stuff*/
+#helpButton {
+    float: left;
+}
+
+.modal-offmenu {
+    display: block;
+    position: fixed;
+    z-index: 1;
+    overflow: auto;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.modal-helpmenu {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    -webkit-animation-name: slideIn;
+    -webkit-animation-duration: 0.2s;
+}
+
+#closeHelpButton {
+    float: right;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+#closeHelpButton:hover {
+    cursor: pointer;
+}
+
+.modal-content {
+    padding: 2px 16px;
+    background-color: lightcyan;
+}

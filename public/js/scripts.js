@@ -79,15 +79,27 @@ function stopPlaying() {
     clearInterval(play);
 }
 
+function setPosition(col) {
+    for(var i = 0; i < 16; i++) {
+        trackerPanel.setValue(0, i, 0);
+    }
+    trackerPanel.setValue(0, col, 1);
+    count = col;
+    prevCount = col-1;
+    if(prevCount < 0) {
+        prevCount = 16;
+    }
+}
+
 function startPlaying() {
     trackerPanel.setValue(0, count, 1);
-                trackerPanel.setValue(0, prevCount, 0);
-                playChord(count);
-                prevCount = count;
-                count++;
-                if(count >= 16) {
-                    count = 0;
-                }
+    trackerPanel.setValue(0, prevCount, 0);
+    playChord(count);
+    prevCount = count;
+    count++;
+    if(count >= 16) {
+        count = 0;
+    }
 }
 
 // THINGS THAT RUN ON START
@@ -105,7 +117,7 @@ function startPlaying() {
         }
         makeChord(row, col, value);
     },
-    background: 'white',
+    background: 'lightcyan',
     stroke: 'black',
     fill: 'yellow'
     });
@@ -115,9 +127,9 @@ function startPlaying() {
         columns:16,
         bounds:[.05,.90,.9,.05],
         onvaluechange : function(row, col, value) {
-            trackerPanel.setValue(row, col, 0);
+            setPosition(col);
         },
-        background: 'white',
+        background: 'lightcyan',
         stroke: 'black',
         fill: 'red'
     });
@@ -126,9 +138,10 @@ function startPlaying() {
     bounds:[.05,.82,.875,.05],
     hAlign:"left",
     value: "Note :",
+    font: 'Rajdhani'
     });
 
-    a.background = 'white';
+    a.background = 'lightcyan';
 
     for(var i = 0; i < multiButton._values.length; i++) {
     multiButton._values[i] = Math.random() > .5 ;
@@ -140,6 +153,10 @@ function startPlaying() {
 
 window.onload = function() {
     console.log("page loaded!");
+
+    trackerPanel.setValue(0, 0, 1);
+
+    //initialize buttons
     const startButton = document.getElementById("startButton");
     startButton.onclick = function() {
         if(!playing) {
@@ -188,5 +205,25 @@ window.onload = function() {
     const waveInput = document.getElementById("waveTypes");
     waveInput.onchange = function() {
         oscType = waveInput.value;
+    }
+
+    //initialize modal
+    //inspired by https://www.w3schools.com/howto/howto_css_modals.asp
+    var helpmenu = document.getElementById("helpMenu");
+    var openhelp = document.getElementById("helpButton");
+    var closehelp = document.getElementById("closeHelpButton");
+
+    openhelp.onclick = function() {
+        helpmenu.style.display = "block";
+    }
+
+    closehelp.onclick = function() {
+        helpmenu.style.display = "none";
+    }
+
+    window.onclick = function(event) {
+        if(event.target == helpmenu) {
+            helpmenu.style.display = "none";
+        }
     }
 }
