@@ -29,7 +29,7 @@
                     <label for="secondsPerRound">Seconds Per Round</label>
                     <select name="secondsPerRound" id="secondsPerRound" class="form-control">
                       <option>40</option>
-                      <option>50</option>  
+                      <option>50</option>
                       <option>60</option>  
                       <option>70</option>  
                       <option>80</option>  
@@ -85,26 +85,37 @@
     
   <!--   Help Modal   -->
   <!-- Button trigger modal -->
-  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-    Launch demo modal
-  </button>
+  <div class="fixed-bottom d-flex justify-content-end">
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#helpModal" style="margin: 1rem">
+        Help
+      </button>
+  </div>
+
 
   <!-- Modal -->
-  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal fade" id="helpModal" tabindex="-1" role="dialog" aria-labelledby="helpModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+          <h5 class="modal-title" id="helpModalLabel">Help</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
-          ...
+          <h4>Welcome to my app!</h4>
+          <p>
+            This application functions very similarly to skribbl.io. Players take turns drawing a randomly selected word.
+            While one player draws, all the other players try to guess what the word is before the time runs out. Guess correctly and
+            your score increases.
+          </p>
+          <b>Drawing</b>
+          <p>
+            When it is your turn to draw, you will be notified with a browser alert. The canvas will then unlock, and you can select
+          </p>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
         </div>
       </div>
     </div>

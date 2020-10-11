@@ -48,7 +48,9 @@ const app = new Vue({
 window.onload = function() {
     canvas = document.getElementById('canvasArea');
     ctx = canvas.getContext('2d');
-
+  
+    // Display modal
+    $('#helpModal').modal();
 
     document.getElementById('joinButton').onclick = function() {
         // Get rid of attributes - no longer need them
