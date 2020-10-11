@@ -13,8 +13,8 @@ var loop;
 
 let words = [];
 
-// In seconds
-const ROUND_LENGTH = 60
+// Defaults
+const ROUND_LENGTH = 90
 const NUM_ROUNDS = 2
 const MIN_PLAYERS = 2
 const MAX_PLAYERS = 8
