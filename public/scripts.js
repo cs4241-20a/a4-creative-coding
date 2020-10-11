@@ -168,12 +168,17 @@ ws.onmessage = (message) => {
         })
     }
     else if(obj.command === "CORRECT") {
-        app.messages.push({player: obj.name, correct: true})
-        let correctPlayer = app.players.find((p) => p.name === obj.name)
-        .correct++;
+        app.messages.push({player: obj.name, correct: true});
+        let correctPlayer = app.players.find((p) => p.name === obj.name);
+        correctPlayer.correct++;
+        correctPlayer.correctThisDrawing = true;
     }
     else if(obj.command === "WORD") {
         app.word = obj.word;
+        // On new word, reset correctThisDrawing for all players.
+        for(let i = 0; i < app.players.length; i++) {
+          app.players[i].correctThisDrawing = false;
+        }
     }
     else if(obj.command === "TICK") {
         app.timeLeft = obj.timeLeft;

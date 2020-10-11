@@ -14,7 +14,7 @@
 
                 <p>Current players:</p>
                 <ul>
-                    <li v-for="p in players">{{ p.name }} ({{ p.correct}} correct)</li>
+                    <li v-for="p in players" v-bind:class="{correctThisDrawing: p.correctThisDrawing}">{{ p.name }} ({{ p.correct}} correct)</li>
                 </ul>
 
                 <div v-if="isLeader && !started" id="leaderControls" class="text-center card">
@@ -61,7 +61,7 @@
                     </p>
                 </div>
                 <div style="position:absolute; left:0; bottom:0;">
-                    <input id="messageBox" type="text" maxlength="15" placeholder="Enter your guess!">
+                    <input id="messageBox" type="text" maxlength="30" placeholder="Enter your guess!">
                 </div>
             </div>
         </div>
@@ -82,5 +82,33 @@
         </div>
     </div>
     <script src="scripts.js"></script>
+    
+  <!--   Help Modal   -->
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+    Launch demo modal
+  </button>
+
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          ...
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+    
   </body>
 </html>
