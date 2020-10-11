@@ -15,9 +15,9 @@ let words;
 setTimeout(() => {
   API.getWords(5).then((w) => {
     words = w
-    console.log(words)
+    console.log("Got words: ", words)
   })
-}, 8000)
+}, 4000)
 
 
 // In seconds

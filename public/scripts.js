@@ -9,7 +9,6 @@ var lineWidth = 10;
 var color = "#000000"
 var colors = ["#000000", "#FF0000", "#FF7F00", "#FFFF00", "#00FF00", "#00FFFF", "#007FFF", "#0000FF", "#7F00FF", "#FF00FF", 
               "#FFFFFF", "#E05151", "#E09951", "#E0E051", "#51E051", "#51E0E0", "#5199E0", "#5151E0", "#9951E0", "#E051E0", ]
-              //"#FFFFFF", "#fdd835", "#ffb300", "#fb8c00", "#f4511e"]
 
 // WEBSOCKET
 const ws = new WebSocket('wss://' + location.host);

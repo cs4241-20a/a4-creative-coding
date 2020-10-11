@@ -37,7 +37,7 @@ client.connect()
 const getWords = function(num) {
   var queryDoc = {};
   
-  return client.db("a4-webware").collection("words").find({limit: num}).toArray();
+  return client.db("a4-webware").collection("words").find().toArray();
 }
 
 exports.getWords = getWords;
