@@ -8,8 +8,8 @@ app.use(express.static('./'));
 app.use(bodyParser.urlencoded({extended: true}));
 
 //simple server for storing settings and defaults
-let settings = { volume: 0.5, waveform: "sine", passtype: "Lowpass", frequency: 1000.0 }
-const default_settings = { volume: 0.5, waveform: "sine", passtype: "Lowpass", frequency: 1000.0 }
+let settings = { volume: 0.5, waveform: "sine", passtype: "lowpass", frequency: 1000 }
+const default_settings = { volume: 0.5, waveform: "sine", passtype: "lowpass", frequency: 1000 }
 
 
 

@@ -1,7 +1,9 @@
 //key press buttons for UI keyboard
 const WHITE_KEYS = ['z', 'x', 'c', 'v', 'b', 'n', 'm', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i']
 const BLACK_KEYS = ['s', 'd', 'g', 'h', 'j', '2', '3', '5', '6', '7']
-let waveform;
+
+//default waveform, this is to remove undefined warning
+let waveform = 'sine';
 
 const keys = document.querySelectorAll('.key');
 const whiteKeys = document.querySelectorAll('.key.white');
@@ -72,10 +74,6 @@ function initializeAudio() {
     const filter = audioCtx.createBiquadFilter();
     const activeOscillators = {};
 
-    //default waveform
-    waveform = 'sine'
-
-
     //Keycode to musical frequency hashmap
     const keyboardFrequencyMap = {
         '90': 130.81,  //Z - note: C3
@@ -108,11 +106,15 @@ function initializeAudio() {
     volume.connect(filter);
     filter.connect(audioCtx.destination);
 
-    //Listens for changes to the volume
-    const volumeControl = document.getElementById('volLevelRange')
-    volumeControl.addEventListener('change', function (event) {
-        volume.gain.setValueAtTime(event.target.value, audioCtx.currentTime)
+    //Listens for changes to the volume on range and number
+    const volumeRangeControl = document.getElementById('volLevelRange')
+    const volumeNumControl = document.getElementById('volLevelNumber');
+    volumeRangeControl.addEventListener('change', function(e) {
+        volume.gain.setValueAtTime(e.target.value, audioCtx.currentTime)
     });
+    volumeNumControl.addEventListener('change', function(e) {
+        volume.gain.setValueAtTime(e.target.value, audioCtx.currentTime);
+    })
 
     //Listens for changes to the waveform
     const waveformControl = document.getElementById('waveform')
@@ -127,11 +129,15 @@ function initializeAudio() {
         filter.type = event.target.value
     });
 
-    //Listens for change in frequency
-    const frequencyLevelControl = document.getElementById('freqLevelRange')
-    frequencyLevelControl.addEventListener('change', function (event) {
-        filter.frequency.setValueAtTime(event.target.value, audioCtx.currentTime)
+    //Listens for change in frequency on range and number
+    const frequencyRangeControl = document.getElementById('freqLevelRange')
+    const frequencyNumControl = document.getElementById('freqLevelNumber');
+    frequencyRangeControl.addEventListener('change', function(e) {
+        filter.frequency.setValueAtTime(e.target.value, audioCtx.currentTime)
     });
+    frequencyNumControl.addEventListener('change', function(e) {
+        filter.frequency.setValueAtTime(e.target.value, audioCtx.currentTime);
+    })
 
     //Listen for keypresses to play notes
     window.addEventListener('keydown', keyDown, false);
@@ -169,46 +175,85 @@ function initializeAudio() {
 const reset = function (e) {
     //prevent default form action from being carried out
     // e.preventDefault();
-  
+
     fetch('/reset', {
-      method: 'GET'
+        method: 'GET'
     })
-      .then(function (res) {
-        //response
-        res.json().then(function (data) {
-          //data
-          console.log("Submit Response:", res);
-          console.log("Returned data: ", data);
-  
-          setSettings(data);
+        .then(function (res) {
+            //response
+            res.json().then(function (data) {
+                //data
+                console.log("Submit Response:", res);
+                console.log("Returned data: ", data);
+
+                setSettings(data);
+            })
         })
-      })
-  
+
     return false;
-  }
-  
-  //gets last saved settings from server
-  const load = function (e) {
+}
+
+//gets last saved settings from server
+const load = function (e) {
     //prevent default form action from being carried out
     e.preventDefault();
-  
+
     fetch('/load', {
-      method: 'GET'
+        method: 'GET'
     })
-      .then(function (res) {
-        //response
-        res.json().then(function (data) {
-          //data
-          console.log("Submit Response:", res);
-          console.log("Returned data: ", data);
-  
-          setSettings(data);
+        .then(function (res) {
+            //response
+            res.json().then(function (data) {
+                //data
+                console.log("Submit Response:", res);
+                console.log("Returned data: ", data);
+
+                setSettings(data);
+            })
         })
-      })
-  
+
     return false;
-  }
-  
+}
+
+//posts current settings to server
+const save = function (e) {
+    //prevent default form action from being carried out
+    e.preventDefault();
+
+    if (document.getElementById('volLevelNumber').value > 100) {
+        alert("Volume cannot be that high");
+        document.getElementById('volLevelNumber').value = 100;
+        document.getElementById('volLevelRange').value = 100;
+    }
+
+    const userSettings = {
+        volume: document.getElementById('volLevelNumber').value,
+        waveform: document.getElementById('waveform').value,
+        passtype: document.getElementById('passType').value,
+        frequency: document.getElementById('freqLevelNumber').value
+    }
+    console.log("User settings: " + userSettings)
+
+    fetch('/save', {
+        method: 'POST',
+        body: JSON.stringify(userSettings),
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
+        .then(function (res) {
+            //response
+            res.json().then(function (data) {
+                //data
+                console.log("Submit Response:", res);
+                console.log("Returned data: ", data);
+                alert('Settings saved!');
+            })
+        })
+
+    return false;
+}
+
 //builds Piano page with server settings
 function setSettings(settings) {
 
@@ -216,54 +261,14 @@ function setSettings(settings) {
     document.getElementById('volLevelNumber').value = settings.volume;
     document.getElementById('volLevelRange').value = settings.volume;
     document.getElementById('waveform').value = settings.waveform;
-    document.getElementById('passType').value = settings.passType;
+    document.getElementById('passType').value = settings.passtype;
     document.getElementById('freqLevelNumber').value = settings.frequency;
     document.getElementById('freqLevelRange').value = settings.frequency;
+    // initializeAudio();
 
-  
+
     console.log("Settings applied!");
-  }
-
-  // const freqLevelRange = document.getElementById('freqLevelRange');
-  // const freqLevelNumber = document.getElementById('freqLevelNumber');
-  //posts current settings to server
-  const save = function (e) {
-    //prevent default form action from being carried out
-    e.preventDefault();
-  
-    if (document.getElementById('volLevelNumber').value > 100) {
-      alert("Volume cannot be that high");
-      document.getElementById('volLevelNumber').value = 100;
-      document.getElementById('volLevelRange').value = 100;
-    }
-  
-    const userSettings = {
-      volume: document.getElementById('volLevelNumber').value,
-      waveform: document.getElementById('waveform').value,
-      passtype: document.getElementById('passType').value,
-      frequency: document.getElementById('freqLevelNumber').value
-    }
-    console.log("User settings: " + userSettings)
-    
-    fetch('/save', {
-      method: 'POST',
-      body: JSON.stringify(userSettings),
-      headers: {
-        "Content-Type": "application/json"
-      }
-    })
-      .then(function (res) {
-        //response
-        res.json().then(function (data) {
-          //data
-          console.log("Submit Response:", res);
-          console.log("Returned data: ", data);
-          alert('Settings saved!');
-        })
-      })
-  
-    return false;
-  }
+}
 
 //run functions on window load
 window.onload = function () {
