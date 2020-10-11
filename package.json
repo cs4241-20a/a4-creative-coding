@@ -1,0 +1,13 @@
+{
+  "name": "a4-jordanstoessel",
+  "version": "1.0",
+  "description": "The fourth assignment of my WebWare course that helps teach creative coding.",
+  "author": "Jordan Stoessel",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "nodejs": "0.0.0"
+  }
+}
