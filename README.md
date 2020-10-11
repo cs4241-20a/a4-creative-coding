@@ -59,4 +59,8 @@ Include a very brief summary of your project here. Images are encouraged when ne
 - the instructions you present in the website should be clear enough to use the application, but if you feel any need to provide additional instructions please do so here.
 
 
-Bug: Volume goes to maximum after defaulted
+Credits to:
+Web Dev Simplified for Piano visual tutorial and modal tutorial
+css-tricks.com for slider customization options
+https://pages.mtu.edu/~suits/notefreqs.html for note frequencies
+https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API for Web Audio API tutorial

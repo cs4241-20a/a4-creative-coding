@@ -109,6 +109,9 @@ a {
   --width: 100px;
   background-color: white;
   border: 1px solid #333;
+  color: black;
+  text-align: center;
+  align-items: center;
 }
 
 .white.active {
@@ -118,6 +121,7 @@ a {
 .black {
   --width: 60px;
   background-color: black;
+  color: white;
   margin-left: calc(var(--width) / -2);
   margin-right: calc(var(--width) / -2);
   z-index: 2;
