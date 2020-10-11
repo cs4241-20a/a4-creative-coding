@@ -119,6 +119,9 @@ wss.on('connection', (ws) => {
         
         // Start game. Only leader can do this, and only if there are at least MIN_PLAYERS connected.
         else if(obj.command === "START" && obj.id === game.leader.id && game.players.length >= MIN_PLAYERS) {
+            sendToClients(JSON.stringify({
+                command: "START"
+            }));
             API.getWords(game.players.length * 3).then((w) => {
               words = w.map((it) => {
                 return it.word.toLowerCase();
@@ -178,7 +181,6 @@ wss.on('connection', (ws) => {
 
         // Check that draw command has authority to do so, then send to all clients
         else if(obj["command"] === "DRAW" && obj["id"] === game.players[game.nowDrawingIdx].id) {
-            console.log("Sending draw!")
             messages.push(message);
             sendToClients(message);
         }
@@ -210,11 +212,12 @@ function sendToClient(id, msg) {
 // Get word, blanked out except for specified positions if given
 function getBlankedWord(word, revealLetters=[]) {
     console.log("Word: %s", word)
-    let blankedWord = "_".repeat(word.length);
-    for(let i = 0; i < revealLetters.length; i++) {
-        let idx = revealLetters[i]
-        blankedWord = blankedWord.substring(0, idx) + word[idx] + blankedWord.substring(idx+1)
-    }
+    let blankedWord = word.replace(/\W/g/, "_");
+  
+    // for(let i = 0; i < revealLetters.length; i++) {
+    //     let idx = revealLetters[i]
+    //     blankedWord = blankedWord.substring(0, idx) + word[idx] + blankedWord.substring(idx+1)
+    // }
     return blankedWord;
 }
 
@@ -281,6 +284,7 @@ const gameLoop = function() {
             endGame();
         }
         else {
+          clearInterval(loop);
           setTimeout(() => {
             nextQuestion();
           }, 3000)
@@ -290,6 +294,7 @@ const gameLoop = function() {
 
 // Setup gamestate for new question
 function nextQuestion() {
+    loop = setInterval(gameLoop, 1000);
     game.correctPlayers = []
     game.answerIdx++;
     game.timeLeft = ROUND_LENGTH;
