@@ -50,6 +50,8 @@ function makeChord(row, col, val) {
     //console.log(toPlay);
 }
 
+//inspired by https://www.javascriptjanuary.com/blog/making-music-in-the-browser
+//because I have little to no knowledge in music theory :(
 function playNote(frequency) {
     const oscillator = context.createOscillator();
     const envelop = context.createGain()
@@ -103,6 +105,7 @@ function startPlaying() {
 }
 
 // THINGS THAT RUN ON START
+// made possible and inspired by http://www.charlie-roberts.com/interface/
 !function() {
     var a = new Interface.Panel({  background:"#000", container:document.querySelector("#notePanel") });            
     multiButton = new Interface.MultiButton({ 
