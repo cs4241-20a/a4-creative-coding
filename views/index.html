@@ -1,0 +1,68 @@
+<!-- This is a static file -->
+<!-- served from your routes in server.js -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="An Etch-A-Sketch Remake" />
+
+    <title>Etch-A-Sketch</title>
+
+    <!-- import the webpage's stylesheet -->
+    <link rel="stylesheet" href="/style.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Marck+Script&display=swap" rel="stylesheet">
+
+    <!-- import the webpage's client-side javascript file -->
+    <script src="/script.js" defer></script>
+    <script src="/audioscript.js" type="module"></script>
+  </head>
+
+  <body>
+    <header>
+      <h1>
+        Etch-A-Sketch
+      </h1>
+    </header>
+
+    <main>
+      <div id="left"></div>
+      <div id="middle">
+        <canvas id="canvas" width="1100" height="600"></canvas>
+        <div id="help">
+          <div id="info">
+            <h1>
+              Welcome to Etch-A-Sketch!
+            </h1>
+            <ul>
+              <li>Use the arrow keys to draw</li>
+              <li>Use the color picker to change the color of the line</li>
+              <li>Use the 'Clear' button to erase the sketch</li>
+              <li>
+                Use the controls in the top right to adjust the music settings
+              </li>
+              <li>Use the spacebar to open and close this help window</li>
+              <li>Most importantly, have fun!!</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div id="right">
+        <label>
+          Change the Color
+          <input
+            type="color"
+            id="colorpicker"
+            onchange="changeColor()"
+            style="width:85%;"
+        /></label>
+
+        <button id="clear">
+          Clear
+        </button>
+      </div>
+    </main>
+  </body>
+</html>
