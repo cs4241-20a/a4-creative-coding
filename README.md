@@ -48,9 +48,12 @@ Do the following to complete this assignment:
 Sample Readme (delete the above when you're ready to submit, and modify the below so with your links and descriptions)
 ---
 
-## Your Web Application Title
+## Drawing App
 
-your hosting link e.g. http://a4-charlieroberts.glitch.me
+https://a4-sam-moran.glitch.me/
+  
+My project is based on the same idea as Skribbl.io. It is a multiplayer game where one player is given a word to draw, and the other players have to guess the word based on the drawing.
+
 
 Include a very brief summary of your project here. Images are encouraged when needed, along with concise, high-level text. Be sure to include:
 
