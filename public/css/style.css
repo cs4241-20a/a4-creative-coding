@@ -58,5 +58,6 @@ body {
 
 .modal-content {
     padding: 2px 16px;
+    padding-bottom: 16px;
     background-color: lightcyan;
 }
