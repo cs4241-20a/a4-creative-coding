@@ -1,0 +1,143 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>CS4241 Assignment 4</title>
+    <script src="//d3js.org/d3.v5.min.js"></script>
+    <style>
+        #stat {
+            height: 80px;
+            width: 150px;
+            background-color:aquamarine;
+        }
+
+        p {
+            margin: 0 0 0 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="stat">
+        <p id="state">State: </p>
+        <p id="nickname">Nickname: </p>
+        <p id="population">Population: </p>
+        <button onclick="help()">Help Message</button>
+    </div>
+    <div id="graph"></div>
+    <script>
+        function help() {
+            window.confirm(
+                "Put your mouse on the graph to see the details of each state's population and nickname"
+            );
+        }
+
+        width = window.innerWidth;
+        height = window.innerHeight;
+
+        var svg = d3
+            .select("#graph")
+            .append("svg")
+            .attr("width", width)
+            .attr("height", height)
+            .attr("class", "bubble");
+
+        states = [];
+
+        Promise.all([
+            d3.json("https://raw.githubusercontent.com/CivilServiceUSA/us-states/master/data/states.json"),]).then(function (stat) {
+                console.log(stat);
+                states = parseData(stat[0]);
+                draw(states);
+            });
+
+        function parseData(stat) {
+            return stat.map((element) => {
+                return {
+                    state: element.state,
+                    nickname: element.nickname,
+                    population: element.population,
+                    photo_url: element.state_flag_url,
+                    facebook_url: element.facebook_url,
+                };
+            });
+        }
+
+        function draw(stat) {
+            var bubble = d3.pack(stat).size([width, height]).padding(1.5);
+
+            var nodes = d3.hierarchy({ children: stat }).sum(function (s) {
+                return s.population;
+            });
+
+            var node = svg
+                .selectAll(".node")
+                .data(bubble(nodes).descendants())
+                .enter()
+                .filter(function (s) {
+                    return !s.children;
+                })
+                .append("g")
+                .attr("class", "node")
+                .attr("transform", function (s) {
+                    return "translate(" + s.x + "," + s.y + ")";
+                });
+            node.on("mouseover", function (s) {
+                d3.select(this).classed("hover", true);
+                d3.select(this).attr("opacity", 0.8);
+                d3.select("#state").text("State: " + s.stat.state);
+                d3.select("#nickname").text("Nickname: " + s.stat.nickname);
+                d3.select("#population").text("Population: " + s.stat.population);
+            })
+                .on("mouseout", function (s) {
+                    d3.select(this).classed("hover", false);
+                    d3.select(this).attr("opacity", 1);
+                    d3.select("#state").text("State: ");
+                    d3.select("#nickname").text("Nickname: ");
+                    d3.select("#population").text("Population: ");
+                })
+                .on("click", function (s) {
+                    window.open(s.stat.facebook_url, "_blank");
+                });
+
+            node.append("title").text(function (s) {
+                return s.data.state + ": " + s.data.nickname;
+            });
+
+            node.append("svg:pattern")
+                .attr("id", (s) => s.stat.facebook_url)
+                .attr("height", (s) => 1.5 * s.r)
+                .attr("width", (s) => 1.5 * s.r)
+                .attr("patternUnits", "userSpaceOnUse")
+                .append('svg:image')
+                .attr("xlink:href", (s) => s.stat.state_flag_url)
+                .attr("height", (s) => 1.5 * s.r)
+                .attr("width", (s) => 1.5 * s.r)
+                .attr("x", 0)
+                .attr("y", 0);
+
+            node.append("circle")
+                .attr(
+                    "transform",
+                    (s) => "translate" + -s.r + "," + -s.r + ")"
+                )
+                .attr("cx", (s) => s.r)
+                .attr("cy", (s) => s.r)
+                .attr("r", (s) => s.r)
+                .style("fill", "#fff")
+                .style("fill", (s) => "url(#" + s.stat.state_flag_url + ")");
+
+            node.append("text")
+                .attr("dy", "1.2em")
+                .text(function (s) {
+                    return s.stat.population;
+                })
+                .attr("font-family", "Trebuchet MS", "Helvetica")
+                .attr("font-size", function (s) {
+                    return s.r / 1.25;
+                })
+            .attr("fill", "gray")
+        }
+    </script>
+</body>
+</html>

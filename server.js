@@ -1,16 +1,19 @@
 // PACKAGES
 const express = require('express'),
-    morgan = require('morgan'),
-    bodyParser = require('body-parser');
+    morgan = require('morgan');
 
 const app = express();
-app.use(express.static('public'));
-app.use(bodyParser.json());
-app.use(morgan('tiny'));
+app.use(express.json());
+app.use(morgan('dev'));
 
-// LISTENING PORT
-app.listen(process.env.PORT || 3000, function () {
-    console.log('The app is listening on port ' + this.address().port);
-    console.log('Served at http://localhost:3000');
-    console.log('Ctrl-c to quit');
+app.use(express.static("public"));
+
+app.get("/", (req, res) => {
+    res.sendFile(__dirname + "/views/index.html");
 })
+
+//Listening Port
+const port = process.env.PORT || 3000;
+
+app.listen(port, () => console.log("Server launched on port: ${port}"));
+
