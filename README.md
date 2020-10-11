@@ -1,6 +1,6 @@
 ## Drawing App
 
-Sam 
+Sam Moran
 
 Glitch Link: https://a4-sam-moran.glitch.me/
   
