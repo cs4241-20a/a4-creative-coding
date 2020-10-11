@@ -2,12 +2,37 @@ console.log("Welcome to assignment 4!")
 const BLACK_KEYS = ['s', 'd', 'g', 'h', 'j']
 const WHITE_KEYS = ['z', 'x', 'c', 'v', 'b', 'n', 'm']
 
-
 const keys = document.querySelectorAll('.key');
 const whiteKeys = document.querySelectorAll('.key.white');
 const blackKeys = document.querySelectorAll('.key.black');
 
+const freqLevelRange = document.getElementById('freqLevelRange');
+const freqLevelNumber = document.getElementById('freqLevelNumber');
 
+freqLevelRange.addEventListener('input', syncFreqAmount)
+freqLevelNumber.addEventListener('input', syncFreqAmount)
+
+function syncFreqAmount(e) {
+  const val = e.target.value
+  freqLevelRange.value = val;
+  freqLevelNumber.value = val;
+}
+
+const volLevelRange = document.getElementById('volLevelRange');
+const volLevelNumber = document.getElementById('volLevelNumber');
+
+volLevelRange.addEventListener('input', syncVolAmount)
+volLevelNumber.addEventListener('input', syncVolAmount)
+
+function syncVolAmount(e) {
+  const val = e.target.value
+  volLevelRange.value = val;
+  volLevelNumber.value = val;
+}
+
+document.getElementById("freqLevelRange").oninput = function () {
+  this.style.background = 'linear-gradient(to right, #82CFD0 0%, #82CFD0 ' + this.value + '%, #fff ' + this.value + '%, white 100%)'
+};
 
 keys.forEach(key => {
   key.addEventListener('click', () => playNote(key))
@@ -73,7 +98,7 @@ function playNote(key) {
 
 
 window.onload = function () {
-//  const button = document.getElementById('submitbtn');
-
+  //  const button = document.getElementById('submitbtn');
+  document.getElementById('pianoSoundCheckBox').checked = true;
   console.log("Loaded!");
 }

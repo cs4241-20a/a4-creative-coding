@@ -52,7 +52,36 @@
 
 
 <div class="controllers">
-  
+  <label for="volumeLevel">Volume</label>
+  <div class="volume-container">
+    <input type="range" min="0" max="100" value="50" id="volLevelRange">
+    <input class="volume-input" type="number" min="0" max="100" value="50" id="volLevelNumber">
+  </div><br>
+
+  <label for="frequencyLevel">Frequency</label>
+  <div class="frequency-container">
+    <input type="range" min="27.5" max="4186" value="262" id="freqLevelRange">
+    <input class="frequency-input" type="number" min="27.5" max="4186" value="262" id="freqLevelNumber">
+  </div><br>
+
+  <div class="octave-container">
+    <label class="octave-radio" for="octaveAmount">Number of Octaves</label><br>
+    <input class="octave-radio" type="radio" name="octaves" id="oneOctave">
+    <label for="oneOctave">1</label>
+    <input class="octave-radio" type="radio" name="octaves" id="twoOctave">
+    <label for="twoOctave">2</label>
+    <input class="octave-radio" type="radio" name="octaves" id="threeOctave">
+    <label for="threeOctave">3</label>
+  </div><br>
+
+
+  <div>
+    <label class="piano-sound-container">Piano Sound
+      <input type="checkbox" checked="piano-sound-checked">
+      <span class="checkmark"></span>
+    </label>
+  </div>
+  <button id='resetbtn'>Reset Default</button>
 </div>
 
 </html>
