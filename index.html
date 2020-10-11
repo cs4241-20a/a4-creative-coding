@@ -10,16 +10,22 @@
 </head>
 
 <body>
-  <h1 class="title">Welcome to Assignment 4</h1>
-  <p id="intro">
-    Welcome to [Piano App]! Here you can mess around on the Piano and play to your heart's content. You can control the
-    Frequency(pitch), Volume, Number of Octaves, and toggle Piano sounds below. Don't worry if you edit too much as you
-    can always reset the application to default with the reset button. Have fun!
-  </p>
+  <h1>Virtual Piano</h1>
 
   <p class="footer">Application by <a href="https://github.com/jstoessel" target="_">Jordan Stoessel</a>. Random music
     link <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">here</a>.</p>
 </body>
+
+<div class="modal" id="modal">
+  <div class="modal-header">
+    <div class="modal-title">Welcome to Virtual Piano!</div>
+    <button data-close-button class="close-button">&times;</button>
+  </div>
+  <div class="modal-body">
+    Here you can mess around on the Piano and play to your heart's content. The Piano is made using Web Audio API to create an oscillation. This oscillation can be controlled using the keyboard. You may also control the Volume, Waveform, Pass Filter, and Filter Frequency below. If you find a setting you like, you can save the settings [Save Current Settings] and load the previously saved settings [Load Saved Settings] back at any time. If you mess up the settings you can always press the [Reset Default] button to reset the settings back to default. Click the [X] or off the modal to close.
+  </div>
+</div>
+<div id="overlay"></div>
 
 
 <div class="piano" id='pianotable'>
@@ -53,9 +59,11 @@
 
   <!-- Third octave -->
   <div data-note="C3" class="key white"></div>
-
 </div>
 
+<br>
+
+<!-- Settings for the webpage -->
 <div class="controllers">
   <span>Volume: </span>
   <input type="range" min="0.0" max="1.0" step="0.01" value="0.5" id="volLevelRange">
@@ -94,6 +102,9 @@
   <button id='loadbtn'>Load Saved Settings</button>
   <button id='resetbtn'>Reset Default</button>
 </div>
+<br>
+<button data-modal-target="#modal">Help!</button>
+
 </body>
 
 </html>

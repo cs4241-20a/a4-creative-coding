@@ -21,10 +21,9 @@ app.get('/', (req, res) => {
 //get default settings
 app.get("/reset", (req, res) => {
     console.log("Loading defaults: " + JSON.stringify(default_settings));
-    settings = default_settings;
-
     res.json(default_settings);
     console.log("Defaulted!");
+    res.end();
 })
 
 //get server settings
@@ -33,6 +32,7 @@ app.get("/load", (req, res) => {
 
     res.json(settings);
     console.log("Loaded!");
+    res.end();
 })
 
 //post to update server settings
@@ -48,10 +48,9 @@ app.post("/save", bodyParser.json(), (req, res) => {
     }
     
     console.log("These settings saved: " + JSON.stringify(settings));
-    //console.log("After change: " + JSON.stringify(settings));
     console.log("Saved!");
     // res.writeHead(200, "OK", {'Content-Type': 'text/plain' });
-    // res.end();
+    res.end();
 })
 
 //listen to port

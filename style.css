@@ -11,21 +11,77 @@ html {
 body, html {
     font-family: "Lato";
     color: #FFFFFF;
-    margin: 0;
-    padding: 0;
     height: 100%;
     min-width: 770px;
-    align-items: center;
+    text-align: center;
 }
 
 .title {
     text-align: center;
 }
 
-.intro {
-    padding-left: 220px;
-    padding-right: 220px;
-    justify-content: center;
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  transition: 200ms ease-in-out;
+  border: 1px solid black;
+  border-radius: 5px;
+  z-index: 5;
+  background-color: white;
+  width: 500px;
+  max-width: 80%;
+  color: black;
+}
+
+.modal.active{
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.modal-header {
+  padding: 10px 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid black;
+}
+
+.modal-header .modal-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.modal-header .close-button {
+  cursor: pointer;
+  border: none;
+  outline: none;
+  background: none;
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: red;
+}
+
+.modal-body {
+  padding: 10px 15px;
+  user-select: none;
+}
+
+#overlay {
+  position: fixed;
+  opacity: 0;
+  transition: 200ms ease-in-out;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, .5);
+  pointer-events: none;
+}
+
+#overlay.active {
+  opacity: 1;
+  pointer-events: all;
 }
 
 a {
@@ -65,3 +121,5 @@ a {
   .black.active {
     background-color: #333;
   }
+
+  
