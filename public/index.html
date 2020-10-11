@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>a4 Pooja Patel</title>
+  <h1><center>Creative Coding: Interactive Multimedia Experiences | Pooja Patel</center></h1>
+  <script src="https://cdn.jsdelivr.net/npm/vega@5" type="module"></script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/vega-lite@4.0.0-beta.2"
+    type="module"
+  ></script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/vega-embed@5"
+    type="module"
+  ></script>
+  <link href="/style.css" rel="stylesheet" type="text/css" />
+  <script src="scripts.js"></script>
+</head>
+
+<body>
+  <h2 style="position:absolute;top:8%;left:36%;">
+    China's Population since 1960
+  </h2>
+  <h4
+    style="transform-origin:0 0;transform:rotate(270deg);position:absolute;top:43%;left:32%;"
+  >
+    Population (in hundred millions)
+  </h4>
+  <div id="ChinaGraph" style="position:absolute;top:15%;left:31%;"></div>
+
+  <h2 style="position:absolute;top:8%;left:72%;">
+    India's Population since 1960
+  </h2>
+  <h4
+    style="transform-origin:0 0;transform:rotate(270deg);position:absolute;top:43%;left:66%;"
+  >
+    Population (in hundred millions)
+  </h4>
+  <div id="IndiaGraph" style="position:absolute;top:15%;left:65%;"></div>
+
+  <h2 style="position:absolute;top:8%;left:3%;">
+    United States' Population since 1960
+  </h2>
+  <h4
+    style="transform-origin:0 0;transform:rotate(270deg);position:absolute;top:43%;left:1%;"
+  >
+    Population (in ten millions)
+  </h4>
+  <div id="USAGraph" style="position:absolute;top:15%;left:0%;"></div>
+
+  <div id="vis7" style="position:absolute;top:55%;left:38%;"></div>
+  <div>
+  <h2 style="position:absolute;top:150%;left:42%;color:black;">
+    Pooja Patel CS 4241
+
+    </h2>
+  </div>
+  <button
+    id="instructions"
+    onclick="popup()"
+    style="position:absolute;top:3%;left:92%;background-color:black;color:white;height:5%;width:7%;"
+  >
+    Instructions
+  </button>
+
+  <script src="https://d3js.org/d3.v4.js"></script>
+  <script src="main.js" type="module"></script>
+
+  <script>
+    function popup() {
+      "use strict";
+      let myWindow = window.open("", "Instructions", "width=600,height=370");
+      myWindow.document.write(
+        "<h1>Instructions</h1>" +
+          "<p>This is the website for Assignment 4- Creative Coding: Interactive Multimedia Experiences<p> " +
+          "<p>Below is basic documentation and instructions for how to use the user interface.<p>" +
+          "<p>This website is using a population dataset for India, China, and the United States." +
+          "<p>The datasets come from https://github.com/jdorfman/Awesome-JSON-Datasets#population <p>" +
+          "This website allows you to compare the populations of the three countries from 1960. " +
+        "You can zoom into each of the country graphs by highlighting the area you wish to see zoomed in- to look at the range more closely.</p>" +
+          "There is also the pie chart that can be manipulated to show the data as you wish. For more user interaction, the user may save the graph or continue to edit the file in an open-source github project.</p>" +
+        "<p>This project can be expanded in the future by including datasets to include more countries. <p>"
+      );
+    }
+  </script>
+  <footer>
+</footer>
+</body>
+
+</html>
