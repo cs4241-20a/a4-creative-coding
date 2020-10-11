@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+  <head>
+    <title> title</title>
+    <meta charset="utf-8" />
+
+    <script type="text/javascript" src="script.js"></script>
+<!--     <script type="text/javascript" src="dat.gui.min.js"></script> -->
+       <!-- import the webpage's stylesheet -->
+    <link rel="stylesheet" href="style.css" />
+    
+  </head>
+  
+  
+  <body class="content">
+    <div> 
+      <h1>
+         2D Music Visualizer 
+            <button id="help" style="background-color:rgb(200,150,150);border-color:rgb(200,150,150); margin-left:30px;">
+          Help
+        </button>
+      </h1>
+      
+      <div>
+           <button id="pause" value="pause">
+        Pause
+      </button>
+      <button id="play" value="play">
+        Play
+      </button>
+    
+      </div>
+      
+      <div>
+      
+      <label for="radius">Radius</label>
+       <select name="radius" id="radius">
+         <option value="90" >90</option>
+        <option value="120" selected="selected">120</option>
+        <option value="150">150</option>
+        <option value="180">180</option>
+      </select>
+      
+        <label for="bar_length">Bar Length</label>
+       <select name="bar_length" id="bar_length">
+        <option value="1.0" selected="selected">Normal</option>
+        <option value="0.5">Short</option>
+        <option value="1.5">Long</option>
+      </select>
+      
+      <label for="bar_color">Bar Color</label>
+       <select name="bar_color" id="bar_color">
+         <option value="simple" >Simple</option>
+        <option value="default" selected="selected">Classic</option>
+        <option value="rose">Rose</option>
+      </select>
+      
+       <label for="background_color">Background Color</label>
+       <select name="background_color" id="background_color">
+         <option value="simple" >Simple</option>
+        <option value="default" selected="selected">Classic</option>
+        <option value="rose">Rose</option>
+      </select>
+      
+      </div>
+  
+    </div>
+  
+    <canvas id="renderer" style="margin-top:60px;"></canvas>
+    
+   
+    <audio id="player" autoplay controls>
+      <!-- added 0.5s silence for chrome to auto-play -->
+    </audio>
+  </body>
+</html>
