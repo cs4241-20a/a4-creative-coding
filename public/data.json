@@ -1,0 +1,180 @@
+[{
+    "Currency": "USD",
+    "Value": 1
+  },
+  {
+    "Currency": "AED",
+    "Value": 3.671933
+  },
+  {
+    "Currency": "ARS",
+    "Value": 77.103482
+  },
+  {
+    "Currency": "AUD",
+    "Value": 1.388395
+  },
+  {
+    "Currency": "BGN",
+    "Value": 1.657844
+  },
+  {
+    "Currency": "BRL",
+    "Value": 5.577212
+  },
+  {
+    "Currency": "BSD",
+    "Value": 1
+  },
+  {
+    "Currency": "CAD",
+    "Value": 1.315939
+  },
+  {
+    "Currency": "CHF",
+    "Value": 0.912706
+  },
+  {
+    "Currency": "CNY",
+    "Value": 6.708065
+  },
+  {
+    "Currency": "CZK",
+    "Value": 23.023706
+  },
+  {
+    "Currency": "DKK",
+    "Value": 6.313904
+  },
+  {
+    "Currency": "DOP",
+    "Value": 58.024017
+  },
+  {
+    "Currency": "EGP",
+    "Value": 15.675383
+  },
+  {
+    "Currency": "EUR",
+    "Value": 0.847291
+  },
+  {
+    "Currency": "FJD",
+    "Value": 2.138604
+  },
+  {
+    "Currency": "GBP",
+    "Value": 0.770871
+  },
+  {
+    "Currency": "GTQ",
+    "Value": 7.727537
+  },
+  {
+    "Currency": "HKD",
+    "Value": 7.750018
+  },
+  {
+    "Currency": "HRK",
+    "Value": 6.419608
+  },
+  {
+    "Currency": "ILS",
+    "Value": 3.380959
+  },
+  {
+    "Currency": "INR",
+    "Value": 73.101473
+  },
+  {
+    "Currency": "ISK",
+    "Value": 138.089834
+  },
+  {
+    "Currency": "JPY",
+    "Value": 105.829533
+  },
+  {
+    "Currency": "MVR",
+    "Value": 15.29
+  },
+  {
+    "Currency": "MXN",
+    "Value": 21.249913
+  },
+  {
+    "Currency": "MYR",
+    "Value": 4.142925
+  },
+  {
+    "Currency": "NOK",
+    "Value": 9.198323
+  },
+  {
+    "Currency": "NZD",
+    "Value": 1.50847
+  },
+  {
+    "Currency": "PAB",
+    "Value": 1
+  },
+  {
+    "Currency": "PEN",
+    "Value": 3.576475
+  },
+  {
+    "Currency": "PHP",
+    "Value": 48.375423
+  },
+  {
+    "Currency": "PKR",
+    "Value": 163.706366
+  },
+  {
+    "Currency": "PLN",
+    "Value": 3.796549
+  },
+  {
+    "Currency": "RON",
+    "Value": 4.132194
+  },
+  {
+    "Currency": "RUB",
+    "Value": 77.089015
+  },
+  {
+    "Currency": "SAR",
+    "Value": 3.750533
+  },
+  {
+    "Currency": "SEK",
+    "Value": 8.825126
+  },
+  {
+    "Currency": "SGD",
+    "Value": 1.355592
+  },
+  {
+    "Currency": "THB",
+    "Value": 31.08709
+  },
+  {
+    "Currency": "TRY",
+    "Value": 7.898492
+  },
+  {
+    "Currency": "TWD",
+    "Value": 28.649431
+  },
+  {
+    "Currency": "UAH",
+    "Value": 28.154603
+  },
+  {
+    "Currency": "UYU",
+    "Value": 42.52
+  },
+  {
+    "Currency": "ZAR",
+    "Value": 16.478024
+}]
