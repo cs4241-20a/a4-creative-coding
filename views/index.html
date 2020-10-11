@@ -1,0 +1,115 @@
+<!-- This is a static file -->
+<!-- served from your routes in server.js -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A cool thing made with Glitch">
+    <title>Welcome to Glitch!</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@700&display=swap" rel="stylesheet"> 
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link id="favicon" rel="icon" href="https://glitch.com/edit/favicon-app.ico" type="image/x-icon">
+    <!-- import the webpage's stylesheet -->
+    <link rel="stylesheet" href="/style.css">
+
+    <!-- import the webpage's client-side javascript file -->
+    <script src="/script.js" type="module"></script>
+    
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div class="collapse navbar-collapse" id="navbarColor01">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <button id = "NextGen" class="btn bg-light mr-2 p-3" style = "font-family: 'Open Sans', sans-serif;">
+              Step Forward One
+            </button>
+          </li>
+          <li class="nav-item" >
+            <button id = "Play" class="btn bg-light mr-2 p-3" style = "font-family: 'Open Sans', sans-serif;">
+              Play
+            </button>
+          </li>
+          <li class="nav-item">
+            <button id = "Clear" class="btn bg-light mr-2 p-3" style = "font-family: 'Open Sans', sans-serif;">
+              Reset Board
+             </button>
+          </li>
+          <li>
+            <div id="slidecontainer" class="ml-2 bg bg-light row mr-2 p-2">
+              <button id = "SlideRange" class="btn my-auto" style = "font-family: 'Open Sans', sans-serif;">
+                Animation Speed
+               </button>
+              <input type="range" autocomplete="off" min="0" max="1000" value="500" class ="border border-primary bg bg-dark my-auto" id="speedRange">
+            </div>
+          </li>
+          <li>
+          <button id = "help" class="btn bg-light mr-2 p-3" style = "font-family: 'Open Sans', sans-serif;">
+            Help
+           </button>
+           </li>
+        </ul>
+      </div>
+    </nav>
+    <div class = "d-flex flex-row">
+      <div class ="p-2">
+        <canvas id = "canvas" width="800" height="800">
+        </canvas>
+      </div>
+      <div class ="p-2">
+        <ul class = "list-group" id="ruleList">
+          <li class="list-group-item bg-primary text-white" id = "rule0">A cell will change when it has 3 neighbors and is off</li>
+          <li class="list-group-item bg-primary text-white" id = "rule1">A cell will change when it has greater than 3 neighbors and is on</li>
+          <li class="list-group-item bg-primary text-white" id = "rule2">A cell will change when it has less than 2 neighbors and is on</li>
+        </ul>
+      </div>
+    </div>
+    <form>
+      <div class = "row">
+        <div class="form-group col-sm-2 p-3 ml-2">
+          <label for="numNeighbors">Number of neighbors to change a cell</label>
+          <select class="form-control" id="numNeighbors">
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+            <option>5</option>
+            <option>6</option>
+            <option>7</option>
+            <option>8</option>
+          </select>
+        </div>
+        <div class="form-check col-sm-2 p-3 ml-2">
+          <label for="stateCheck">What cell state can it change in?</label>
+          <select class="form-control" id="stateCheck">
+            <option value="0">Off</option>
+            <option value="1">On</option>
+            <option value="2">On or Off</option>
+          </select>
+        </div>
+        <div class="form-check col-sm-2 p-3 ml-2">
+          <label for="checkType">What type of rule?</label>
+          <select class="form-control" id="checkType">
+            <option>Greater Than</option>
+            <option>Equal To</option>
+            <option>Less Than</option>
+          </select>
+        </div>
+        <div class="form-submit col-sm-2 p-3 ml-2">
+          <input type="submit" class="form-control btn btn-primary" id="submit" value="Add Rule">
+        </div>
+      </div>
+    </form>
+
+
+    <footer>Made with <a href="https://glitch.com">Glitch</a>!</footer>
+
+    <!-- include the Glitch button to show what the webpage is about and
+          to make it easier for folks to view source and remix -->
+    <div class="glitchButton" style="position:fixed;top:2em;right:20px;"></div>
+    <script src="https://button.glitch.me/button.js" defer></script>
+  </body>
+</html>
