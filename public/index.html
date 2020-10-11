@@ -9,8 +9,8 @@
     <script src="//d3js.org/d3.v5.min.js"></script>
     <style>
         #data {
-            height: 80px;
-            width: 150px;
+            height: 100px;
+            width: 300px;
             background-color: aquamarine;
         }
 
@@ -108,13 +108,13 @@
 
             node.append("svg:pattern")
                 .attr("id", (s) => s.data.photo_url)
-                .attr("height", (s) => 1.5 * s.r)
-                .attr("width", (s) => 1.5 * s.r)
+                .attr("height", (s) => 2 * s.r)
+                .attr("width", (s) => 2 * s.r)
                 .attr("patternUnits", "userSpaceOnUse")
                 .append('svg:image')
                 .attr("xlink:href", (s) => s.data.photo_url)
-                .attr("height", (s) => 1.5 * s.r)
-                .attr("width", (s) => 1.5 * s.r)
+                .attr("height", (s) => 2 * s.r)
+                .attr("width", (s) => 2 * s.r)
                 .attr("x", 0)
                 .attr("y", 0);
 
@@ -137,14 +137,14 @@
 
 
             node.append("text")
-                .attr("dy", "1.2em")
+                .attr("dy", "1.1em")
                 .style("text-anchor", "middle")
                 .text(function (s) {
                     return s.data.population;
                 })
                 .attr("font-family", "Gill Sans", "Gill Sans MT")
                 .attr("font-size", function (s) {
-                    return s.r / 1.25;
+                    return s.r / 1.2;
                 })
             .attr("fill", "white")
         }
