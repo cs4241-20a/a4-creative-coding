@@ -132,7 +132,6 @@ a {
 }
 
 /* This CSS is for styling range inputs which was taken and edited from css-tricks.com */
-
 input[type=range] {
   -webkit-appearance: none;
   margin: 18px 0;
