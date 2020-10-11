@@ -4,11 +4,12 @@ Assignment 4 - Creative Coding: Interactive Multimedia Experiences
 ## Alex's Audiovisualizer
 Alex Hunt - https://a4-alex-hunt.glitch.me/
 
-For this project, I created an audiovisualizer using Canvas and Web Audio API.
+For this project, I created a 2D audiovisualizer using Canvas and Web Audio API. As the song plays, it uses Web Audio API's realtime waveform analysis tools to make colorful balls bounce based on the amplitude (volume) at certain frequencies.
 ![Sample](https://github.com/alexmhunt/a4-creative-coding/blob/master/sample.png?raw=true)
 
-Include a very brief summary of your project here. Images are encouraged when needed, along with concise, high-level text. Be sure to include:
-
-- the goal of the application
-- challenges you faced in realizing the application
-- the instructions you present in the website should be clear enough to use the application, but if you feel any need to provide additional instructions please do so here.
+The goal of this application is to create an appealing visual based on a song in realtime. Some challenges I faced during development were:
+- Interpreting output from audio waveform analysis
+- Translating analysis output into a visual representation
+- Implementing Javascript modules
+- Implementing UI and linking it to Javscript to allow the user to customize the visuals
+- Loading and playing an audio file from a CDN
