@@ -11,6 +11,10 @@ const uri = `mongodb+srv://${user}:${password}@${host}/${database}?retryWrites=t
 const client = new MongoClient(uri);
 client.connect()
 
+
+
+// This block of code is for inserting records into the DB.
+
 // try {
 // client.connect()
 // .then(() => {
@@ -29,8 +33,6 @@ client.connect()
 // } catch(e) {
 //   console.log(e)
 // }
-
-
 
 
 // Get the specified number of words from the db

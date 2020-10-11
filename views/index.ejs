@@ -17,7 +17,25 @@
                     <li v-for="p in players">{{ p.name }} ({{ p.correct}} correct)</li>
                 </ul>
 
-                <div v-if="isLeader && !started" id="leaderControls" class="text-center">
+                <div v-if="isLeader && !started" id="leaderControls" class="text-center card">
+                    <label for="numRounds">Number of Rounds</label>
+                    <select name="numRounds" id="numRounds" class="form-control">
+                      <option>1</option>
+                      <option>2</option>
+                      <option>3</option>
+                    </select>
+                    <label for="secondsPerRound">Seconds Per Round</label>
+                    <select name="secondsPerRound" id="secondsPerRound" class="form-control">
+                      <option>40</option>
+                      <option>50</option>  
+                      <option>60</option>  
+                      <option>70</option>  
+                      <option>80</option>  
+                      <option>90</option>  
+                      <option>100</option>  
+                      <option>110</option>  
+                      <option>120</option>  
+                    </select>
                     <button class="btn btn-success" v-on:click="sendStart()">Start</button>
                 </div>
             </div>

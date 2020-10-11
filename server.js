@@ -11,6 +11,7 @@ app.set('view engine', 'ejs');
 // Used to unset interval when game ends.
 var loop;
 
+// Set on a timeout because server needs time to set up
 let words;
 setTimeout(() => {
   API.getWords(5).then((w) => {
@@ -23,6 +24,7 @@ setTimeout(() => {
 // In seconds
 const ROUND_LENGTH = 60
 const MIN_PLAYERS = 2
+const MAX_PLAYERS = 8
 
 // Set up initial game state
 var game = {
@@ -80,7 +82,7 @@ wss.on('connection', (ws) => {
         // I did it this way. :)
         
         // Add new player to game state and send unique ID to client
-        if(obj["command"] === "NEW_PLAYER") {
+        if(obj["command"] === "NEW_PLAYER" && game.players.length < MAX_PLAYERS) {
           
             // First player is leader
             const isLeader = game.players.length < 1
