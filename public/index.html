@@ -8,7 +8,7 @@
     <title>CS4241 Assignment 4</title>
     <script src="//d3js.org/d3.v5.min.js"></script>
     <style>
-        #stat {
+        #data {
             height: 80px;
             width: 150px;
             background-color: aquamarine;
@@ -20,7 +20,7 @@
     </style>
 </head>
 <body>
-    <div id="stat">
+    <div id="data">
         <p id="state">State: </p>
         <p id="nickname">Nickname: </p>
         <p id="population">Population: </p>
@@ -47,14 +47,14 @@
         states = [];
 
         Promise.all([
-            d3.json("https://raw.githubusercontent.com/CivilServiceUSA/us-states/master/data/states.json"),]).then(function (stat) {
-                console.log(stat);
-                states = parseData(stat[0]);
+            d3.json("https://raw.githubusercontent.com/CivilServiceUSA/us-states/master/data/states.json")]).then(function (data) {
+                console.log(data);
+                states = parseData(data[0]);
                 draw(states);
             });
 
-        function parseData(stat) {
-            return stat.map((element) => {
+        function parseData(data) {
+            return data.map((element) => {
                 return {
                     state: element.state,
                     nickname: element.nickname,
@@ -65,10 +65,10 @@
             });
         }
 
-        function draw(stat) {
-            var bubble = d3.pack(stat).size([width, height]).padding(1.5);
+        function draw(data) {
+            var bubble = d3.pack(data).size([width, height]).padding(1.5);
 
-            var nodes = d3.hierarchy({ children: stat }).sum(function (s) {
+            var nodes = d3.hierarchy({ children: data }).sum(function (s) {
                 return s.population;
             });
 
@@ -86,10 +86,10 @@
                 });
             node.on("mouseover", function (s) {
                 d3.select(this).classed("hover", true);
-                d3.select(this).attr("opacity", 0.8);
-                d3.select("#state").text("State: " + s.stat.state);
-                d3.select("#nickname").text("Nickname: " + s.stat.nickname);
-                d3.select("#population").text("Population: " + s.stat.population);
+                d3.select(this).attr("opacity", 0.75);
+                d3.select("#state").text("State: " + s.data.state);
+                d3.select("#nickname").text("Nickname: " + s.data.nickname);
+                d3.select("#population").text("Population: " + s.data.population);
             })
                 .on("mouseout", function (s) {
                     d3.select(this).classed("hover", false);
@@ -99,7 +99,7 @@
                     d3.select("#population").text("Population: ");
                 })
                 .on("click", function (s) {
-                    window.open(s.stat.facebook_url, "_blank");
+                    window.open(s.data.facebook_url, "_blank");
                 });
 
             node.append("title").text(function (s) {
@@ -107,12 +107,12 @@
             });
 
             node.append("svg:pattern")
-                .attr("id", (s) => s.stat.photo_url)
+                .attr("id", (s) => s.data.photo_url)
                 .attr("height", (s) => 1.5 * s.r)
                 .attr("width", (s) => 1.5 * s.r)
                 .attr("patternUnits", "userSpaceOnUse")
                 .append('svg:image')
-                .attr("xlink:href", (s) => s.stat.photo_url)
+                .attr("xlink:href", (s) => s.data.photo_url)
                 .attr("height", (s) => 1.5 * s.r)
                 .attr("width", (s) => 1.5 * s.r)
                 .attr("x", 0)
@@ -127,12 +127,20 @@
                 .attr("cy", (s) => s.r)
                 .attr("r", (s) => s.r)
                 .style("fill", "#fff")
-                .style("fill", (s) => "url(#" + s.stat.photo_url + ")");
+                .style("fill", (s) => "url(#" + s.data.photo_url + ")");
+            node.append("circle")
+                .attr("r", (s) => s.r)
+                .style("fill", function (s, i) {
+                    return "blue";
+                })
+                .style("opacity", 0.5);
+
 
             node.append("text")
                 .attr("dy", "1.2em")
+                .style("text-anchor", "middle")
                 .text(function (s) {
-                    return s.stat.population;
+                    return s.data.population;
                 })
                 .attr("font-family", "Gill Sans", "Gill Sans MT")
                 .attr("font-size", function (s) {
