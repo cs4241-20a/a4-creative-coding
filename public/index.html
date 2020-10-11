@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap"
           rel="stylesheet" />
-    <title>CS4241 Assignment 4</title>
+    <title>Chris Lee - A4</title>
     <script src="//d3js.org/d3.v5.min.js"></script>
     <style>
         #data {
@@ -22,13 +22,13 @@
 <body>
     <div id="data">
         <p id="state">State: </p>
-        <p id="capital">Capital: </p>
         <p id="nickname">Nickname: </p>
         <p id="population">Population: </p>
         <button onclick="help()">Help Message</button>
     </div>
     <div id="graph"></div>
     <script>
+        //Help/Instructions Message
         function help() {
             window.confirm(
                 "Put your mouse on the graph to see the details of each state's population and nickname"
@@ -36,7 +36,7 @@
         }
 
         width = window.innerWidth;
-        height = window.innerHeight - 100;
+        height = window.innerHeight - 120;
 
         var svg = d3
             .select("#graph")
@@ -54,11 +54,12 @@
                 draw(states);
             });
 
+        //parse information needed from json file
         function parseData(data) {
             return data.map((element) => {
                 return {
                     state: element.state,
-                    capital: element.capital_city,
+                    capital_city: element.capital_city,
                     nickname: element.nickname,
                     population: element.population,
                     photo_url: element.state_flag_url,
@@ -67,6 +68,7 @@
             });
         }
 
+        //drawing the bubbles and photos
         function draw(data) {
             var bubble = d3.pack(data).size([width, height]).padding(1.5);
 
@@ -86,19 +88,19 @@
                 .attr("transform", function (s) {
                     return "translate(" + s.x + "," + s.y + ")";
                 });
+            //mouse over on bubble action
             node.on("mouseover", function (s) {
                 d3.select(this).classed("hover", true);
                 d3.select(this).attr("opacity", 0.75);
                 d3.select("#state").text("State: " + s.data.state);
-                d3.select("#capital_city").text("Capital: " + s.data.capital_city);
                 d3.select("#nickname").text("Nickname: " + s.data.nickname);
                 d3.select("#population").text("Population: " + s.data.population);
             })
+                //mouse not over on bubble action
                 .on("mouseout", function (s) {
                     d3.select(this).classed("hover", false);
                     d3.select(this).attr("opacity", 1);
                     d3.select("#state").text("State: ");
-                    d3.select("#capital_city").text("Capital: ")
                     d3.select("#nickname").text("Nickname: ");
                     d3.select("#population").text("Population: ");
                 })
@@ -106,30 +108,33 @@
                     window.open(s.data.website, "_blank");
                 });
 
+            //Shows the state and it's corresponding capital when mouse is on
             node.append("title").text(function (s) {
-                return s.data.state + ": " + s.data.capital;
+                return s.data.state + ": " + s.data.capital_city;
             });
 
+            //Scaling the photo to the circle
             node.append("svg:pattern")
                 .attr("id", (s) => s.data.photo_url)
-                .attr("height", (s) =>  s.r)
-                .attr("width", (s) =>  s.r)
+                .attr("height", (s) => 1.5 * s.r)
+                .attr("width", (s) => 1.5 * s.r)
                 .attr("patternUnits", "userSpaceOnUse")
                 .append('svg:image')
                 .attr("xlink:href", (s) => s.data.photo_url)
-                .attr("height", (s) =>  s.r)
-                .attr("width", (s) =>  s.r)
+                .attr("height", (s) => 1.5 * s.r)
+                .attr("width", (s) => 1.5 * s.r)
                 .attr("x", 0)
                 .attr("y", 0);
 
+            //scaling the circle and photo
             node.append("circle")
                 .attr(
                     "transform",
                     (s) => "translate" + -s.r + "," + -s.r + ")"
                 )
-                .attr("cx", (s) => s.r)
-                .attr("cy", (s) => s.r)
-                .attr("r", (s) => s.r)
+                .attr("cx", (s) => 0.7 * s.r)
+                .attr("cy", (s) => 0.7 * s.r)
+                .attr("r", (s) => 0.7 * s.r)
                 .style("fill", "#fff")
                 .style("fill", (s) => "url(#" + s.data.photo_url + ")");
             node.append("circle")
