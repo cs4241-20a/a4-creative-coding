@@ -281,9 +281,6 @@ const gameLoop = function() {
             endGame();
         }
         else {
-          sendToClients(JSON.stringify({
-            command: "NEXT_QUESTION"
-          }))
           setTimeout(() => {
             nextQuestion();
           }, 3000)
