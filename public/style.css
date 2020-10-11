@@ -1,0 +1,18 @@
+html{
+    background-color: black;
+}
+
+
+h1 {
+    text-align: center;
+    font-size: 46px;
+    font-family: 'Roboto Mono', monospace;
+    color: salmon;
+}
+
+p{
+    text-align: center;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 30px;
+    color: turquoise;
+}
