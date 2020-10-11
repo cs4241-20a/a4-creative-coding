@@ -4,6 +4,7 @@ console.log("Welcome to Edward's Audio Visualizer Experience.  Pleasure to have 
 NUM_SPOKES = 250
 SPOKE_WIDTH = 2
 VOLUME_START = 0.2
+FRAMES_AFTER_PAUSE = 40
 
 
 
@@ -21,12 +22,22 @@ window.onload = function() {
     shape: "Circle",
     shapeFunc: drawCircle,
     volume: 1,
-    playback: () => {fullToggle(visCanvas, analyzer, frequencies, audioContext)}
-  }
+    playback: () => {fullToggle(visCanvas, analyzer, frequencies, audioContext)},
+    gradient: "Vertical",
+    fgColor: "#FFFFFF",
+    bgColor1: "#080c18",
+    bgColor2: "#1d2731"
+  }  
   var baseGui = new dat.GUI();
   let shapeController = baseGui.add(settings, "shape", ["Circle", "Triangle"]).name("Shape")
   let volumeController = baseGui.add(settings, "volume", 0, 2).name("Volume")
   baseGui.add(settings, "playback").name("Play/Pause")
+  
+  let colorGui = baseGui.addFolder("Colors")
+  let gradController = colorGui.add(settings, "gradient", ["Solid", "Vertical", "Horizontal"]).name("Gradient")
+  let fgController  = colorGui.addColor(settings, "fgColor").name("Shape")
+  let bg1Controller = colorGui.addColor(settings, "bgColor1").name("Background 1")
+  let bg2Controller = colorGui.addColor(settings, "bgColor2").name("Background 2")
   
   shapeController.onChange(function(value) {
     switch (value) {
@@ -39,20 +50,19 @@ window.onload = function() {
         default:
           console.error("Invalid shape chosen")
     }
+    redrawOnChange(visCanvas, analyzer, frequencies)
   });
   volumeController.onChange(function(vol) {
     gainNode.gain.value = vol * VOLUME_START;
   })
   
-  // TODO: Draw the visualizer initially
-  //redrawVisualizer(visCanvas, analyzer, frequencies)
-}
-
-
-
-function fullToggle(visCanvas, analyzer, frequencies, audioContext) {
-  togglePlayback(audioContext)
-  redrawVisualizer(visCanvas, analyzer, frequencies)
+  fgController.onChange(  function(_color){ redrawOnChange(visCanvas, analyzer, frequencies) })
+  bg1Controller.onChange( function(_color){ redrawOnChange(visCanvas, analyzer, frequencies) })
+  bg2Controller.onChange( function(_color){ redrawOnChange(visCanvas, analyzer, frequencies) })
+  gradController.onChange(function(_color){ redrawOnChange(visCanvas, analyzer, frequencies) })
+  
+  // Draw the visualizer initially
+  redrawVisualizer(visCanvas, analyzer, frequencies, 0)
 }
 
 
@@ -80,37 +90,87 @@ function initAudio() {
 
 
 
-function redrawVisualizer(canvas, analyzer, frequencies) {
+function fullToggle(visCanvas, analyzer, frequencies, audioContext) {
+  togglePlayback(audioContext)
+  //Start the animation loop
+  redrawVisualizer(visCanvas, analyzer, frequencies, 0)
+}
+
+
+
+function redrawOnChange(canvas, analyzer, frequencies) {
+  const audioElement = document.querySelector('audio')
+  let isPaused = audioElement.paused
+  
+  // It already updates while playing, so don't double up
+  if (isPaused) {
+    redrawVisualizer(canvas, analyzer, frequencies, 0)
+  }
+}
+
+
+
+function redrawVisualizer(canvas, analyzer, frequencies, framesLeft) {
   //Update frequency data
   analyzer.getByteFrequencyData(frequencies);
   
-  // If it's paused, stop (don't clear, don't draw, don't reschedule)
-  const audioElement = document.querySelector('audio')
-  if (audioElement.paused) {
-    return
-  }
-  
-  //Clear and redraw canvas
-  canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height)
+  //Paint over canvas and redraw shapes
+  drawBackground(canvas)
   settings.shapeFunc(canvas, frequencies)
   
-  // Schedule next frame
-  window.requestAnimationFrame(() => {redrawVisualizer(canvas, analyzer, frequencies)});
+  // Only schedule next frame if playing
+  const audioElement = document.querySelector('audio')
+  if (!audioElement.paused) { framesLeft = FRAMES_AFTER_PAUSE }
+  if (framesLeft > 0) {
+    framesLeft--
+    window.requestAnimationFrame(() => {redrawVisualizer(canvas, analyzer, frequencies, framesLeft)});
+  }
 }
 
 
 
 function togglePlayback(audioContext) {
   const audioElement = document.querySelector('audio')
+  let isPaused = audioElement.paused
   
   if (audioContext.state === 'suspended') {
       audioContext.resume();
   }
-  if (!audioElement.paused) {
+  if (!isPaused) {
     audioElement.pause();
   } else {
     audioElement.play();
   }
+}
+
+
+
+function drawBackground(canvas) {
+    let context = canvas.getContext("2d")
+    let gradient
+    
+    switch (settings.gradient) {
+        case "Solid":
+          gradient = context.createLinearGradient(0, 0, 0, canvas.height)
+          gradient.addColorStop(0, settings.bgColor1)
+          gradient.addColorStop(1, settings.bgColor1)
+          break
+        case "Vertical":
+          gradient = context.createLinearGradient(0, 0, 0, canvas.height)
+          gradient.addColorStop(0, settings.bgColor1)
+          gradient.addColorStop(1, settings.bgColor2)
+          break
+        case "Horizontal":
+          gradient = context.createLinearGradient(0, 0, canvas.width, 0)
+          gradient.addColorStop(0, settings.bgColor1)
+          gradient.addColorStop(1, settings.bgColor2)
+          break
+        default:
+          Console.error("Invalid gradient parameter")
+    }
+    
+    context.fillStyle = gradient
+    context.fillRect(0, 0, canvas.width, canvas.height)
 }
 
 
@@ -126,6 +186,7 @@ function drawCircle(canvas, frequencies) {
   let maxSpokeLen = shortAxis / 4
   
   // Draw the circle
+  context.strokeStyle = settings.fgColor
   context.beginPath()
   context.arc(x_mid, y_mid, radius, 0, 2*Math.PI)
   context.stroke()
@@ -210,8 +271,7 @@ function drawTriangle(canvas, frequencies) {
 
 
 function drawSpoke(context, x1, y1, angle, maxSpokeLen, freq=255){
-  //var lineColor = #000000
-  //ctx.strokeStyle = lineColor;
+  context.strokeStyle = settings.fgColor
   let spokeLen = maxSpokeLen * (freq / 255)
   
   let x2 = x1 + spokeLen * Math.cos(angle)
