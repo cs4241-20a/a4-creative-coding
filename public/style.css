@@ -1,0 +1,86 @@
+/* this file is loaded by index.html and styles the page */
+
+* {
+  box-sizing: border-box;
+}
+
+.name{
+  display:flex;
+  justify-content: center;
+  align-content: center;
+}
+
+.container{
+  display: flex;
+  justify-content: space-between;
+}
+
+body {
+  font-family: 'Oswald', sans-serif;
+  color: white;
+  margin: 2em 1em;
+  line-height: 1.5em;
+  background-color: black;
+  background-image: url("https://cdn.glitch.com/4504b488-ef4b-4282-963e-13a33d4acbb3%2FEE2ZOZQ.jpg?v=1602284980004")
+}
+
+h1 {
+  font-style: italic;
+  font-family: 'Creepster', cursive;
+  text-shadow: 2px 2px 5px orange;
+  font-size: 40px;
+  color: white;
+  max-width: calc(100% - 5rem);
+  line-height: 1.1;
+}
+
+form {
+  background-color: #eee;
+  display: grid;
+  grid-gap: 1em;
+  padding: 1em;
+  max-width: 40ch;
+}
+
+input {
+  border: 1px solid silver;
+  display: block;
+  font-size: 16px;
+  margin-bottom: 10px;
+  padding: 5px;
+  width: 100%;
+}
+
+form button {
+  background-color: #bbbbf2;
+  border: 2px solid currentColor;
+  border-radius: .25em;
+  cursor: pointer;
+  font-size: inherit;
+  line-height: 1.4em;
+  padding: 0.25em 1em;
+  max-width: 20ch;
+}
+
+form button:hover {
+  background-color: lavender;
+}
+
+footer {
+  margin-top: 3em;
+  padding-top: 1.5em;
+  border-top: 1px solid lightgrey;
+}
+
+button{
+  font-family: 'Oswald', sans-serif;
+  background-color: orange;
+  height: 35px;
+  width: 80px;
+  margin-top:10px;
+  margin-bottom:10px;
+}
+button:hover{
+  background-color: black;
+  color: white;
+}
