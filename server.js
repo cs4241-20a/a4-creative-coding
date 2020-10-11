@@ -212,7 +212,8 @@ function sendToClient(id, msg) {
 // Get word, blanked out except for specified positions if given
 function getBlankedWord(word, revealLetters=[]) {
     console.log("Word: %s", word)
-    let blankedWord = word.replace(/\W/g/, "_");
+    let re = /\W/g
+    let blankedWord = word.replace(/\w/g, "_");
   
     // for(let i = 0; i < revealLetters.length; i++) {
     //     let idx = revealLetters[i]

@@ -30,7 +30,8 @@ const app = new Vue({
         sendStart: function() {
             ws.send(JSON.stringify({
                 id: CLIENT_ID,
-                command: "START"
+                command: "START",
+                // TODO send rounds and round length too
             }))
         }
     }
