@@ -8,7 +8,7 @@
     <title>CS4241 Assignment 4</title>
     <script src="//d3js.org/d3.v5.min.js"></script>
     <style>
-        #stat {
+        #data {
             height: 100px;
             width: 200px;
             background-color: aquamarine;
@@ -20,8 +20,9 @@
     </style>
 </head>
 <body>
-    <div id="stat">
+    <div id="data">
         <p id="state">State: </p>
+        <p id="capital">Capital: </p>
         <p id="nickname">Nickname: </p>
         <p id="population">Population: </p>
         <button onclick="help()">Help Message</button>
@@ -47,16 +48,17 @@
         states = [];
 
         Promise.all([
-            d3.json("https://raw.githubusercontent.com/CivilServiceUSA/us-states/master/data/states.json")]).then(function (stat) {
-                console.log(stat);
-                states = parseData(stat[0]);
+            d3.json("https://raw.githubusercontent.com/CivilServiceUSA/us-states/master/data/states.json")]).then(function (data) {
+                console.log(data);
+                states = parseData(data[0]);
                 draw(states);
             });
 
-        function parseData(stat) {
-            return stat.map((element) => {
+        function parseData(data) {
+            return data.map((element) => {
                 return {
                     state: element.state,
+                    capital: element.capital_city,
                     nickname: element.nickname,
                     population: element.population,
                     photo_url: element.state_flag_url,
@@ -65,16 +67,16 @@
             });
         }
 
-        function draw(stat) {
-            var bubble = d3.pack(stat).size([width, height]).padding(1.5);
+        function draw(data) {
+            var bubble = d3.pack(data).size([width, height]).padding(1.5);
 
-            var nodes = d3.hierarchy({ children: stat }).sum(function (s) {
+            var nodes = d3.hierarchy({ children: data }).sum(function (s) {
                 return s.population;
             });
 
             var node = svg
                 .selectAll(".node")
-                .stat(bubble(nodes).descendants())
+                .data(bubble(nodes).descendants())
                 .enter()
                 .filter(function (s) {
                     return !s.children;
@@ -87,32 +89,34 @@
             node.on("mouseover", function (s) {
                 d3.select(this).classed("hover", true);
                 d3.select(this).attr("opacity", 0.75);
-                d3.select("#state").text("State: " + s.stat.state);
-                d3.select("#nickname").text("Nickname: " + s.stat.nickname);
-                d3.select("#population").text("Population: " + s.stat.population);
+                d3.select("#state").text("State: " + s.data.state);
+                d3.select("#capital_city").text("Capital: " + s.data.capital);
+                d3.select("#nickname").text("Nickname: " + s.data.nickname);
+                d3.select("#population").text("Population: " + s.data.population);
             })
                 .on("mouseout", function (s) {
                     d3.select(this).classed("hover", false);
                     d3.select(this).attr("opacity", 1);
                     d3.select("#state").text("State: ");
+                    d3.select("#capital_city").text("Capital: ")
                     d3.select("#nickname").text("Nickname: ");
                     d3.select("#population").text("Population: ");
                 })
                 .on("click", function (s) {
-                    window.open(s.stat.website, "_blank");
+                    window.open(s.data.website, "_blank");
                 });
 
             node.append("title").text(function (s) {
-                return s.stat.state + ": " + s.stat.nickname;
+                return s.data.state + ": " + s.data.capital;
             });
 
             node.append("svg:pattern")
-                .attr("id", (s) => s.stat.photo_url)
+                .attr("id", (s) => s.data.photo_url)
                 .attr("height", (s) => 2 * s.r)
                 .attr("width", (s) => 2 * s.r)
                 .attr("patternUnits", "userSpaceOnUse")
                 .append('svg:image')
-                .attr("xlink:href", (s) => s.stat.photo_url)
+                .attr("xlink:href", (s) => s.data.photo_url)
                 .attr("height", (s) => 2 * s.r)
                 .attr("width", (s) => 2 * s.r)
                 .attr("x", 0)
@@ -127,7 +131,7 @@
                 .attr("cy", (s) => s.r)
                 .attr("r", (s) => s.r)
                 .style("fill", "#fff")
-                .style("fill", (s) => "url(#" + s.stat.photo_url + ")");
+                .style("fill", (s) => "url(#" + s.data.photo_url + ")");
             node.append("circle")
                 .attr("r", (s) => s.r)
                 .style("fill", function (s, i) {
