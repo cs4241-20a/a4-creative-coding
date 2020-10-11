@@ -9,7 +9,7 @@ For this assignment we will focus on client-side development using popular audio
 
 ## Virtual Piano using Web Audio API
 
-[Link]
+https://a4-jordan-stoessel.herokuapp.com/
 
 The Virtual Piano app was made to allow a Piano to be played on a computer's physical keyboard. It makes use of Web Audio API as seen in https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API. Virtual Piano features a Piano interface which was created using Web Dev Simplified's HTML & CSS tutorial. Playing notes can be done by pressing the key on the note that you want to play. There are also user parameters that can be controlled such as a volume bar, filter frequency bar, waveforms, and pass filter types. The volume and frequency bars are synced with the numberal input next to it and vice versa; this was done using a sync function to read changes in input from either inputs. The user can also save their current settings, load their last saved settings, or reset their current settings to default. This was done by creating a simple server that holds the default settings of 0.5 volume, sine waveform, low-pass pass filter type, and a frequency of 1,000. The server utilizes express and the body-parser middleware for ease of use. There is a modal that can be opened and closed at will for those who are confused about using the app. This modal can be found after clicking the "Help!" button at the bottom of the application. 
 
