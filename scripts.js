@@ -59,46 +59,167 @@ function playNote(key) {
   })
 }
 
-// const submit = function (e) {
-//   //prevent default form action from being carried out
-//   e.preventDefault();
+//gets default settings from server
+const reset = function (e) {
+  //prevent default form action from being carried out
+  // e.preventDefault();
 
-//   if (document.getElementById('yourname').value === "") {
-//     alert("Please don't leave the name blank");
-//     return false;
-//   }
+  fetch('/reset', {
+    method: 'GET'
+  })
+    .then(function (res) {
+      //response
+      res.json().then(function (data) {
+        //data
+        console.log("Submit Response:", res);
+        console.log("Returned data: ", data);
 
-//   const userScore = {
-//     name: document.getElementById('yourname').value,
-//     clicks: clickcount,
-//     seconds: seconds
-//   }
+        buildPiano(data);
+      })
+    })
 
-//   const body = JSON.stringify(userScore);
+  return false;
+}
 
-//   fetch('/submit', {
-//     method: 'POST',
-//     body
-//   })
-//     .then(function (response) {
-//       //response
-//       response.json().then(function (data) {
-//         //data
-//         console.log("Submit Response:", response);
-//         console.log("Returned data: ", data);
-//         restartGame();
+//gets last saved settings from server
+const load = function (e) {
+  //prevent default form action from being carried out
+  e.preventDefault();
 
-//         buildTable(data);
-//       })
-//     })
+  fetch('/load', {
+    method: 'GET'
+  })
+    .then(function (res) {
+      //response
+      res.json().then(function (data) {
+        //data
+        console.log("Submit Response:", res);
+        console.log("Returned data: ", data);
 
-//   return false;
-// }
+        buildPiano(data);
+      })
+    })
 
+  return false;
+}
+
+// const freqLevelRange = document.getElementById('freqLevelRange');
+// const freqLevelNumber = document.getElementById('freqLevelNumber');
+//posts current settings to server
+const save = function (e) {
+  //prevent default form action from being carried out
+  e.preventDefault();
+
+  if (document.getElementById('volLevelNumber').value > 100) {
+    alert("Volume cannot be that high");
+    document.getElementById('volLevelNumber').value = 100;
+    document.getElementById('volLevelRange').value = 100;
+  }
+
+  let num_octaves = 0;
+  if (document.getElementById('oneOctave').checked) {
+    num_octaves = 1;
+  } else if (document.getElementById('twoOctave').checked) {
+    num_octaves = 2;
+  } else if (document.getElementById('threeOctave').checked) {
+    num_octaves = 3;
+  } else {
+    console.log("Error, octave somehow not checked");
+  }
+  
+
+  const userSettings = {
+    volume: document.getElementById('volLevelNumber').value,
+    frequency: document.getElementById('freqLevelNumber').value,
+    octaves: num_octaves,
+    piano: document.getElementById('piano-checkbox').checked
+  }
+  console.log("User settings: " + userSettings)
+  
+  fetch('/save', {
+    method: 'POST',
+    body: JSON.stringify(userSettings),
+    headers: {
+      "Content-Type": "application/json"
+    }
+  })
+    .then(function (res) {
+      //response
+      res.json().then(function (data) {
+        //data
+        console.log("Submit Response:", res);
+        console.log("Returned data: ", data);
+        alert('Settings saved!');
+      })
+    })
+
+  return false;
+}
+
+//builds Piano page with server settings
+function buildPiano(settings) {
+  let piano = document.getElementById('pianotable');
+
+  //set data values from settings
+  document.getElementById('volLevelNumber').value = settings.volume;
+  document.getElementById('volLevelRange').value = settings.volume;
+  document.getElementById('freqLevelNumber').value = settings.frequency;
+  document.getElementById('freqLevelRange').value = settings.frequency;
+
+  //generate octaves here using the int settings.octaves
+  let newPiano = `<div class="piano" id='pianotable'>\n`;
+
+  console.log("Number of octaves: " + settings.octaves);
+  //for adding octaves to virtual piano
+  for (let i = 0; i < settings.octaves; i++) {
+    newPiano += (`<div data-note="C${i+1}" class="key white"></div>\n`);
+    newPiano += (`<div data-note="Db${i+1}" class="key black"></div>\n`);
+    newPiano += (`<div data-note="D${i+1}" class="key white"></div>\n`);
+    newPiano += (`<div data-note="Eb${i+1}" class="key black"></div>\n`);
+    newPiano += (`<div data-note="E${i+1}" class="key white"></div>\n`);
+    newPiano += (`<div data-note="F${i+1}" class="key white"></div>\n`);
+    newPiano += (`<div data-note="Gb${i+1}" class="key black"></div>\n`);
+    newPiano += (`<div data-note="G${i+1}" class="key white"></div>\n`);
+    newPiano += (`<div data-note="Ab${i+1}" class="key black"></div>\n`);
+    newPiano += (`<div data-note="A${i+1}" class="key white"></div>\n`);
+    newPiano += (`<div data-note="Bb${i+1}" class="key black"></div>\n`);
+    newPiano += (`<div data-note="B${i+1}" class="key white"></div>\n`);
+  }
+  newPiano += "\n";
+
+  for (let i = 0; i < settings.octaves; i++) {
+    newPiano += (`<audio id="C${i+1}" src="notes/C.mp3"></audio>\n`);
+    newPiano += (`<audio id="Db${i+1}" src="notes/Db.mp3"></audio>\n`);
+    newPiano += (`<audio id="D${i+1}" src="notes/D.mp3"></audio>\n`);
+    newPiano += (`<audio id="Eb${i+1}" src="notes/Eb.mp3"></audio>\n`);
+    newPiano += (`<audio id="E${i+1}" src="notes/E.mp3"></audio>\n`);
+    newPiano += (`<audio id="F${i+1}" src="notes/F.mp3"></audio>\n`);
+    newPiano += (`<audio id="Gb${i+1}" src="notes/Gb.mp3"></audio>\n`);
+    newPiano += (`<audio id="G${i+1}" src="notes/G.mp3"></audio>\n`);
+    newPiano += (`<audio id="Ab${i+1}" src="notes/Ab.mp3"></audio>\n`);
+    newPiano += (`<audio id="A${i+1}" src="notes/A.mp3"></audio>\n`);
+    newPiano += (`<audio id="Bb${i+1}" src="notes/Bb.mp3"></audio>\n`);
+    newPiano += (`<audio id="B${i+1}" src="notes/B.mp3"></audio>\n`);
+  }
+
+  newPiano += (`</div>`);
+  piano = newPiano;
+  document.getElementById('piano-checkbox').checked = settings.piano;
+
+  console.log("Table populated");
+  console.log(newPiano);
+}
 
 
 window.onload = function () {
-  //  const button = document.getElementById('submitbtn');
-  document.getElementById('pianoSoundCheckBox').checked = true;
+  const savebtn = document.getElementById('savebtn');
+  savebtn.onclick = save;
+  const loadbtn = document.getElementById('loadbtn');
+  loadbtn.onclick = load;
+  const resetbtn = document.getElementById('resetbtn');
+  resetbtn.onclick = reset;
+  reset();
+  document.getElementById('oneOctave').checked = true;
+  document.getElementById('piano-checkbox').checked = true;
   console.log("Loaded!");
 }
