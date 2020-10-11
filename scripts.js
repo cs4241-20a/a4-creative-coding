@@ -5,6 +5,11 @@ var gainNode = audioContext.createGain();
 //can set volume level here
 
 window.onload = function(){
+    alert("Wanna be the Piano Man?");
+    alert("Play this piano like you would any electric piano!");
+
+
+    
    var piano = new Nexus.Piano('#target',{
   'size': [600,400],
   'mode': 'button',  // 'button', 'toggle', or 'impulse'
@@ -64,4 +69,5 @@ console.log(radiobuttonv)
 oscillator.stop(audioContext.currentTime+.08);
         console.log(v, oscillator.type);
   })
+  
 }
