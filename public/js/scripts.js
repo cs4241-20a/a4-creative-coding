@@ -224,7 +224,7 @@ const init = () => {
 
 	// gui stuff
 	gui = new GUI({name: 'chessboard'});
-	gui.add({textField: 'a3'}, 'textField')
+	gui.add({textField: 'a3 or h8 or castle'}, 'textField')
 	   .name('Move Selected')
 	   .onFinishChange((val) => moveFunc(val));
 
@@ -265,12 +265,12 @@ const moveFunc = (val) => {
 	let pattern = /[a-h][1-8]/
 
 	if (!selected) {
-		alert('No pieces are selected! ಥ_ಥ');	
+		setTimeout(() => Swal.fire({title: 'No pieces are selected! ಥ_ಥ'}), 50);
 		return false;	
 	}
 
 	if (val === 'castle') {
-		alert('Sorry, I\'m not smart enough to put that in ¯\\_(ツ)_/¯');
+		setTimeout(() => Swal.fire({title: 'Sorry, I\'m not smart enough to put that in ¯\\_(ツ)_/¯'}), 50);
 		return false;
 	}
 
@@ -280,18 +280,26 @@ const moveFunc = (val) => {
 		let row = translate[val[0][0]]; // 1 2 3
 		let col = translate[val[0][1]]; // a b c
 
+		if (selected.name[0] !== curPlayer) {
+			setTimeout(() => Swal.fire({title: 'It\'s actually ' + (curPlayer === 'w' ? 'white' : 'black') + '\'s turn right now'}), 50);
+			return false;
+		}
+
 		if (row === selected.boardZ && col === selected.boardX) {
-			alert('You\'re already there silly •ᴗ•')
+			setTimeout(() => Swal.fire({title: 'You\'re already there silly •ᴗ•'}), 50);
+			return false;
+			// alert('');
 		} else if (canMoveThere(row, col)){
 			selected.boardZ = row;
 			selected.boardX = col;
 			selected.moved = true;
+			curPlayer = curPlayer === 'w' ? 'b' : 'w';
 			reRenderBoard();
 		} else {
-			alert('You can\'t move there ヽ(ಠ_ಠ)ノ');
+			setTimeout(() => Swal.fire({title: 'Illegal move ヽ(ಠ_ಠ)ノ'}), 50);
 		}
 	} else {
-		alert('invalid input, must be between [a - h] and [1 - 8] and format: \'a3\' or \'b8\'')
+		setTimeout(() => Swal.fire({title: 'Invalid input, must be between [a - h] and [1 - 8] and format: \'a3\' or \'b8\'', icon: 'error'}), 50);
 	}
 }
 
@@ -334,7 +342,7 @@ const movePawn = (row, col, currow, curcol) => {
 	col = parseInt(getKeyByVal(translate, col));
 	currow = parseInt(getKeyByVal(translate, currow));
 	row = parseInt(getKeyByVal(translate, row));
-	if (col === (curcol + 1)){
+	if (col === (curcol + (selected.name[0] === 'w' ? 1 : -1))){
 		if ((currow === (row - 1) || currow === (row + 1)) && isOcc(translate[row], translate[col])) {
 			if (col === 8 && deletePiece(translate[row], translate[col])){
 				promoteSelected();
