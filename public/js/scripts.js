@@ -195,10 +195,10 @@ const init = () => {
 		Swal.fire({title: 'Help Me!',
 				  icon: 'info',
 				  html: 'Don\'t worry! Once you get the basics down for this game it\'s not too hard.' + 
-				  		'<a href="https://www.chess.com/learn-how-to-play-chess">Here\'s</a> a link to' + 
-				  		'help you out! Once you figure the basics out all you have to do is click on piece' + 
+				  		'<a href="https://www.chess.com/learn-how-to-play-chess"> Here\'s</a> a link to ' + 
+				  		'help you out! Once you figure the basics out all you have to do is click on piece ' + 
 				  		'and type the square you want to move it to!'}); 
-	}}, 'Help');
+	}}, 'Help').name('Help Me!');
 
 	container.appendChild(renderer.domElement);
 	window.addEventListener('resize', onWindowResize, false);
