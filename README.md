@@ -13,7 +13,7 @@ I have also referred to Bubble Chart from Observable : https://observablehq.com/
 
 Goal: Show a visualization of US states and their information for international students who do not know American geography as much. 
 
-Challenges: Scaling pictures on each circle was the hardest. I still have not figured this out. However, also loading specific information from the json file was tedious work. 
+Challenges: Scaling pictures on each circle was the hardest. I have worked on for several hours, but I still have not figured this out. Loading specific information from the json file was tedious work. 
 
 Instructions: If you want further information, clicking on the circle will lead to the state's official government site. 
 
