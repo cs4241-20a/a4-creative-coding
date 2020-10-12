@@ -1,0 +1,185 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+section{
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+h2, p{
+    margin: 0px auto;
+    width: 800px;
+    font-family: serif;
+}
+
+h4{
+    font-family: serif
+}
+
+h2{
+    color: #0F1FE5;
+}
+
+canvas{
+    display: block;
+    border: 1px solid black;
+    margin: 10px auto 0px;
+}
+
+button{
+    outline: 0;
+    border: 0;
+    color: #0F1FE5;
+    font-family: impact;
+    background: silver;
+    width: 40px;
+    height: 40px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#tools{
+    width: 800px;
+    height: 80px;
+    margin: 0px auto;
+    display: flex;
+}
+
+#clearWrapper, #fillAndClear{
+    display: flex;
+    flex-direction: column;
+    margin-right: 10px;
+}
+
+#fillAndClear{
+    margin-top: 19px;
+}
+
+#clearWrapper button, #fillAndClear button{
+    width: 80px;
+    height: 35px;
+    margin-bottom: 5px;
+}
+
+#brushType, #sizes{
+    display: flex;
+    width: 100px;
+    flex-wrap: wrap;
+}
+
+#brushType button{
+    margin-bottom: 5px;
+    margin-right: 5px;
+    height: 30px;
+    width: 42px;
+}
+
+#sizes button{
+    margin-bottom: 5px;
+    margin-right: 1px;
+    height: 30px;
+    width: 45px;
+}
+
+#colors{
+    height: 50px;
+    display: flex;
+    flex-direction: column;
+    margin-right: 10px;
+}
+
+#currentColor{
+    border: 1px solid silver;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    background: black;
+    margin-top:20px;
+}
+
+#colors button{
+    width: 20px;
+    height: 20px;
+    margin-top: 5px;
+    border: 1px solid silver;
+}
+
+#colorSelect{
+    visibility: hidden;
+}
+
+#colors button:hover{
+    opacity: 0.5;
+}
+
+#red{
+    background: red;
+}
+
+#orange{
+    background: orange;
+}
+
+#yellow{
+    background: yellow;
+}
+
+#green{
+    background: green;
+}
+
+#blue{
+    background: blue;
+}
+#indigo{
+    background: indigo;
+}
+
+#violet{
+    background: violet;
+}
+
+#black{
+    background: black;
+}
+
+#grey{
+    background: grey;
+}
+
+#white{
+    background: white;
+}
+
+#maroon{
+    background: maroon;
+}
+#orangered{
+    background: orangered;
+}
+#gold{
+    background: gold;
+}
+#lime{
+    background: lime;
+}
+#lightblue{
+    background: lightblue;
+}
+#plum{
+    background: plum;
+}
+#lavender{
+    background: lavender;
+}
+#darkgrey{
+    background: darkgrey;
+}
+#lightgrey{
+    background: lightgrey;
+}
+#tan{
+    background: tan;
+}
