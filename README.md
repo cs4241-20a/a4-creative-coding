@@ -1,5 +1,5 @@
 ## Fall Guys Minigame Frontend
-http://a4-charlieroberts.glitch.me
+http://a4-ioannis-kyriazis.glitch.me
 
 The goal of this application is to be a front-end for my side project of recreating a Fall Guys minigame to be played online. I faced challenges when generating random colored
 tiles and figuring out how to make the assignment satisfy the requirements.
