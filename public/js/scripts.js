@@ -187,7 +187,7 @@ const init = () => {
 
 	gui = new GUI({name: 'chessboard'});
 	// let white = gui.addFolder('White');
-	gui.add({textField: 'a3 or f3 or castle'}, 'textField')
+	gui.add({textField: 'a3'}, 'textField')
 	   .name('Move Selected')
 	   .onFinishChange((val) => moveFunc(val));
 
@@ -200,33 +200,120 @@ const init = () => {
 	document.querySelector('.dg').addEventListener('mouseout', e => isInGui = false);
 }
 
+// function for moving the piece from dat gui
 const moveFunc = (val) => {
 	let pattern = /[a-h][1-8]/
 
-	// console.log(val)
 	if (!selected) {
-		alert('No pieces are selected!');	
+		alert('No pieces are selected! ಥ_ಥ');	
 		return false;	
 	}
 
 	if (val === 'castle') {
-		alert('Sorry, I\'m not smart enough to put that in ;)');
+		alert('Sorry, I\'m not smart enough to put that in ¯\\_(ツ)_/¯');
 		return false;
 	}
 
 	val = val.toLowerCase().match(pattern);
 
 	if (val !== null){
-		let row = val[0][0];
-		let col = val[0][1];
-		console.log(selected);
-		selected.boardZ = translate[row];
-		selected.boardX = translate[col];
-		selected.moved = true;
-		console.log(selected);
-		reRenderBoard();
-	}
+		let row = translate[val[0][0]]; // 1 2 3
+		let col = translate[val[0][1]]; // a b c
 
+		if (row === selected.boardZ && col === selected.boardX) {
+			alert('You\'re already there silly •ᴗ•')
+		} else if (canMoveThere(row, col)){
+			selected.boardZ = row;
+			selected.boardX = col;
+			selected.moved = true;
+			reRenderBoard();
+		} else {
+			alert('You can\'t move there ヽ(ಠ_ಠ)ノ');
+		}
+	}
+}
+
+// checks if the selected piece is allowed to move to that new position
+const canMoveThere = (row, col) => {
+	let pieceType = selected.name[1];
+	let currow = selected.boardZ;
+	let curcol = selected.boardX;
+
+	switch(pieceType){
+		case 'r':
+			return moveRook(row, col, currow, curcol);
+			break;			
+		case 'b':			
+			break;			
+		case 'n':
+			break;			
+		case 'q':
+			break;
+		case 'k':
+			break;
+		default:
+	}
+	return true;
+}
+
+const moveRook = (row, col, currow, curcol) => {
+	if (currow !== row && curcol !== col){
+		return false;
+	} 
+
+	if (currow === row) {
+		let indOne = parseInt(getKeyByVal(translate, curcol));
+		let indTwo = parseInt(getKeyByVal(translate, col));
+		let high = indTwo > indOne ? indTwo : indOne;
+		let low = indTwo > indOne ? indOne : indTwo;
+		console.log(indOne, indTwo, low, high);
+		for (let i = low + 1; i < high; i++) {
+			if (isOcc(row, translate[i]))
+				return false;
+		}
+		deletePiece(row, high);
+	} else {
+		let indOne = parseInt(getKeyByVal(translate, currow));
+		let indTwo = parseInt(getKeyByVal(translate, row));
+		let high = indTwo > indOne ? indTwo : indOne;
+		let low = indTwo > indOne ? indOne : indTwo;
+		console.log(indOne, indTwo, low, high);
+		for (let i = low + 1; i < high; i++) {
+			console.log(isOcc(translate[i], col));
+			if (isOcc(translate[i], col))
+				return false;
+		}
+		deletePiece(high, col);
+	}
+	
+	return true;	
+}
+
+// checks is if a piece is already on that square (probably couldve made this better by refactoring board)
+const isOcc = (row, col) => {
+	let ret = false;
+
+	Object.entries(board).some(piece => {
+		if (piece[1].boardZ === row && piece[1].boardX === col){
+			ret = true;
+			console.log('found one', ret);
+			return true;
+		}
+	});
+	return ret;
+}
+
+const deletePiece = (row, col) => {
+	Object.entries(board).some(piece => {
+		if (piece[1].boardZ === row && piece[1].boardX === col){
+			piece.onBoard = false;
+			return true;
+		}
+	});
+}
+
+const getKeyByVal = (obj, val) => {
+	return Object.keys(obj).find(key => obj[key] === val);
 }
 
 const selectObject = (event) => {
@@ -249,6 +336,7 @@ const selectObject = (event) => {
 			ogcolor = intersects[0].object.material.color.getHex();
 			intersects[0].object.material.color.set('yellow');
 			selected = intersects[0].object.parent;
+			console.log(selected);
 		} else {
 			selected ? selected.children[0].material.color.setHex(ogcolor) : null;
 			selected = undefined;
