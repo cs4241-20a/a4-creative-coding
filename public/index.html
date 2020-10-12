@@ -116,13 +116,13 @@
             //Scaling the photo to the circle
             node.append("svg:pattern")
                 .attr("id", (s) => s.data.photo_url)
-                .attr("height", (s) => 1.5 * s.r)
-                .attr("width", (s) => 1.5 * s.r)
+                .attr("height", (s) => 2 * s.r)
+                .attr("width", (s) => 2 * s.r)
                 .attr("patternUnits", "userSpaceOnUse")
                 .append('svg:image')
                 .attr("xlink:href", (s) => s.data.photo_url)
-                .attr("height", (s) => 1.5 * s.r)
-                .attr("width", (s) => 1.5 * s.r)
+                .attr("height", (s) => 2 * s.r)
+                .attr("width", (s) => 2 * s.r)
                 .attr("x", 0)
                 .attr("y", 0);
 
@@ -132,9 +132,9 @@
                     "transform",
                     (s) => "translate" + -s.r + "," + -s.r + ")"
                 )
-                .attr("cx", (s) => 0.7 * s.r)
-                .attr("cy", (s) => 0.7 * s.r)
-                .attr("r", (s) => 0.7 * s.r)
+                .attr("cx", (s) =>  s.r)
+                .attr("cy", (s) =>  s.r)
+                .attr("r", (s) =>  s.r)
                 .style("fill", "#fff")
                 .style("fill", (s) => "url(#" + s.data.photo_url + ")");
             node.append("circle")
