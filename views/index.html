@@ -1,0 +1,119 @@
+<!-- This is a static file -->
+<!-- served from your routes in server.js -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="A song player that plays differnt sunflower themed songs" />
+
+    <title>Sunflower Field</title>
+
+    <link
+      id="favicon"
+      rel="icon"
+      href="https://glitch.com/edit/favicon-app.ico"
+      type="image/x-icon"
+    />
+    <!-- import the webpage's stylesheet -->
+    <link rel="stylesheet" href="/style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cutive+Mono&family=Poiret+One&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- import the webpage's client-side javascript file -->
+    <script src="script.js" type="module" defer></script>
+  </head>
+  <body>
+    <div id="overlay">
+      <div id="instructions">
+        <h1>
+          Instructions
+        </h1>
+        <p>
+          Welcome to the sunflower field. We have 3 different sunflower songs
+          sung by your favorite artists! Song will being playing after 'OK' is
+          presssed. To pull up this menu again press the "H" key
+        </p>
+        <h2>
+          Song Functions
+        </h2>
+        <ul>
+          <li>Play: Plays song</li>
+          <li>Pause: Pauses song</li>
+          <li>Volume: Decreases volume</li>
+          <li>Loop: Plays song again after its ended</li>
+          <li>Mute: Mutes song</li>
+        </ul>
+        <h2>
+          Colors
+        </h2>
+        <p>
+          Select the buttons to change the color of the visualizer
+        </p>
+        <h2>
+          Change Song
+        </h2>
+        <p>
+          Select from the choices to play that artists version of Sunflower
+        </p>
+        <button id="play">
+          OK
+        </button>
+      </div>
+    </div>
+    <div id="content">
+      <h1>
+        Sunflower Field
+      </h1>
+      <div id="player">
+        <div id="canvas-div">
+          <canvas id="canvas" width="400" height="400"></canvas>
+        </div>
+        <div id="change-colors">
+          Change Colors
+          <button id="default">Default</button>
+          <button id="purple">Purple</button>
+          <button id="rainbow">Rainbow</button>
+          <button id="blue">Blue Gradient</button>
+          <button id="red">Red Gradient</button>
+        </div>
+      </div>
+      <div id="songs">
+        <label>
+          <input
+            type="radio"
+            id="harry"
+            name="song"
+            value="https://cdn.glitch.com/e6f8ae8c-36c3-48aa-b208-20b00427342c%2F3.mp3?v=1602407357167"
+          />
+          Harry Styles
+        </label>
+        <label>
+          <input
+            type="radio"
+            id="post"
+            name="song"
+            value="https://cdn.glitch.com/e6f8ae8c-36c3-48aa-b208-20b00427342c%2F1.mp3?v=1602381823448"
+          />
+          Post Malone
+        </label>
+        <label>
+          <input
+            type="radio"
+            id="rex"
+            name="song"
+            value="https://cdn.glitch.com/e6f8ae8c-36c3-48aa-b208-20b00427342c%2F2.mp3?v=1602402346286"
+          />
+          Rex Orange County
+        </label>
+      </div>
+    </div>
+  </body>
+</html>
