@@ -1,0 +1,51 @@
+canvas {
+  height:400px;
+  width:200px;
+  border:solid;
+}
+
+body {
+  width: 90%;
+  margin:auto;
+  font-family: 'Press Start 2P', cursive;
+}
+
+#badge, button, canvas {
+  display:block;
+  margin:auto !important;
+}
+
+h1 {
+  text-align:center;
+}
+
+.nes-container, .nes-field {
+  width: 50% !important;
+  margin:auto !important;
+}
+
+/* Collapsible is based on W3 schools example */
+.collapsible {
+  background-color: #777;
+  color: white;
+  cursor: pointer;
+  padding: 18px;
+  width: 50%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+}
+
+.active, .collapsible:hover {
+  background-color: #555;
+}
+
+.content {
+  padding: 0 18px;
+  margin:auto;
+  width: 50%;
+  display: block;
+  overflow: hidden;
+  background-color: #f1f1f1;
+}

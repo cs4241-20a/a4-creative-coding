@@ -1,0 +1,19 @@
+{
+  "name": "Customizable-Tetris",
+  "version": "0.0.1",
+  "description": "A tetris game following user-defined settings",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "nes.css": "^2.3.0"
+  },
+  "engines": {
+    "node": "12.x"
+  },
+  "repository": {
+    "url": "https://a4-margaret-earnest.glitch.me/"
+  }
+}

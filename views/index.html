@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Customizable Tetris</title>
+    
+    <link href="https://unpkg.com/nes.css@latest/css/nes.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="/style.css">
+    <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
+    <script src="/script.js"></script>
+  </head>  
+  <body onload="loadInstruct()">
+    <br><h1>Customizable Tetris</h1><br>
+    <div id="badge" class="nes-badge">
+      <span id="score" class="is-error">Score: 0</span>
+    </div><br>
+    <canvas id="canvas" width="200" height="400">Your browser doesn't support canvas :(</canvas><br>
+    <button onclick="runGame()">Start</button><br>
+    
+    <button type="button" class="collapsible">Instructions</button>
+    <div class="content nes-container">
+      <br>
+      <p>Welcome to Customizable Tetris! Use the options below to play Tetris however you like best. You can change the color scheme, change the input type, and turn on background music. You can also set the falling delay, which determines how slowly pieces fall. The higher the delay value the slower pieces will fall, with normal values ranging between 100 and 600. The following checkbox lets you turn on a progressive speed increase as lines are cleared. Finally, dark mode can be enabled at the end of the menu. Click the instructions button above to toggle this section's visibility.</p>
+      <br>
+    </div><br>
+    
+    <div id="colorSelector" class="nes-container with-title is-rounded">
+      <p class="title">Color Scheme</p>
+      <label>
+        <input type="radio" class="nes-radio" name="color" value="0" checked />
+        <span>Classic</span>
+      </label>
+      <label>
+        <input type="radio" class="nes-radio" name="color" value="1" />
+        <span>Rainbow</span>
+      </label>
+      <label>
+        <input type="radio" class="nes-radio" name="color" value="2" />
+        <span>Purple</span>
+      </label>
+      <label>
+        <input type="radio" class="nes-radio" name="color" value="3" />
+        <span>Greyscale</span>
+      </label>
+    </div><br>
+    <div id="keySelector" class="nes-container with-title is-rounded">
+      <p class="title">Control Keys</p>
+      <label>
+        <input type="radio" class="nes-radio" name="key" value="0" checked />
+        <span>Arrow keys</span>
+      </label>
+      <label>
+        <input type="radio" class="nes-radio" name="key" value="1" />
+        <span>WASD</span>
+      </label>
+    </div><br>
+    <div id="songSelector" class="nes-container with-title is-rounded">
+      <p class="title">Background Music</p>
+      <label>
+        <input type="radio" class="nes-radio" name="song" value="0" checked />
+        <span>Theme 1</span>
+      </label>
+      <label>
+        <input type="radio" class="nes-radio" name="song" value="1" />
+        <span>Theme 2</span>
+      </label>
+      <label>
+        <input type="radio" class="nes-radio" name="song" value="2" />
+        <span>Theme 3</span>
+      </label>
+      <label>
+        <input type="radio" class="nes-radio" name="song" value="3" />
+        <span>No Music</span>
+      </label>
+    </div><br>
+    <div class="nes-field">
+      <label for="delay" id="delayLabel">Falling Delay</label>
+      <input type="number" id="delay" class="nes-input" value="300">
+    </div><br>
+    <div class="nes-field">
+      <label>
+        <input type="checkbox" class="nes-checkbox" id="enableIncrease" />
+        <span>Enable Speed Increase</span>
+      </label>
+    </div><br>
+    <div class="nes-field">
+      <label>
+        <input type="checkbox" class="nes-checkbox" id="enableDark" />
+        <span>Enable Dark Mode</span>
+      </label>
+    </div><br>
+  </body>
+</html>
