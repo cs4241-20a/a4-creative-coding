@@ -17,7 +17,7 @@ function loadInstruct() {
 }
 
 var colors = [
-  ["#952D98", "#FF7900", "#ED2939", "#FECB00", "#69BE28", "#0065BD", "#009FDA"],
+  ["#952D98", "#FF7900", "#69BE28", "#FECB00", "#ED2939", "#0065BD", "#009FDA"],
   ["#FF0018", "#FFA52C", "#FFFF41", "#008018", "#0000F9", "#86007D", "#ee82ee"],
   ["#D8BFD8", "#DDA0DD", "#EE82EE", "#FF00FF", "#8A2BE2", "#4B0082", "#800080"],
   ["#A0A0A0", "#D0D0D0", "#B0B0B0", "#909090", "#696969", "#484848", "#202020"]
@@ -60,33 +60,33 @@ function runGame() {
   let palette = document.querySelector('input[name="color"]:checked').value;
   keyChoice = document.querySelector('input[name="key"]:checked').value;
   const T = {
-    piece: [[0, 0, 0], [1, 1, 1], [0, 1, 0]],
+    piece: rot([[0, 0, 0], [1, 1, 1], [0, 1, 0]]),
     color: colors[palette][0],
     pos: [3, -1]
   };
   const J = {
-    piece: [[0, 0, 0], [1, 1, 1], [0, 0, 1]],
+    piece: rot([[0, 0, 0], [1, 1, 1], [0, 0, 1]]),
     color: colors[palette][1],
     pos: [3, -1]
   };
   const Z = {
-    piece: [[0, 0, 0], [1, 1, 0], [0, 1, 1]],
+    piece: rot([[0, 0, 0], [1, 1, 0], [0, 1, 1]]),
     color: colors[palette][2],
     pos: [3, -1]
   };
-  const O = { piece: [[1, 1], [1, 1]], color: colors[palette][3], pos: [3, 0] };
+  const O = { piece: rot([[1, 1], [1, 1]]), color: colors[palette][3], pos: [3, 0] };
   const S = {
-    piece: [[0, 0, 0], [0, 1, 1], [1, 1, 0]],
+    piece: rot([[0, 0, 0], [0, 1, 1], [1, 1, 0]]),
     color: colors[palette][4],
     pos: [3, -1]
   };
   const L = {
-    piece: [[0, 0, 0], [1, 1, 1], [1, 0, 0]],
+    piece: rot([[0, 0, 0], [1, 1, 1], [1, 0, 0]]),
     color: colors[palette][5],
     pos: [3, -1]
   };
   const I = {
-    piece: [[0, 0, 0, 0], [0, 0, 0, 0], [1, 1, 1, 1], [0, 0, 0, 0]],
+    piece: rot([[0, 0, 0, 0], [0, 0, 0, 0], [1, 1, 1, 1], [0, 0, 0, 0]]),
     color: colors[palette][6],
     pos: [3, -1]
   };
