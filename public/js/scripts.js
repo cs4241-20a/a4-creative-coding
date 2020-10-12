@@ -18,7 +18,7 @@ const squares = {'one': 43, 'two': 31.3, 'three': 18.5, 'four': 6, 'five': -6.5,
 const startingPos = {
 	wr1: {x: 'one', z: 'one'}, wn1: {x: 'one', z: 'two'}, wb1: {x: 'one', z: 'three'}, wq: {x: 'one', z: 'four'}, wk: {x: 'one', z: 'five'}, wb2: {x: 'one', z: 'six'}, wn2: {x: 'one', z: 'seven'}, wr2: {x: 'one', z: 'eight'}, 
 
-	w1: {x: 'two', z: 'one'}, w2: {x: 'two', z: 'two'}, w3: {x: 'two', z: 'three'}, w4: {x: 'two', z: 'four'}, w5: {x: 'two', z: 'five'}, w6: {x: 'two', z: 'six'}, w7: {x: 'two', z: 'seven'}, w8: {x: 'two', z: 'eight'},
+	w1: {x: 'two', z: 'one'}, w2: {x: 'two', z: 'two'}, w3: {x: 'two', z: 'three'}, w4: {x: 'three', z: 'four'}, w5: {x: 'two', z: 'five'}, w6: {x: 'two', z: 'six'}, w7: {x: 'two', z: 'seven'}, w8: {x: 'two', z: 'eight'},
 
 	br1: {x: 'eight', z: 'one'}, bn1: {x: 'eight', z: 'two'}, bb1: {x: 'eight', z: 'three'}, bk: {x: 'eight', z: 'five'}, bq: {x: 'eight', z: 'four'}, bb2: {x: 'eight', z: 'six'}, bn2: {x: 'eight', z: 'seven'}, br2: {x: 'eight', z: 'eight'}, 
 
@@ -103,6 +103,7 @@ const initBoard = () => {
 		clone.boardZ = piece.z;
 		clone.onBoard = true;
 		clone.moved = false;
+		clone.color = name[0];
 		clone.name = name;
 		board[name] = clone;
 		scene.add(clone);
@@ -243,7 +244,8 @@ const canMoveThere = (row, col) => {
 		case 'r':
 			return moveRook(row, col, currow, curcol);
 			break;			
-		case 'b':	
+		case 'b':
+			return moveBishop(row, col, currow, curcol);
 			break;			
 		case 'n':
 			break;			
@@ -257,7 +259,27 @@ const canMoveThere = (row, col) => {
 }
 
 const moveBishop = (row, col, currow, curcol) => {
+	curcol = parseInt(getKeyByVal(translate, curcol));
+	col = parseInt(getKeyByVal(translate, col));
+	currow = parseInt(getKeyByVal(translate, currow));
+	row = parseInt(getKeyByVal(translate, row));
 
+	if (Math.abs(currow - row) !== Math.abs(curcol - col)){
+		return false;
+	}
+
+	let highCol = curcol > col ? curcol : col;
+	let lowCol = curcol > col ? col : curcol;
+
+	let highRow = currow > row ? currow : row;
+	let lowRow = currow > row ? row : currow;
+
+	for (let i = lowCol + 1, j = lowRow; i < highCol || j < highRow; i++, j++){
+		if (isOcc(row, translate[i]))
+			return false;
+	}
+	
+	return deletePiece(translate[row], translate[col]);
 }
 
 const moveRook = (row, col, currow, curcol) => {
@@ -275,7 +297,7 @@ const moveRook = (row, col, currow, curcol) => {
 			if (isOcc(row, translate[i]))
 				return false;
 		}
-		deletePiece(row, col);
+
 	} else {
 		let indOne = parseInt(getKeyByVal(translate, currow));
 		let indTwo = parseInt(getKeyByVal(translate, row));
@@ -287,10 +309,9 @@ const moveRook = (row, col, currow, curcol) => {
 			if (isOcc(translate[i], col))
 				return false;
 		}
-		deletePiece(row, col);
 	}
 	
-	return true;	
+	return deletePiece(row, col);;	
 }
 
 // checks is if a piece is already on that square (probably couldve made this better by refactoring board)
@@ -308,12 +329,21 @@ const isOcc = (row, col) => {
 }
 
 const deletePiece = (row, col) => {
+	let ret = true;
+
 	Object.entries(board).some(piece => {
-		if (piece[1].boardZ === row && piece[1].boardX === col){
-			piece[1].onBoard = false;
-			return true;
+		piece = piece[1]
+		if (piece.boardZ === row && piece.boardX === col){
+			if (piece.color === selected.color) {
+				ret = false
+			} else {
+				piece.onBoard = false;
+				return true;
+			}
 		}
 	});
+
+	return ret;
 }
 
 const getKeyByVal = (obj, val) => {
