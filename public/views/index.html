@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Webware Paint</title>
+    <meta name="description" content="Webware Paint">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css/style.css">
+    <script type="module" src="js/main.js"></script>
+    <script type="module" src="js/selectors.js"></script>
+</head>
+
+<body>
+<div class="col-big">
+    <section>
+        <h2>
+            Webware Paint
+        </h2>
+        <p>
+            Paint things below.
+            <a href="#" id="info">Click here for information on functionality.</a>
+        </p>
+        <div id="tools">
+            <div id="clearWrapper">
+                <h4>
+                    Tools
+                </h4>
+                <button id="saveFile">Save File</button>
+            </div>
+            <div id="fillAndClear">
+                <button id="clear">Clear</button>
+                <button id="fillCanvas">Fill</button>
+            </div>
+            <div id="brushType">
+                <h4>
+                    Brush Style
+                </h4>
+                <button id="squareBrush">Square</button>
+                <button id="RoundBrush">Round</button>
+            </div>
+            <div id="sizes">
+                <h4>
+                    Brush Size
+                </h4>
+                <div>
+                    <button id="brushSize1">Small</button>
+                    <button id="brushSize2">Normal</button>
+                </div>
+                <div>
+                    <button id="brushSize3">Big</button>
+                    <button id="brushSize4">Huge</button>
+                </div>
+            </div>
+            <div id="colors">
+                <h4>
+                    Colors
+                </h4>
+                <div>
+                    <button id="red"></button>
+                    <button id="orange"></button>
+                    <button id="yellow"></button>
+                    <button id="green"></button>
+                    <button id="blue"></button>
+                    <button id="indigo"></button>
+                    <button id="violet"></button>
+                    <button id="black"></button>
+                    <button id="grey"></button>
+                    <button id="white"></button>
+                </div>
+                <div>
+                    <button id="maroon"></button>
+                    <button id="orangered"></button>
+                    <button id="gold"></button>
+                    <button id="lime"></button>
+                    <button id="lightblue"></button>
+                    <button id="plum"></button>
+                    <button id="lavender"></button>
+                    <button id="darkgrey"></button>
+                    <button id="lightgrey"></button>
+                    <button id="tan"></button>
+                </div>
+            </div>
+            <div id="currentColor">
+                <input type="color" id="colorSelect">
+            </div>
+
+        </div>
+        <canvas id="canvasArea" width="1000" height="1000"></canvas>
+    </section>
+    <a id="link"></a>
+</div>
+</body>
+
+</html>
