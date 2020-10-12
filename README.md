@@ -1,6 +1,6 @@
 ## Creative Project
 
-Link: https://a4-ninataurich.glitch.me/
+Link: https://a4-nina-taurich.glitch.me/
 
 ### Goal:
 The goal of this project was to create an interactive 3d experience. I wanted to experiment is three.js and understand what it was capable of. In this project the user can create cubes and move around the space. When the user clicks on a cube it will expand/explode and then contract/reassemble. I used the server to make the cubes persistent when the page reloads
