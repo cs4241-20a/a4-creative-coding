@@ -191,6 +191,7 @@ const init = () => {
 	gui.add({textField: 'a3'}, 'textField')
 	   .name('Move Selected')
 	   .onFinishChange((val) => moveFunc(val));
+	gui.add({Help: () => { console.log("clicked") }}, 'Help')
 
 	container.appendChild(renderer.domElement);
 	window.addEventListener('resize', onWindowResize, false);
