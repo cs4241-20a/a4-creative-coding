@@ -1,10 +1,16 @@
 
-## Your Web Application Title
+## To my grader, I received and extension for this project
+Thank you :]
 
-your hosting link e.g. http://a4-charlieroberts.glitch.me
+## Sphere Field
 
-Include a very brief summary of your project here. Images are encouraged when needed, along with concise, high-level text. Be sure to include:
+https://a4-herschelkrustofsky.glitch.me/
 
-- the goal of the application
-- challenges you faced in realizing the application
-- the instructions you present in the website should be clear enough to use the application, but if you feel any need to provide additional instructions please do so here.
+## Goal
+To create an interactive physics demo
+
+
+## Challenges
+I have note taken any courses in game design, I thought I would be able to learn enought to create the obligatory space game.
+The challenges were overwhelming, I had difficulty loading 3d models, updating projectiles and getting my bearing in threejs.
+I scaled back and implemented raycasting to select spheres, and used Physijs to create motion.
