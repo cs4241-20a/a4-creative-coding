@@ -5,7 +5,7 @@ import {GLTFLoader} from '/js/imports/GLTFLoader.js';
 
 let scene, camera, renderer, controls, container, gui, raycaster;
 let bishop, pawn, knight, rook, queen, king;
-let selected, ogcolor, isInGui = false;
+let selected, ogcolor, curPlayer = 'w', isInGui = false;
 let mats = [];
 let board = {};
 
@@ -18,7 +18,7 @@ const squares = {'one': 43, 'two': 31.3, 'three': 18.5, 'four': 6, 'five': -6.5,
 const startingPos = {
 	wr1: {x: 'one', z: 'one'}, wn1: {x: 'one', z: 'two'}, wb1: {x: 'one', z: 'three'}, wq: {x: 'one', z: 'four'}, wk: {x: 'one', z: 'five'}, wb2: {x: 'one', z: 'six'}, wn2: {x: 'one', z: 'seven'}, wr2: {x: 'one', z: 'eight'}, 
 
-	w1: {x: 'two', z: 'one'}, w2: {x: 'two', z: 'two'}, w3: {x: 'two', z: 'three'}, w4: {x: 'two', z: 'four'}, w5: {x: 'two', z: 'eight'}, w6: {x: 'two', z: 'six'}, w7: {x: 'two', z: 'seven'}, w8: {x: 'two', z: 'eight'},
+	w1: {x: 'two', z: 'one'}, w2: {x: 'two', z: 'two'}, w3: {x: 'two', z: 'three'}, w4: {x: 'two', z: 'four'}, w5: {x: 'two', z: 'five'}, w6: {x: 'two', z: 'six'}, w7: {x: 'two', z: 'seven'}, w8: {x: 'two', z: 'eight'},
 
 	br1: {x: 'eight', z: 'one'}, bn1: {x: 'eight', z: 'two'}, bb1: {x: 'eight', z: 'three'}, bk: {x: 'eight', z: 'five'}, bq: {x: 'eight', z: 'four'}, bb2: {x: 'eight', z: 'six'}, bn2: {x: 'eight', z: 'seven'}, br2: {x: 'eight', z: 'eight'}, 
 
@@ -109,7 +109,49 @@ const initBoard = () => {
 		scene.add(clone);
 		mats.push(clone.children[0]);
 	});
+	initBoardLets();
 }
+
+const initBoardLets = () => {
+	let loader = new THREE.FontLoader();
+	loader.load('../assets/droid_sans_regular.typeface.json', (font) => {
+		const mesh = new THREE.MeshBasicMaterial( { color: 'mediumslateblue' } );
+
+		const letters = {'a': {'x': squares.eight - 7, 'z': squares.one + 2}, 'b': {'x': squares.eight - 7, 'z': squares.two + 2}, 'c': {'x': squares.eight - 7, 'z': squares.three + 2}, 'd': {'x': squares.eight - 7, 'z': squares.four + 2}, 'e': {'x': squares.eight - 7, 'z': squares.five + 2}, 'f': {'x': squares.eight - 7, 'z': squares.six + 2}, 'g': {'x': squares.eight - 7, 'z': squares.seven + 2}, 'h': {'x': squares.eight - 7, 'z': squares.eight + 2} };
+
+		const nums = {'1': {'x': squares.eight - 7, 'z': squares.one + 2}, '2': {'x': squares.eight - 7, 'z': squares.two + 2}, '3': {'x': squares.eight - 7, 'z': squares.three + 2}, '4': {'x': squares.eight - 7, 'z': squares.four + 2}, '5': {'x': squares.eight - 7, 'z': squares.five + 2}, '6': {'x': squares.eight - 7, 'z': squares.six + 2}, '7': {'x': squares.eight - 7, 'z': squares.seven + 2}, '8': {'x': squares.eight - 7, 'z': squares.eight + 2} };
+
+		Object.entries(letters).forEach((val, ind) => {
+			let geometry = new THREE.TextGeometry(val[0], {
+				font,
+				size: 5,
+				height: 2,
+				curveSegments: 12,
+			} );
+			let letter = new THREE.Mesh(geometry, mesh)
+			scene.add(letter);
+			letter.position.y = 10;
+			letter.position.x = val[1].x;
+			letter.position.z = val[1].z;
+			letter.rotation.y = (Math.PI / 2);
+		});		
+
+		Object.entries(nums).forEach((val, ind) => {
+			let geometry = new THREE.TextGeometry(val[0], {
+				font,
+				size: 5,
+				height: 2,
+				curveSegments: 12,
+			} );
+			let letter = new THREE.Mesh(geometry, mesh)
+			scene.add(letter);
+			letter.position.y = 10;
+			letter.position.x = val[1].z;
+			letter.position.z = val[1].x;
+		});
+	});
+}
+
 
 // rerenders board and moves/deletes pieces to their spots
 const reRenderBoard = () => {
@@ -118,6 +160,14 @@ const reRenderBoard = () => {
 		let piece = val[1];
 
 		if (!piece.onBoard) {
+			if (name[1] === 'k'){
+				setTimeout(() => {Swal.fire({title: 'Congrats ' + (name[0] === 'w' ? 'black' : 'white') + '!',
+						   icon: 'success',
+						   text: 'You played yourself!',
+						   confirmButtonText: 'Try Again!',
+						   showConfirmButton: true
+				}).then(result => window.location.reload(true))}, 50);
+			}
 			scene.remove(piece);
 			delete board[name];
 			return;
@@ -160,13 +210,6 @@ const init = () => {
 	light.position.set(1,1,6);
 	scene.add(light);
 
-	// var light = new THREE.DirectionalLight(0x002288);
-	// light.position.set(-1,-1,-1);
-	// camera.add(light);
-
-	// var light = new THREE.AmbientLight(0x222222);
-	// scene.add(light);
-
 	//Floor
 	var floorTexture = new THREE.ImageUtils.loadTexture('../assets/checkerboard.jpg');
 	floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping; 
@@ -179,18 +222,17 @@ const init = () => {
 	floor.rotation.x = Math.PI / 2;
 	scene.add(floor);
 
-	//Axes
-	var axes = new THREE.AxesHelper(100);
-	scene.add(axes);
-
-	// camera.position.z = 5;
-
-
+	// gui stuff
 	gui = new GUI({name: 'chessboard'});
-	// let white = gui.addFolder('White');
 	gui.add({textField: 'a3'}, 'textField')
 	   .name('Move Selected')
 	   .onFinishChange((val) => moveFunc(val));
+
+	let colorParams = {whitecolor: [255, 255, 255], blackcolor: [128, 128, 128]};
+	gui.addColor(colorParams, 'whitecolor')
+	   .onChange(colorval => changeColors('w', colorval));
+	gui.addColor(colorParams, 'blackcolor')
+	   .onChange(colorval => changeColors('b', colorval));
 	gui.add({Help: () => { 
 		Swal.fire({title: 'Help Me!',
 				  icon: 'info',
@@ -207,6 +249,15 @@ const init = () => {
 	// keep selection even when you click dat gui
 	document.querySelector('.dg').addEventListener('mouseover', e => isInGui = true);
 	document.querySelector('.dg').addEventListener('mouseout', e => isInGui = false);
+}
+
+
+const changeColors = (og, newCol) => {
+	Object.entries(board).forEach(val => {
+		if (val[0][0] === og) 
+			val[1].children[0].material.color.setRGB(newCol[0] / 255, newCol[1] / 255, newCol[2] / 255);
+		console.log(val[1].children[0].floorMaterial);
+	});
 }
 
 // function for moving the piece from dat gui
@@ -267,8 +318,39 @@ const canMoveThere = (row, col) => {
 			return moveKing(row, col, currow, curcol);
 			break;
 		default:
+		return movePawn(row, col, currow, curcol);
 	}
 	return true;
+}
+
+const promoteSelected = () => {
+	selected.children[0].geometry = queen.children[0].geometry.clone();
+	selected.scale.x = selected.scale.y = selected.scale.z = queen.scale.x;
+	selected.name += ('promoted' + Math.floor(Math.random() * 1000));
+}
+
+const movePawn = (row, col, currow, curcol) => {
+	curcol = parseInt(getKeyByVal(translate, curcol));
+	col = parseInt(getKeyByVal(translate, col));
+	currow = parseInt(getKeyByVal(translate, currow));
+	row = parseInt(getKeyByVal(translate, row));
+	if (col === (curcol + 1)){
+		if ((currow === (row - 1) || currow === (row + 1)) && isOcc(translate[row], translate[col])) {
+			if (col === 8 && deletePiece(translate[row], translate[col])){
+				promoteSelected();
+				return true;
+			}
+		}
+		else if (row === currow) {
+			if (col === 8 && !isOcc(translate[row], translate[col])) {
+				promoteSelected();
+				return true;
+			}
+			return !isOcc(translate[row], translate[col]);
+		}
+	} 
+
+	return false;
 }
 
 const moveKing = (row, col, currow, curcol) => {
@@ -276,7 +358,6 @@ const moveKing = (row, col, currow, curcol) => {
 	col = parseInt(getKeyByVal(translate, col));
 	currow = parseInt(getKeyByVal(translate, currow));
 	row = parseInt(getKeyByVal(translate, row));
-	console.log(curcol, col, curcol - col, currow, row, currow - row)
 	if (Math.abs(curcol - col) !== 1 && Math.abs(currow - row) !== 1){
 		return false;
 	}
@@ -345,7 +426,6 @@ const moveRook = (row, col, currow, curcol) => {
 		let indTwo = parseInt(getKeyByVal(translate, col));
 		let high = indTwo > indOne ? indTwo : indOne;
 		let low = indTwo > indOne ? indOne : indTwo;
-		console.log(indOne, indTwo, low, high);
 		for (let i = low + 1; i < high; i++) {
 			if (isOcc(row, translate[i]))
 				return false;
@@ -356,9 +436,7 @@ const moveRook = (row, col, currow, curcol) => {
 		let indTwo = parseInt(getKeyByVal(translate, row));
 		let high = indTwo > indOne ? indTwo : indOne;
 		let low = indTwo > indOne ? indOne : indTwo;
-		console.log(indOne, indTwo, low, high);
 		for (let i = low + 1; i < high; i++) {
-			console.log(isOcc(translate[i], col));
 			if (isOcc(translate[i], col))
 				return false;
 		}
@@ -374,7 +452,6 @@ const isOcc = (row, col) => {
 	Object.entries(board).some(piece => {
 		if (piece[1].boardZ === row && piece[1].boardX === col){
 			ret = true;
-			console.log('found one', ret);
 			return true;
 		}
 	});
@@ -391,8 +468,8 @@ const deletePiece = (row, col) => {
 				ret = false
 			} else {
 				piece.onBoard = false;
-				return true;
 			}
+			return true;
 		}
 	});
 
@@ -421,9 +498,8 @@ const selectObject = (event) => {
 				selected.children[0].material.color.setHex(ogcolor);
 			}
 			ogcolor = intersects[0].object.material.color.getHex();
-			intersects[0].object.material.color.set('yellow');
+			intersects[0].object.material.color.set('skyblue');
 			selected = intersects[0].object.parent;
-			console.log(selected);
 		} else {
 			selected ? selected.children[0].material.color.setHex(ogcolor) : null;
 			selected = undefined;
