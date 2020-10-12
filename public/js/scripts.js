@@ -18,7 +18,7 @@ const squares = {'one': 43, 'two': 31.3, 'three': 18.5, 'four': 6, 'five': -6.5,
 const startingPos = {
 	wr1: {x: 'one', z: 'one'}, wn1: {x: 'one', z: 'two'}, wb1: {x: 'one', z: 'three'}, wq: {x: 'one', z: 'four'}, wk: {x: 'one', z: 'five'}, wb2: {x: 'one', z: 'six'}, wn2: {x: 'one', z: 'seven'}, wr2: {x: 'one', z: 'eight'}, 
 
-	w1: {x: 'two', z: 'one'}, w2: {x: 'two', z: 'two'}, w3: {x: 'two', z: 'three'}, w4: {x: 'three', z: 'four'}, w5: {x: 'two', z: 'five'}, w6: {x: 'two', z: 'six'}, w7: {x: 'two', z: 'seven'}, w8: {x: 'two', z: 'eight'},
+	w1: {x: 'two', z: 'one'}, w2: {x: 'two', z: 'two'}, w3: {x: 'two', z: 'three'}, w4: {x: 'two', z: 'four'}, w5: {x: 'two', z: 'eight'}, w6: {x: 'two', z: 'six'}, w7: {x: 'two', z: 'seven'}, w8: {x: 'two', z: 'eight'},
 
 	br1: {x: 'eight', z: 'one'}, bn1: {x: 'eight', z: 'two'}, bb1: {x: 'eight', z: 'three'}, bk: {x: 'eight', z: 'five'}, bq: {x: 'eight', z: 'four'}, bb2: {x: 'eight', z: 'six'}, bn2: {x: 'eight', z: 'seven'}, br2: {x: 'eight', z: 'eight'}, 
 
@@ -231,6 +231,8 @@ const moveFunc = (val) => {
 		} else {
 			alert('You can\'t move there ヽ(ಠ_ಠ)ノ');
 		}
+	} else {
+		alert('invalid input, must be between [a - h] and [1 - 8] and format: \'a3\' or \'b8\'')
 	}
 }
 
@@ -248,17 +250,58 @@ const canMoveThere = (row, col) => {
 			return moveBishop(row, col, currow, curcol);
 			break;			
 		case 'n':
+			return moveKnight(row, col, currow, curcol);
 			break;			
 		case 'q':
+			return moveQueen(row, col, currow, curcol);
 			break;
 		case 'k':
+			return moveKing(row, col, currow, curcol);
 			break;
 		default:
 	}
 	return true;
 }
 
-const moveBishop = (row, col, currow, curcol) => {
+const moveKing = (row, col, currow, curcol) => {
+	curcol = parseInt(getKeyByVal(translate, curcol));
+	col = parseInt(getKeyByVal(translate, col));
+	currow = parseInt(getKeyByVal(translate, currow));
+	row = parseInt(getKeyByVal(translate, row));
+	console.log(curcol, col, curcol - col, currow, row, currow - row)
+	if (Math.abs(curcol - col) !== 1 && Math.abs(currow - row) !== 1){
+		return false;
+	}
+
+	return deletePiece(translate[row], translate[col]);
+}
+
+const moveQueen = (row, col, currow, curcol) => {
+	return moveBishop(row, col, currow, curcol) || moveRook(row, col, currow, curcol);
+}
+
+const moveKnight = (row, col, currow, curcol) => {
+    const x = [2, 1, -1, -2, -2, -1, 1, 2]; // all the possible x moves of a knight
+    const y = [1, 2, 2, 1, -1, -2, -2, -1]; // all the possible y moves of a knight
+
+	curcol = parseInt(getKeyByVal(translate, curcol));
+	col = parseInt(getKeyByVal(translate, col));
+	currow = parseInt(getKeyByVal(translate, currow));
+	row = parseInt(getKeyByVal(translate, row));
+
+	let colDiff = col - curcol;
+	let rowDiff = row - currow;
+
+	for (let i = 0; i < x.length; i++){
+		if (x[i] === colDiff && y[i] === rowDiff)
+			return deletePiece(row, col)
+	}
+
+	return false;
+
+}
+
+const moveBishop = (row, col, currow, curcol) => {	
 	curcol = parseInt(getKeyByVal(translate, curcol));
 	col = parseInt(getKeyByVal(translate, col));
 	currow = parseInt(getKeyByVal(translate, currow));
