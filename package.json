@@ -4,7 +4,8 @@
   "description": "Assignment 4 - Creative Coding: Interactive Multimedia Experiences ===",
   "main": "server.js",
   "dependencies": {
-    "d3": "^6.2.0"
+    "d3": "^6.2.0",
+    "popper.js": "^1.16.1"
   },
   "devDependencies": {},
   "scripts": {
