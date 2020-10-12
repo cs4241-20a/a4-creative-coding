@@ -1,7 +1,24 @@
 
 const canvas = document.createElement('canvas');
 document.body.appendChild(canvas);
-canvas.width = canvas.height = 400;
+canvas.width = canvas.height = 1600;
+
+let numColors = 4;
+let sizeTiles = 1;
+let numTiles = 1;
+let numCols = 4;
+let numRows = 4;
+let backgroundColor = [255, 255, 255];
+let strokeColor = [0, 0, 0];
+let control = {
+    numColors,
+    sizeTiles,
+    numTiles,
+    numCols,
+    numRows,
+    backgroundColor,
+    strokeColor
+};
 
 const ctx = canvas.getContext('2d');
 let x = y = 0;
@@ -17,8 +34,9 @@ function drawBlanks() {
 function drawTiles(tiles) {
     tiles.forEach((tile) => {
         ctx.fillStyle = tile.color;
-        ctx.fillRect(tile.x, tile.y, 100, 100);
-        ctx.strokeRect(tile.x, tile.y, 100, 100);
+        ctx.fillRect(tile.x, tile.y, 100 * control.sizeTiles, 100 * control.sizeTiles);
+        ctx.strokeStyle = 'rgb(' + control.strokeColor[0] + ', ' + control.strokeColor[1] + ', ' + control.strokeColor[2] + ')';
+        ctx.strokeRect(tile.x, tile.y, 100 * control.sizeTiles, 100 * control.sizeTiles);
 
     })
 }
@@ -59,15 +77,16 @@ let round;
 //     round = await fetch('/getRound').then(result => result.json());
 //     console.log(round);
 // }
-const colors = ['red', 'blue', 'green', 'purple'];
+const colors = ['red', 'blue', 'green', 'purple', 'orange', 'yellow', 'indigo', 'violet'];
 let tiles = [];
-function generateTiles() {
-    for (let i = 0; i < 4; i++) {
-        for (let j = 0; j < 4; j++) {
-            tiles.push({x: i * 100 * control.sizeTiles, y: j * 100 * control.sizeTiles, color: 'white'});
-        }
-    }
-}
+// function generateTiles() {
+//     for (let i = 0; i < 4; i++) {
+//         for (let j = 0; j < 4; j++) {
+//             tiles.push({x: i * 100 * control.sizeTiles, y: j * 100 * control.sizeTiles, color: 'white'});
+//         }
+//     }
+// }
+
 let color;
 // setInterval();
 let selection;
@@ -90,37 +109,36 @@ let selection;
 
 function generateColorTiles() {
     let tiles = []
-    for (let i = 0; i < 4; i++) {
-        for (let j = 0; j < 4; j++) {
-            tiles.push({x: i * 100, y: j * 100, color: colors[Math.floor(Math.random() * colors.length)]});
+    for (let i = 0; i < control.numCols; i++) {
+        for (let j = 0; j < control.numRows; j++) {
+            tiles.push({x: i * 100 * control.sizeTiles, y: j * 100 * control.sizeTiles, color: colors[Math.floor(Math.random() * control.numColors)]});
         }
     }
     return tiles;
 }
 
 const gui = new dat.GUI();
-let numColors = 4;
-let sizeTiles = 1;
-let numTiles = 1;
-let numCols = 4;
-let numRows = 4;
-let backgroundColor = [255, 255, 255];
 
-let control = {
-    numColors,
-    sizeTiles,
-    numTiles,
-    numCols,
-    numRows,
-    backgroundColor
-};
+
+
 gui.add(control, "numColors").min(1).max(8).step(1);
-gui.add(control, "sizeTiles").min(1).max(3).step(1);
+gui.add(control, "sizeTiles").min(0).max(3).step(.2);
 gui.add(control, "numCols").min(1).max(8).step(1);
 gui.add(control, "numRows").min(1).max(8).step(1);
 gui.addColor(control, "backgroundColor");
+gui.addColor(control, "strokeColor");
+let colortiles = generateColorTiles();
+alert("This site displays a disco dance floor. The controls are on the right to change the size, and other properties. Press the '?' on the keyboard to bring this back up.");
+document.body.addEventListener("keydown", (e) => {
+    if (e.key === '?') {
+        alert("This site displays a disco dance floor. The controls are on the right to change the size, and other properties. Press the '?' on the keyboard to bring this back up.");
+    }
+});
 
 setInterval(function () {
-    drawTiles(generateTiles());
-}, 1000);
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawTiles(generateColorTiles());
+    document.body.style.backgroundColor = 'rgb(' + control.backgroundColor[0] + ', ' + control.backgroundColor[1] + ', ' + control.backgroundColor[2] + ')';
+}, 200);
 

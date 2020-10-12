@@ -79,7 +79,7 @@ function switchRound() {
   }
 }
 setInterval(switchRound, 10 * 1000);
-const colors = ['red', 'blue', 'green', 'purple'];
+const colors = ['red', 'blue', 'green', 'purple', 'orange', 'yellow', 'indigo', 'violet'];
 let tiles = [];
 generateTiles();
 let color = 'red';
