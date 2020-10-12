@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <script src="js/three.min.js"></script>
+    <script src="js/physi.js"></script>
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+          integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+          crossorigin="anonymous">
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+
+</head>
+
+<body>
+
+
+<div id="display" ></div>
+
+<table><tr>
+    <td>
+        <input type="range" id="gravity"
+               min="-9" max="9" step="1">
+        <label for="gravity">Gravity</label>
+    </td>
+    <td>
+        <input type="color" id="colorPicker"
+               value="#e66465">
+        <label for="colorPicker">Color</label>
+    </td>
+</tr>
+    <tr>
+        <td>
+            <input type="range" id="scale"
+                   min="0.5" max="5" value="1" step=".1">
+            <label for="scale">scale</label>
+        </td>
+    </tr>
+        <tr>
+        <td>
+            <input type="range" id="velocityX"
+                   min="-100" max="100" step="1">
+            <label for="velocityX">X Velocity</label>
+        </td>
+        <td>
+            <input type="range" id="velocityZ"
+                   min="-100" max="100" step="1">
+            <label for="velocityZ">Z Velocity</label>
+        </td>
+    </tr>
+</table>
+<!-- Button trigger modal -->
+<button type="button" id="instructions" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+    ?
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Sphere Field</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <p>Orbit controls have been implemented to help navigate the scence.<p>
+                <ul>
+                <li>1. Have a look around by clicking on the display and moving the mouse!</li>
+                <li>2. Select a sphere using the mouse.</li>
+            </ul>
+
+                <p>These spheres can be influenced by the provided user controls.</p>
+                <ul>
+                    <li>1. Gravity, controls the gravity scale: -9 to 9.</li>
+                    <li>2. Color, controls the selected spheres appearance.</li>
+                    <li> 3. Scale, controls the spheres scale.</li>
+                    <li>4. X Velocity,  controls the linear velocity in the x direction: -100 to 100</li>
+                    <li> 5. Y Velocity, controls the linear velocity in the y direction: -100 to 100</li>
+                </ul>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="module">
+
+
+    import {OrbitControls} from "../js/OrbitControls.js";
+
+    Physijs.scripts.worker = 'js/physijs_worker.js';
+    Physijs.scripts.ammo = 'ammo.js';
+
+    let scene
+    let camera
+    let renderer
+    let ground
+    let scale = .5
+    let gravity, velocityX, velocityZ = 0
+    let currentColor = 0xff0000
+    let objects = []
+    let controls
+    const clock = new THREE.Clock()
+    let width = 600
+    let height = 600
+
+    /**
+     * init - setup scene
+     */
+    !(function init() {
+        //setup renderer
+        renderer = new THREE.WebGLRenderer()
+        renderer.setSize(width, height)
+        document.querySelector('#display').appendChild(renderer.domElement)
+
+        //setup physics scene
+        scene = new Physijs.Scene()
+        scene.fog = new THREE.Fog(0xecd540, 1, 200)
+        scene.setGravity(new THREE.Vector3(0, gravity, 0))
+
+        let directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+        directionalLight.castShadow = true
+        scene.add(directionalLight);
+
+
+
+        camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000)
+        camera.position.set(0, 40, 0)
+
+        controls = new OrbitControls(camera, renderer.domElement)
+        controls.maxPolarAngle = 1.5
+
+        createObjects()
+        createBase()
+
+    })()
+
+
+    function fire(e) {
+        let vector = new THREE.Vector3((e.clientX / width) * 2 - 1,
+            -(e.clientY / height) * 2 + 1, 0.5);
+        vector = vector.unproject(camera);
+        let raycaster = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize())
+        let intersects = raycaster.intersectObjects(objects)
+
+
+        if (intersects.length > 0) {
+            let object = intersects[0].object
+            let material = object.material
+            object.setLinearVelocity(new THREE.Vector3(0, 10, 0))
+            material.color = new THREE.Color(currentColor)
+            object.scale.set(scale,scale,scale)
+            object.setLinearVelocity(new THREE.Vector3(velocityX, 0, velocityZ))
+
+        }
+    }
+
+
+    !(function animate() {
+
+        let delta = clock.getDelta()
+        renderer.render(scene, camera)
+        scene.simulate()
+        requestAnimationFrame(animate)
+
+    })()
+
+
+    function createObjects() {
+
+        for (let x = -5; x < 5; x += 0.5) {
+            for (let z = -5; z < 5; z += 0.5) {
+
+                let objectMat = new THREE.MeshBasicMaterial(
+                    {
+                        color:currentColor
+                    })
+
+                let gs = new Physijs.SphereMesh(new THREE.SphereGeometry(.5, 10, 10), objectMat)
+                gs.name = 'metalSphere'
+                gs.position.set(x * 5, 1, z * 5)
+                objects.push(gs)
+                scene.add(gs)
+            }
+        }
+    }
+
+
+    function createBase() {
+        //load base textures
+        let textureLoader = new THREE.TextureLoader();
+        let albedoRock = textureLoader.load('textures/rock/rock_albedo.png')
+        albedoRock.wrapS = THREE.RepeatWrapping
+        albedoRock.wrapT = THREE.RepeatWrapping
+        albedoRock.repeat.set(40, 40)
+
+        let normalRock = textureLoader.load('textures/rock/rock_normal.png')
+        normalRock.wrapS = THREE.RepeatWrapping
+        normalRock.wrapT = THREE.RepeatWrapping
+        normalRock.repeat.set(40, 40)
+
+        //create ground material
+        let groundMat = new THREE.MeshPhongMaterial(
+            {
+                map: albedoRock,
+                normalMap: normalRock,
+                color: 0xA1251B
+            })
+
+        ground = new Physijs.BoxMesh(new THREE.BoxGeometry(600, 10, 600),
+            Physijs.createMaterial(groundMat), 0);
+
+        ground.castShadow = true;
+        ground.receiveShadow = true;
+        ground.position.set(-10, -10, -10)
+        scene.add(ground);
+    }
+
+
+    document.addEventListener('click', (e) => {
+        fire(e)
+    })
+
+    document.querySelector('#gravity').addEventListener('input', (e)=>{
+        scene.setGravity(new THREE.Vector3(0, e.target.value, 0))
+    })
+
+
+    document.querySelector('#colorPicker').addEventListener('input', (e)=>{
+            currentColor = e.target.value
+    })
+
+    document.querySelector('#scale').addEventListener('input', (e)=>{
+        scale = e.target.value
+    })
+
+    document.querySelector('#velocityX').addEventListener('input', (e)=>{
+        velocityX = e.target.value
+    })
+
+
+    document.querySelector('#velocityZ').addEventListener('input', (e)=>{
+        velocityZ = e.target.value
+    })
+
+
+</script>
+<script>
+    $(document).ready(function(){
+        $("#exampleModal").modal('show');
+    });
+</script>
+</body>
+</html>
