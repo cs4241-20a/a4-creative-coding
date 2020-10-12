@@ -1,0 +1,569 @@
+<!doctype html>
+<html lang="en" style="height:100%" >
+    <head>
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+      <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+      <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+
+      <title>Good Game.</title>
+      <style>
+			     body { margin: 0; }
+			     canvas { display: block; }
+
+         #info
+         {
+	          position: absolute;
+	          top: 10px;
+	          width: 100%;
+	          text-align: center;
+	          z-index: 100;
+	          display:block;
+            color:white;
+          }
+		  </style>
+    </head>
+
+    <body>
+      <h1>Simple Golf Game</h1>
+        <script src="js/three.js"></script>
+        <script src="js/game_script.js"></script>
+
+        <!-- <div class="container" style="margin-top: 10%">
+          <div class="row">
+            <div class="col">
+            </div>
+            <div class="col-6" style="align:center">
+              <canvas id="rendererCanvas" width="1080px" height="720px">
+              </canvas>
+            </div>
+            <div class="col">
+            </div>
+          </div>
+        </div> -->
+        <div id="info">Description</div>
+        <div id="ballInfo"></div>
+        <div id="planeInfo"></div>
+
+        <div style="float:left; margin-top:10%; margin-left:5%">
+          <h3>Game Options:</h3>
+          <label for="ballFriction">Ball Friction</label>
+          <input class="form-control" type="text" placeholder="0.01" id="ballFriction">
+          <button type="button" class="btn btn-primary" onclick="updateBallFriction()">Update</button>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="debugModeEnabled">
+
+          <label class="form-check-label" for="debugModeEnabled">
+            debug mode
+          </label>
+        </div>
+
+          <div class="form-check">
+
+          <input class="form-check-input" type="checkbox" value="" id="collisionsEnabled">
+          <label class="form-check-label" for="collisionsEnabled">
+            Level collisions
+          </label>
+          </div>
+          <div class="form-group">
+            <label for="levelSelect">Level Select</label>
+            <select class="form-control" id="levelSelect" onchange="changeSelectedLevel()">
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+            </select>
+          </div>
+          <button type="button" class="btn btn-primary" onclick="resetLevel()">Reset</button>
+          <button type="button" class="btn btn-primary" onclick="displayHelpModal()">Help</button>
+        </div>
+        <canvas id="rendererCanvas" width="1080px" height="720px" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+        </canvas>
+
+		      <script>
+            window.onload=function()
+            {
+              $('#game_info_modal').modal('toggle')
+            }
+            var debugModeEnabled = false;
+            var debugModeCheck = document.getElementById("debugModeEnabled");
+            debugModeCheck.addEventListener('change', function() {
+              debugModeEnabled = !debugModeEnabled;
+
+              for(var i = 0; i < gLevels[gCurrentLevel].collisionSurfaces.length; i++)
+              {
+                if(gLevels[gCurrentLevel].collisionSurfaces[i].helper)
+                {
+                    if(debugModeEnabled)
+                    {
+                      scene.add(gLevels[gCurrentLevel].collisionSurfaces[i].helper);
+                    }else{
+                      scene.remove(gLevels[gCurrentLevel].collisionSurfaces[i].helper)
+                    }
+
+                }
+              }
+            })
+
+            var levelCollisionsEnabled = true;
+            var levelCollisionsCheck = document.getElementById("collisionsEnabled");
+            levelCollisionsCheck.checked = true;
+            levelCollisionsCheck.addEventListener('change', function() {
+              levelCollisionsEnabled = !levelCollisionsEnabled;
+            })
+
+            var gBallFrictionCoefficient = 0.99;
+            var ballDebugInfo = document.getElementById("ballInfo");
+            var planeDebugInfo = document.getElementById("planeInfo");
+            var gLevels = [];
+            var scene = new THREE.Scene();
+            var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+
+            var ballVelocity = new THREE.Vector3();
+            ballVelocity.set(0.0,0.0,0.0);
+            var gCollisionPlanes = [];
+            var preMouseX = 0.0;
+            var preMouseY = 0.0;
+            var newMouseX = 0.0;
+            var newMouseY = 0.0;
+            var mousePosVec = new THREE.Vector3();
+            var mouseVelocity = new THREE.Vector3();
+
+            var bumperGeometry = new THREE.TorusGeometry(0.5, 0.2, 8, 12/*16, 100*/);
+            var bumperMaterial = new THREE.MeshPhongMaterial({color: 0x0000ff});
+            var bumper = new THREE.Mesh(bumperGeometry, bumperMaterial);
+            scene.add(bumper);
+            bumper.position.z = 0.2;
+
+            bumper.position.x = -1000;
+            bumper.position.y = -1000;
+            bumperGeometry.computeBoundingSphere();
+            bumperGeometry.boundingSphere.center.x = bumper.position.x;
+            bumperGeometry.boundingSphere.center.y = bumper.position.y;
+
+            var currentRayMouseX = 0.0;
+            var currentRayMouseY = 0.0;
+
+            var prevdX = 0.0;
+            var prevdY = 0.0;
+            var dX = 0.0;
+            var dY = 0.0;
+
+            var collisionSphere = new THREE.Sphere(new THREE.Vector3(0.0, 0.0, 0.0), 0.2);
+
+            gCollisionVisuals = [];
+
+            //console.log("collisionSphere.center: "+collisionSphere.center);
+            var collisionRightPlane = new THREE.Plane(new THREE.Vector3(-1.0, 0.0, 0.0));
+            var collisionUnprojected = new THREE.Plane(new THREE.Vector3(-1.0, 0.0, 0.0));
+            collisionUnprojected.translate(new THREE.Vector3(1.0, 0.0, 0.0));
+
+            var maxXVector = new THREE.Vector3(1.0, 0.0, 0.0);
+            var maxXValue = maxXVector.project(camera).x;
+
+            var mouseVelRaycaster = new THREE.Raycaster();
+
+            mouseVelocity.set(0.0, 0.0, 0.0);
+
+            var mouseVelMat = new THREE.LineBasicMaterial({ color: 0x0000ff });
+            var mouseVelPoints = [];
+            mouseVelPoints.push(new THREE.Vector3(0.0, 0.0, 0.0));
+            mouseVelPoints.push(new THREE.Vector3(0.0, 0.0, 0.0));
+            var mouseVelGeometry = new THREE.BufferGeometry();
+            mouseVelGeometry.setFromPoints(mouseVelPoints);
+
+            var mouseVelLine = new THREE.Line(mouseVelGeometry, mouseVelMat);
+
+            var collisionDebugMat = new THREE.LineBasicMaterial({color: 0xFF0000});
+            var collisionSurfacePoints = [];
+            collisionSurfacePoints.push(new THREE.Vector3(0.0, 0.0, 0.0));
+            collisionSurfacePoints.push(new THREE.Vector3(0.0, 0.0, 0.0));
+            var collisionDebugGeo = new THREE.BufferGeometry();
+            collisionDebugGeo.setFromPoints(collisionSurfacePoints);
+            var collisionDebugLine = new THREE.Line(collisionDebugGeo, collisionDebugMat);
+            scene.add(collisionDebugLine);
+
+
+            var collisionMat = new THREE.LineBasicMaterial({color: 0xff0000});
+            var collisionPoints = [];
+            collisionPoints.push(new THREE.Vector3(0.0, 0.0, 0.0));
+            collisionPoints.push(new THREE.Vector3(0.0, 0.0, 0.0));
+            var collisionGeometry = new THREE.BufferGeometry();
+            var collisionLine = new THREE.Line(collisionGeometry, collisionMat);
+            collisionGeometry.setFromPoints(collisionPoints);
+            scene.add(collisionLine);
+            constructLevels(gLevels);
+
+            var rendererCanvas = document.getElementById("rendererCanvas");
+            var renderer = new THREE.WebGLRenderer({canvas: rendererCanvas});
+
+          //renderer.domElement = rendererCanvas;
+            //renderer.setSize( rendererCanvas.innerWidth, rendererCanvas.innerHeight );
+            //renderer.setSize( window.innerWidth, window.innerHeight);
+            renderer.setSize(1080, 560);
+            //document.body.appendChild( renderer.domElement );
+
+          var geometry = new THREE.SphereGeometry(radius=0.2);
+          geometry.computeFaceNormals();
+
+          //var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+          var material = new THREE.MeshPhongMaterial( {color: 0x00ff00} )
+          var gBall = new THREE.Mesh( geometry, material );
+          gBall.position.z = 0.0;
+          scene.add( gBall );
+          scene.add( mouseVelLine );
+
+          // const color = 0xFFFFFF;
+          // const intensity = 1;
+          // const light = new THREE.DirectionalLight(color, intensity);
+          // light.position.set(0, 0, 5.0);
+          // light.target.position.set(0, 0, 0);
+          // scene.add(light);
+          // scene.add(light.target);
+
+          var light = new THREE.AmbientLight( 0x404040 ); // soft white light
+
+          scene.add( light );
+
+          const color = 0xFFFFFF;
+          const intensity = 1;
+          const dirLight = new THREE.DirectionalLight(color, intensity);
+          dirLight.position.set(0, 0, 5.0);
+          dirLight.target.position.set(-5.0, -3.0, 0);
+          scene.add(dirLight);
+          scene.add(dirLight.target);
+
+          const dirLight2 = new THREE.DirectionalLight(color, intensity);
+          dirLight2.position.set(0, 0, 5.0);
+          dirLight2.target.position.set(5.0, 3.0, 0);
+          scene.add(dirLight2);
+          scene.add(dirLight2.target);
+
+          constructFieldPlanes(scene);
+          constructCollisionPlanes();
+
+          camera.position.z = 5;
+          renderer.render( scene, camera );
+
+          console.log("max x: "+maxXValue);
+          var screenBounds = getScreenBounds();
+          console.log("setting right plane at: "+screenBounds.x);
+          collisionRightPlane.translate(new THREE.Vector3(screenBounds.x, 0.0, 0.0));
+
+          var ballRaycaster = new THREE.Raycaster();
+          var gCurrentLevel = 0;
+          loadCurrentLevel();
+          //var infoDiv = document.getElementById("info");
+          function animate() {
+	           requestAnimationFrame( animate );
+             ballRaycaster.setFromCamera({x:currentRayMouseX, y:currentRayMouseY}, camera);
+
+             if(bumperGeometry.boundingSphere.intersectsSphere(collisionSphere))
+             {
+               //console.log("bumper hit ball!");
+               if(mouseVelocity)
+               {
+                 //console.log("ball intersected bumper! ");
+                 var bumperVel = new THREE.Vector3()
+                 bumperVel.copy(mouseVelocity);
+
+                 var tangentVector = new THREE.Vector3();
+                 tangentVector.y = -(collisionSphere.center.x - bumper.position.x);
+                 tangentVector.x = (collisionSphere.center.y - bumper.position.y);
+                 tangentVector.normalize();
+
+                 var relVelocity = new THREE.Vector3();
+                 relVelocity.x = mouseVelocity.x - ballVelocity.x;
+                 relVelocity.y = mouseVelocity.y - ballVelocity.y;
+                 var length = relVelocity.dot(tangentVector);
+                 var componentOnTangent = new THREE.Vector3();
+                 componentOnTangent.copy(tangentVector);
+                 componentOnTangent.multiplyScalar(length);
+                 var componentOffTangent = new THREE.Vector3();
+                 componentOffTangent.copy(relVelocity);
+                 componentOffTangent.sub(componentOnTangent);
+                 componentOffTangent.clampLength(0.01, 0.05);
+
+                 ballVelocity.x += componentOffTangent.x;
+                 ballVelocity.y += componentOffTangent.y;
+
+                 var maxCount = 0.0;
+                 while(bumperGeometry.boundingSphere.intersectsSphere(collisionSphere))
+                 {
+                   collisionSphere.center.x += ballVelocity.x;
+                   collisionSphere.center.y += ballVelocity.y;
+                   if(maxCount >= 50)
+                   {
+                     break;
+                   }
+                   maxCount++;
+                 }
+                 gBall.position.x = collisionSphere.center.x;
+                 gBall.position.y = collisionSphere.center.y;
+              }
+             }
+
+             var cubePos = gBall.position;
+             geometry.computeFaceNormals();
+             updateVelocity();
+             gBall.translateX(ballVelocity.x);
+             gBall.translateY(ballVelocity.y);
+             collisionSphere.center.x = cubePos.x;
+             collisionSphere.center.y = cubePos.y;
+
+             if(levelCollisionsEnabled)
+             {
+               checkLevelCollisions();
+             }
+             //top plane
+              if(gCollisionPlanes[0].intersectsSphere(collisionSphere))
+              {
+                while(gCollisionPlanes[0].intersectsSphere(collisionSphere))
+                {
+                  collisionSphere.center.y -= 0.01;
+                }
+
+                gBall.position.y = collisionSphere.center.y;
+
+                ballVelocity.y = -ballVelocity.y;
+                processCollision();
+              }
+
+              if(gCollisionPlanes[3].intersectsSphere(collisionSphere))
+              {
+                while(gCollisionPlanes[3].intersectsSphere(collisionSphere))
+                {
+                  collisionSphere.center.y += 0.01;
+                }
+                gBall.position.y = collisionSphere.center.y;
+
+                ballVelocity.y = -ballVelocity.y;
+                processCollision();
+              }
+
+             if(gCollisionPlanes[1].intersectsSphere(collisionSphere))
+             {
+               //console.log("Sphere intersecting with right plane!");
+               while(gCollisionPlanes[1].intersectsSphere(collisionSphere))
+               {
+                 collisionSphere.center.x -= 0.01;
+               }
+               gBall.position.x = collisionSphere.center.x;
+
+               ballVelocity.x = -ballVelocity.x;
+               processCollision();
+             }
+
+             if(gCollisionPlanes[2].intersectsSphere(collisionSphere))
+             {
+
+               while(gCollisionPlanes[2].intersectsSphere(collisionSphere))
+               {
+                 collisionSphere.center.x += 0.01;
+               }
+               gBall.position.x = collisionSphere.center.x;
+
+               ballVelocity.x = -ballVelocity.x;
+               processCollision();
+               //console.log("Sphere intersecting with left plane!");
+             }
+
+             //this checks for the case that the ball blipped through the left plane.
+             if(gCollisionPlanes[2].distanceToSphere(collisionSphere) < 0.0)
+             {
+               console.log("ball escaped to the left! \n");
+               while(gCollisionPlanes[2].distanceToSphere(collisionSphere) < 0.0)
+               {
+                 collisionSphere.center.x += 0.1;
+               }
+               gBall.position.x = collisionSphere.center.x;
+
+               ballVelocity.x = -ballVelocity.x;
+               processCollision();
+             }
+
+             // //checks for the case that the ball blipped through the right plane
+             if(gCollisionPlanes[1].distanceToSphere(collisionSphere) < 0.0)
+             {
+               console.log("ball escaped to the right! \n");
+               while(gCollisionPlanes[1].distanceToSphere(collisionSphere) < 0.0)
+               {
+                 collisionSphere.center.x -= 0.1;
+               }
+               gBall.position.x = collisionSphere.center.x;
+
+               ballVelocity.x = -ballVelocity.x;
+             }
+
+             //checks for the case that the ball clipped through the top plane
+             if(gCollisionPlanes[0].distanceToSphere(collisionSphere) < 0.0)
+             {
+               console.log("ball escaped to top! \n");
+               while(gCollisionPlanes[0].distanceToSphere(collisionSphere) < 0.0)
+               {
+                 collisionSphere.center.y -= 0.1;
+               }
+               gBall.position.y = collisionSphere.center.y;
+
+               ballVelocity.y = -ballVelocity.y;
+             }
+             //ballDebugInfo.innerHTML = "ball x: "+cube.position.x+", ball y: "+cube.position.y;
+
+             //planeDebugInfo.innerHTML = "d to top plane: "+gCollisionPlanes[0].distanceToSphere(collisionSphere);
+
+             if(gCollisionPlanes[3].distanceToSphere(collisionSphere) < 0.0)
+             {
+               console.log("ball escaped bottom! \n");
+               while(gCollisionPlanes[3].distanceToSphere(collisionSphere) < 0.0)
+               {
+                 collisionSphere.center.y += 0.1;
+               }
+               gBall.position.y = collisionSphere.center.y;
+
+               ballVelocity.y = -ballVelocity.y;
+             }
+
+	           renderer.render( scene, camera );
+            }
+            animate();
+
+            function updateVelocity()
+            {
+              ballVelocity.multiplyScalar(gBallFrictionCoefficient);
+            }
+
+            function processCollision()
+            {
+              ballVelocity.multiplyScalar(0.60);
+            }
+
+            function getScreenBounds()
+            {
+              var maxBounds = new THREE.Vector3();
+              maxBounds.set(1.0, 1.0, -1.0);
+              var maxBoundsDistance = (camera.position.z) / maxBounds.z;
+
+              maxBounds.unproject(camera);
+              maxBounds.sub(camera.position).normalize();
+              var maxBoundsVec = new THREE.Vector3();
+              maxBoundsVec.copy(camera.position).add(maxBounds.multiplyScalar(maxBoundsDistance));
+
+              console.log("maxBounds.x: "+maxBoundsVec.x);
+              return maxBoundsVec;
+            }
+            var testBumperSphere = new THREE.Sphere(new THREE.Vector3(0.0, 0.0, 0.0), radius=bumperGeometry.boundingSphere.radius+0.1);
+            window.addEventListener("mousemove", function(event) {
+              //console.log("mouse moved!");
+              var x = (event.clientX / window.innerWidth) * 2 - 1;
+              var y = - (event.clientY / window.innerHeight) * 2 + 1;
+              currentRayMouseX = x;
+              currentRayMouseY = y;
+              //console.log("original x: "+x);
+              var mouseVec = new THREE.Vector3();
+              mouseVec.set(x, y, 0.1);
+
+              mouseVec.unproject(camera);
+
+              mouseVec.sub(camera.position).normalize();
+
+              var distance = camera.position.z / mouseVec.z;
+
+              var posVec = new THREE.Vector3();
+
+              posVec.copy(camera.position).add(mouseVec.multiplyScalar(distance));
+              mousePosVec.set(posVec.x, posVec.y, posVec.z);
+              preMouseX = newMouseX;
+              preMouseY = newMouseY;
+              newMouseX = -posVec.x;
+              newMouseY = -posVec.y;
+
+              testBumperSphere.center.copy(bumperGeometry.boundingSphere.center);
+              testBumperSphere.center.x = newMouseX;
+              testBumperSphere.center.y = newMouseY;
+              //ballDebugInfo.innerHTML = "mouseX: "+newMouseX+", mouseY: "+newMouseY;
+              //planeDebugInfo.innerHTML = "bumperX: "+testBumperSphere.center.x+", bumperY: "+testBumperSphere.center.y;
+
+              if(!isCollidingWithPlanes(testBumperSphere))
+              {
+                //console.log("testBumperSPhere is not colliding");
+                bumper.position.x = newMouseX;
+                bumper.position.y = newMouseY;
+                bumperGeometry.boundingSphere.center.x = newMouseX;
+                bumperGeometry.boundingSphere.center.y = newMouseY;
+              }else{
+
+              }
+
+              prevdX = dX;
+              prevdY = dY;
+              dX = newMouseX - preMouseX;
+              dY = newMouseY - preMouseY;
+              mouseVelocity.x = dX;
+              mouseVelocity.y = dY;
+
+              // var multVel = mouseVelocity.multiplyScalar(5);
+              // if(Math.abs(multVel.x) >= 0.1 && Math.abs(multVel.y) > 0.1)
+              // {
+              //   mouseVelPoints[0].x = newMouseX;
+              //   mouseVelPoints[0].y = newMouseY;
+              //   mouseVelPoints[1].x = newMouseX + multVel.x;
+              //   mouseVelPoints[1].y = newMouseY + multVel.y;
+              //   //console.log("end x: "+multVel.x+", end y: "+multVel.y);
+              //   mouseVelGeometry.setFromPoints(mouseVelPoints);
+              // }
+              // mouseVelRaycaster.set(mouseVelPoints[0].normalize(), mouseVelPoints[1].normalize());
+              //
+              // var intersects = mouseVelRaycaster.intersectObjects(scene.children);
+              // if(intersects.length > 0)
+              // {
+              //   for(var i = 0; i < intersects.length; i++)
+              //   {
+              //     var intersected = intersects[i];
+              //     var object = intersected.object;
+              //     if(object.id == gBall.id)
+              //     {
+              //       //this works
+              //       //console.log("ball was intersected!");
+              //     }
+              //   }
+              //   //console.log("mouse velocity vector insersects "+intersects.length+" item(s). ");
+              //
+              // }
+
+
+              //ray cast with mouse velocity, get face it intersects with, do math to transfer velocity.
+
+              //console.log("x: "+x+", y: "+y);
+              //document.getElementById("info").innerHTML = "mouse: x: "+newMouseX.toFixed(3)+", y: "+newMouseY.toFixed(3);
+            })
+		  </script>
+
+
+
+  <div class="modal" tabindex="-1" id="game_info_modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Game Information</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Hello, welcome to this simple game, written with the help of the Three JS Library.
+        </p>
+        <p>
+          To play, simply mouse over the play window. A "bumper" will follow your mouse. Try to hit the ball into the red circle!
+        </p>
+        <p>
+          You can play with certain aspects of the game using the left toolbar.
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+    </body>
+
+</html>
