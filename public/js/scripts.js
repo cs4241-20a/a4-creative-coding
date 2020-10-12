@@ -12,11 +12,12 @@ function toggleText() {
   
   for (var index = 0; index < hideables.length; index++) {
     let element = hideables[index]
+    let vis = element.style.visibility
     
-    if (element.getAttribute("hidden")) {
-      element.removeAttribute("hidden")
+    if (vis === "hidden") {
+      element.style.visibility = "visible"
     } else {
-      element.setAttribute("hidden", true)
+      element.style.visibility = "hidden"
     }
   }
 }

@@ -2,16 +2,58 @@
 <html lang="en">
   <head>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Fira+Sans">
     <script src="js/scripts.js"></script>
     <script type="text/javascript" src="js/dat.gui.min.js"></script>
     <title>Audio Visualizer</title>
   </head>
   <body>
-    <header class="hideable">
+    <section class="hideable">
       <h1>Audio Visualizer</h1>
-      <p>Add toggleable instructions</p>
-    </header>
+      <h2>How to Use</h2>
+      <p>Control the visualizer using the control panel in the top-right of the web page.  You can:</p>
+      <table>
+        <tr>
+          <th>Control</th>
+          <th>Function</th>
+        </tr>
+        <tr>
+          <td>Play/Pause</td>
+          <td>Toggle music playback.</td>
+        </tr>
+        <tr>
+          <td>Toggle Text</td>
+          <td>Toggle this overlay text on and off.</td>
+        </tr>
+        <tr>
+          <td>Volume</td>
+          <td>Change the volume multiplier.</td>
+        </tr>
+        <tr>
+          <td>Shape</td>
+          <td>Choose the shape of the visualizer.</td>
+        </tr>
+        <tr>
+          <td>Colors > Gradient</td>
+          <td>Disable or change the orientation of the gradient.</td>
+        </tr>
+        <tr>
+          <td>Colors > Shape</td>
+          <td>Change the colors of the visualizer foreground object.</td>
+        </tr>
+        <tr>
+          <td>Colors > Background 1</td>
+          <td>Change the primary background color.</td>
+        </tr>
+        <tr>
+          <td>Colors > Background 2</td>
+          <td>Change the secondary background color.  This is ignored if the gradient is disabled.</td>
+        </tr>
+      </table>
+      <p>You can also hide/show the control panel using the "h" key.</p>
+    </section>
     <canvas id="visualizer"></canvas>
     <audio src="audio/Disconnected.mp3"></audio>
+    <footer class="hideable">Music credit to Nihilore (James Opie).  Freely used under license: http://www.nihilore.com/license.</footer>
   </body>
 </html>
