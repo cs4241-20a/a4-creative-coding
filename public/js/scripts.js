@@ -191,7 +191,14 @@ const init = () => {
 	gui.add({textField: 'a3'}, 'textField')
 	   .name('Move Selected')
 	   .onFinishChange((val) => moveFunc(val));
-	gui.add({Help: () => { console.log("clicked") }}, 'Help')
+	gui.add({Help: () => { 
+		Swal.fire({title: 'Help Me!',
+				  icon: 'info',
+				  html: 'Don\'t worry! Once you get the basics down for this game it\'s not too hard.' + 
+				  		'<a href="https://www.chess.com/learn-how-to-play-chess">Here\'s</a> a link to' + 
+				  		'help you out! Once you figure the basics out all you have to do is click on piece' + 
+				  		'and type the square you want to move it to!'}); 
+	}}, 'Help');
 
 	container.appendChild(renderer.domElement);
 	window.addEventListener('resize', onWindowResize, false);
