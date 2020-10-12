@@ -2,7 +2,7 @@
 
 ## Resplendent Audio Visualizer Experience (R.A.V.E.)
 
-Edward Philippo -- http://a4-ephilippo.glitch.me
+Edward Philippo -- https://a4-edward-philippo.glitch.me
 
 ## Overview
 
