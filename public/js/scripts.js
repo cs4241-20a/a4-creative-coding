@@ -277,7 +277,9 @@ const moveKing = (row, col, currow, curcol) => {
 }
 
 const moveQueen = (row, col, currow, curcol) => {
-	return moveBishop(row, col, currow, curcol) || moveRook(row, col, currow, curcol);
+	if (moveBishop(row, col, currow, curcol) || moveRook(row, col, currow, curcol))
+		return deletePiece(row, col);
+	return false;
 }
 
 const moveKnight = (row, col, currow, curcol) => {
@@ -294,7 +296,7 @@ const moveKnight = (row, col, currow, curcol) => {
 
 	for (let i = 0; i < x.length; i++){
 		if (x[i] === colDiff && y[i] === rowDiff)
-			return deletePiece(row, col)
+			return deletePiece(translate[row], translate[col]);
 	}
 
 	return false;
