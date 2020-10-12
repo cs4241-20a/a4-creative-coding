@@ -1,0 +1,41 @@
+<!-- This is a static file -->
+<!-- served from your routes in server.js -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>ThreeJS</title>
+    <link rel="stylesheet" href="/style.css">
+  </head>
+  <body>
+    <script src="/three.js"></script>
+		<script src="/GLTFLoader.js"></script>
+    
+    <script src="/OrbitControls.js"></script>
+    <!-- Your web-app is https, so your scripts need to be too -->
+    <div id="info"><br>
+    W - Accelerate forward <br><br><br>
+    S - Accelerate backward <br><br><br>
+    A - Turn left <br><br><br>
+    D - Turn right <br><br><br>
+    Spacebar - Restart <br><br><br>
+    Mouse drag & scroll - Control camera <br><br><br>
+    Implemented collision physics, friction <br><br><br>
+
+
+    </div>
+    <input type="image" src="https://cdn.glitch.com/2655b22a-16eb-431c-a433-a3bf6500f396%2FinfoButtonImage.png?v=1602463225843" id="infoButton"
+           onclick="changeVisibility()"/>
+    <script>
+    function changeVisibility() {
+      let obj = document.getElementById("info");
+      if(obj.style.visibility == "visible") obj.style.visibility = "hidden";
+      else obj.style.visibility = "visible";
+    }
+    </script>
+    <script src = "/game.js">
+    
+    </script>
+
+  </body>
+</html>
