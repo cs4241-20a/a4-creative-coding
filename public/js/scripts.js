@@ -243,7 +243,7 @@ const canMoveThere = (row, col) => {
 		case 'r':
 			return moveRook(row, col, currow, curcol);
 			break;			
-		case 'b':			
+		case 'b':	
 			break;			
 		case 'n':
 			break;			
@@ -254,6 +254,10 @@ const canMoveThere = (row, col) => {
 		default:
 	}
 	return true;
+}
+
+const moveBishop = (row, col, currow, curcol) => {
+
 }
 
 const moveRook = (row, col, currow, curcol) => {
@@ -271,7 +275,7 @@ const moveRook = (row, col, currow, curcol) => {
 			if (isOcc(row, translate[i]))
 				return false;
 		}
-		deletePiece(row, high);
+		deletePiece(row, col);
 	} else {
 		let indOne = parseInt(getKeyByVal(translate, currow));
 		let indTwo = parseInt(getKeyByVal(translate, row));
@@ -283,7 +287,7 @@ const moveRook = (row, col, currow, curcol) => {
 			if (isOcc(translate[i], col))
 				return false;
 		}
-		deletePiece(high, col);
+		deletePiece(row, col);
 	}
 	
 	return true;	
@@ -306,7 +310,7 @@ const isOcc = (row, col) => {
 const deletePiece = (row, col) => {
 	Object.entries(board).some(piece => {
 		if (piece[1].boardZ === row && piece[1].boardX === col){
-			piece.onBoard = false;
+			piece[1].onBoard = false;
 			return true;
 		}
 	});
