@@ -1,0 +1,25 @@
+/* this file is loaded by index.html and styles the page */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: sans-serif;
+  margin: 2em 1em;
+  line-height: 1.5em;
+  background: black;
+  padding-left: 1em;
+}
+
+h1 {
+  font-style: italic;
+  color: white;
+  max-width: calc(100% - 5rem);
+  line-height: 1.1;
+}
+
+p {
+  color: white
+}
+
