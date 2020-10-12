@@ -4,8 +4,22 @@ console.log("Welcome to Edward's Audio Visualizer Experience.  Pleasure to have 
 NUM_SPOKES = 250
 SPOKE_WIDTH = 2
 VOLUME_START = 0.2
-FRAMES_AFTER_PAUSE = 40
+FRAMES_AFTER_PAUSE = 60
 
+
+function toggleText() {
+  let hideables = document.getElementsByClassName("hideable")
+  
+  for (var index = 0; index < hideables.length; index++) {
+    let element = hideables[index]
+    
+    if (element.getAttribute("hidden")) {
+      element.removeAttribute("hidden")
+    } else {
+      element.setAttribute("hidden", true)
+    }
+  }
+}
 
 
 window.onload = function() {
@@ -23,17 +37,20 @@ window.onload = function() {
     shapeFunc: drawCircle,
     volume: 1,
     playback: () => {fullToggle(visCanvas, analyzer, frequencies, audioContext)},
+    toggleText: toggleText,
     gradient: "Vertical",
     fgColor: "#FFFFFF",
     bgColor1: "#080c18",
     bgColor2: "#1d2731"
   }  
-  var baseGui = new dat.GUI();
-  let shapeController = baseGui.add(settings, "shape", ["Circle", "Triangle"]).name("Shape")
-  let volumeController = baseGui.add(settings, "volume", 0, 2).name("Volume")
+  let baseGui = new dat.GUI();
   baseGui.add(settings, "playback").name("Play/Pause")
-  
+  baseGui.add(settings, "toggleText").name("Toggle Text")
+  let volumeController = baseGui.add(settings, "volume", 0, 2).name("Volume")
+  let shapeController = baseGui.add(settings, "shape", ["Circle", "Triangle"]).name("Shape")
   let colorGui = baseGui.addFolder("Colors")
+  
+  
   let gradController = colorGui.add(settings, "gradient", ["Solid", "Vertical", "Horizontal"]).name("Gradient")
   let fgController  = colorGui.addColor(settings, "fgColor").name("Shape")
   let bg1Controller = colorGui.addColor(settings, "bgColor1").name("Background 1")
@@ -66,7 +83,6 @@ window.onload = function() {
 }
 
 
-
 function initAudio() {
   const audioElement = document.querySelector('audio');
   
@@ -89,13 +105,11 @@ function initAudio() {
 }
 
 
-
 function fullToggle(visCanvas, analyzer, frequencies, audioContext) {
   togglePlayback(audioContext)
   //Start the animation loop
-  redrawVisualizer(visCanvas, analyzer, frequencies, 0)
+  redrawVisualizer(visCanvas, analyzer, frequencies, 0, true)
 }
-
 
 
 function redrawOnChange(canvas, analyzer, frequencies) {
@@ -104,13 +118,12 @@ function redrawOnChange(canvas, analyzer, frequencies) {
   
   // It already updates while playing, so don't double up
   if (isPaused) {
-    redrawVisualizer(canvas, analyzer, frequencies, 0)
+    redrawVisualizer(canvas, analyzer, frequencies, 0, true)
   }
 }
 
 
-
-function redrawVisualizer(canvas, analyzer, frequencies, framesLeft) {
+function redrawVisualizer(canvas, analyzer, frequencies, framesLeft, continueLoop) {
   //Update frequency data
   analyzer.getByteFrequencyData(frequencies);
   
@@ -120,13 +133,16 @@ function redrawVisualizer(canvas, analyzer, frequencies, framesLeft) {
   
   // Only schedule next frame if playing
   const audioElement = document.querySelector('audio')
-  if (!audioElement.paused) { framesLeft = FRAMES_AFTER_PAUSE }
+  if (!audioElement.paused && continueLoop) {
+    framesLeft = FRAMES_AFTER_PAUSE
+  } else {
+    continueLoop = false
+  }
   if (framesLeft > 0) {
     framesLeft--
-    window.requestAnimationFrame(() => {redrawVisualizer(canvas, analyzer, frequencies, framesLeft)});
+    window.requestAnimationFrame(() => {redrawVisualizer(canvas, analyzer, frequencies, framesLeft, continueLoop)});
   }
 }
-
 
 
 function togglePlayback(audioContext) {
@@ -142,7 +158,6 @@ function togglePlayback(audioContext) {
     audioElement.play();
   }
 }
-
 
 
 function drawBackground(canvas) {
@@ -174,7 +189,6 @@ function drawBackground(canvas) {
 }
 
 
-
 function drawCircle(canvas, frequencies) {
   let context = canvas.getContext("2d")
   
@@ -204,7 +218,6 @@ function drawCircle(canvas, frequencies) {
     drawSpoke(context, x, y, angle, maxSpokeLen, freq)
   }
 }
-
 
 
 function drawTriangle(canvas, frequencies) {
@@ -269,7 +282,6 @@ function drawTriangle(canvas, frequencies) {
 }
 
 
-
 function drawSpoke(context, x1, y1, angle, maxSpokeLen, freq=255){
   context.strokeStyle = settings.fgColor
   let spokeLen = maxSpokeLen * (freq / 255)
@@ -283,7 +295,6 @@ function drawSpoke(context, x1, y1, angle, maxSpokeLen, freq=255){
   context.lineTo(x2, y2)
   context.stroke()
 }
-
 
 
 function getTrianglePos(index, third, startVertex, edgeLen) {
