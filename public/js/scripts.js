@@ -1,7 +1,6 @@
-console.log("Welcome to Edward's Audio Visualizer Experience.  Pleasure to have you aboard.")
+console.log("Welcome to the Resplendent Audio Visualizer Experience.  It's a pleasure to have you aboard.")
 
 // Easy-access global constants
-NUM_SPOKES = 250
 SPOKE_WIDTH = 2
 VOLUME_START = 0.2
 FRAMES_AFTER_PAUSE = 60
@@ -35,6 +34,7 @@ window.onload = function() {
   // Set up settings GUI
   settings = {
     shape: "Circle",
+    spokes: 250,
     shapeFunc: drawCircle,
     volume: 1,
     playback: () => {fullToggle(visCanvas, analyzer, frequencies, audioContext)},
@@ -48,15 +48,16 @@ window.onload = function() {
   baseGui.add(settings, "playback").name("Play/Pause")
   baseGui.add(settings, "toggleText").name("Toggle Text")
   let volumeController = baseGui.add(settings, "volume", 0, 2).name("Volume")
+  baseGui.add(settings, "spokes").name("Spokes")
   let shapeController = baseGui.add(settings, "shape", ["Circle", "Triangle"]).name("Shape")
   let colorGui = baseGui.addFolder("Colors")
-  
   
   let gradController = colorGui.add(settings, "gradient", ["Solid", "Vertical", "Horizontal"]).name("Gradient")
   let fgController  = colorGui.addColor(settings, "fgColor").name("Shape")
   let bg1Controller = colorGui.addColor(settings, "bgColor1").name("Background 1")
   let bg2Controller = colorGui.addColor(settings, "bgColor2").name("Background 2")
   
+  // Set shape
   shapeController.onChange(function(value) {
     switch (value) {
         case "Circle":
@@ -70,10 +71,12 @@ window.onload = function() {
     }
     redrawOnChange(visCanvas, analyzer, frequencies)
   });
+  // Set volume
   volumeController.onChange(function(vol) {
     gainNode.gain.value = vol * VOLUME_START;
   })
   
+  // Redraw visible elements in case they're changed while music is paused.
   fgController.onChange(  function(_color){ redrawOnChange(visCanvas, analyzer, frequencies) })
   bg1Controller.onChange( function(_color){ redrawOnChange(visCanvas, analyzer, frequencies) })
   bg2Controller.onChange( function(_color){ redrawOnChange(visCanvas, analyzer, frequencies) })
@@ -207,13 +210,13 @@ function drawCircle(canvas, frequencies) {
   context.stroke()
   
   // Draw the spokes
-  for (pos = 0; pos < NUM_SPOKES; pos++) {
-    let angle = (2 * Math.PI / NUM_SPOKES) * pos - (Math.PI / 2)
+  for (pos = 0; pos < settings.spokes; pos++) {
+    let angle = (2 * Math.PI / settings.spokes) * pos - (Math.PI / 2)
     
     let x = x_mid + radius * Math.cos(angle)
     let y = y_mid + radius * Math.sin(angle)
     
-    let freqStep = frequencies.length / NUM_SPOKES
+    let freqStep = frequencies.length / settings.spokes
     let freq = frequencies[Math.floor(pos * freqStep)]
     
     drawSpoke(context, x, y, angle, maxSpokeLen, freq)
@@ -249,8 +252,8 @@ function drawTriangle(canvas, frequencies) {
   drawSpoke(context, tx3, ty3, -Math.PI/3, sideLen)
   
   // Draw the spokes
-  for (pos = 0; pos < NUM_SPOKES; pos++) {
-    third = NUM_SPOKES / 3
+  for (pos = 0; pos < settings.spokes; pos++) {
+    third = settings.spokes / 3
     let x1, y1
     
     if (pos < third) {
