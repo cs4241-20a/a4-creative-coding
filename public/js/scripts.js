@@ -356,7 +356,9 @@ const movePawn = (row, col, currow, curcol) => {
 			}
 			return !isOcc(translate[row], translate[col]);
 		}
-	} 
+	} else if (row === currow && ((curcol === (selected.name[0] === 'w' ? 2 : 7)) && (col === (selected.name[0] === 'w' ? 4 : 5)))){
+		return !isOcc(translate[row], translate[col]);
+	}
 
 	return false;
 }
