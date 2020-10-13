@@ -1,0 +1,27 @@
+/* this file is loaded by index.html and styles the page */
+
+body {
+  background-color: black;
+}
+
+h1 {
+  font-style: italic;
+  color: #373fff;
+  max-width: calc(100% - 5rem);
+  line-height: 1.1;
+}
+
+button {
+  background-color: lightblue;
+  border: 2px solid currentColor;
+  border-radius: 0.25em;
+  cursor: pointer;
+  font-size: inherit;
+  line-height: 1.4em;
+  padding: 0.25em 1em;
+  max-width: 20ch;
+}
+
+button:hover {
+  background-color: lavender;
+}
