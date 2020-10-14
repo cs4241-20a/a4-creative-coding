@@ -15,5 +15,6 @@ Include a very brief summary of your project here. Images are encouraged when ne
 Basically the application is an audio visualization tool that uses 2D canvas to realize.
 
 - the goal of the application: the goal is to use canvas to visualize the audio that the user uploads.  
-- challenge of the application: I spent a lot of time trying to figure out why the audio frequency is an array full of 0. Fortunately I finally solved it.
+- challenge of the application: I spent a lot of time trying to figure out why the audio frequency is an array full of 0. Fortunately I finally solved it.  
+- To use the application, you should upload an audio file(ended in .ogg or .mp3, and the anduio visualizer will automatially work. You could choose to pause, replay, resume, set it on a loop / not on a loop or change the bar color of the visualizer.
 >>>>>>> e297cf9b697db5a9a94933e3e64d6ccfc92edb72
