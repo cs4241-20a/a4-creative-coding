@@ -1,0 +1,25 @@
+{
+  "name": "a4-athammana",
+  "version": "1.0.0",
+  "description": "Webware project 4",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/athammana/a4-creative-coding.git"
+  },
+  "author": "Abhijay Thammana",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/athammana/a4-creative-coding/issues"
+  },
+  "homepage": "https://github.com/athammana/a4-creative-coding#readme",
+  "dependencies": {
+    "dat.gui": "^0.7.7",
+    "express": "^4.17.1",
+    "three": "^0.121.1"
+  }
+}

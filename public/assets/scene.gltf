@@ -1,0 +1,798 @@
+{
+  "accessors": [
+    {
+      "bufferView": 1,
+      "componentType": 5126,
+      "count": 799,
+      "max": [
+        1.5,
+        1.5,
+        5.0126500129699707
+      ],
+      "min": [
+        -1.5,
+        -1.5,
+        0
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 9588,
+      "componentType": 5126,
+      "count": 799,
+      "max": [
+        0.99999243021011353,
+        0.92343521118164062,
+        0.93257349729537964
+      ],
+      "min": [
+        -1,
+        -0.92343521118164062,
+        -1
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 0,
+      "componentType": 5125,
+      "count": 1251,
+      "max": [
+        798
+      ],
+      "min": [
+        0
+      ],
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 19176,
+      "componentType": 5126,
+      "count": 887,
+      "max": [
+        1.5,
+        1.5,
+        4.3199100494384766
+      ],
+      "min": [
+        -1.5,
+        -1.5,
+        0
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 29820,
+      "componentType": 5126,
+      "count": 887,
+      "max": [
+        0.96753954887390137,
+        0.96753954887390137,
+        1
+      ],
+      "min": [
+        -0.96753954887390137,
+        -0.96753954887390137,
+        -1
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 5004,
+      "componentType": 5125,
+      "count": 1860,
+      "max": [
+        886
+      ],
+      "min": [
+        0
+      ],
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 40464,
+      "componentType": 5126,
+      "count": 424,
+      "max": [
+        2.0692000389099121,
+        2.0692000389099121,
+        6.1557598114013672
+      ],
+      "min": [
+        -2.0692000389099121,
+        -2.0692000389099121,
+        0
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 45552,
+      "componentType": 5126,
+      "count": 424,
+      "max": [
+        0.92388087511062622,
+        0.92388087511062622,
+        0.94335931539535522
+      ],
+      "min": [
+        -0.92388087511062622,
+        -0.92388087511062622,
+        -1
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 12444,
+      "componentType": 5125,
+      "count": 636,
+      "max": [
+        423
+      ],
+      "min": [
+        0
+      ],
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 50640,
+      "componentType": 5126,
+      "count": 666,
+      "max": [
+        8.4687404632568359,
+        8.4687299728393555,
+        33.242530822753906
+      ],
+      "min": [
+        -8.4687299728393555,
+        -8.4687404632568359,
+        0
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 58632,
+      "componentType": 5126,
+      "count": 666,
+      "max": [
+        0.99998641014099121,
+        0.92388087511062622,
+        0.98729133605957031
+      ],
+      "min": [
+        -0.98760074377059937,
+        -0.92388087511062622,
+        -1
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 14988,
+      "componentType": 5125,
+      "count": 984,
+      "max": [
+        665
+      ],
+      "min": [
+        0
+      ],
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 66624,
+      "componentType": 5126,
+      "count": 832,
+      "max": [
+        8.4687404632568359,
+        8.4687404632568359,
+        32.215129852294922
+      ],
+      "min": [
+        -8.4687404632568359,
+        -8.4687404632568359,
+        0
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 76608,
+      "componentType": 5126,
+      "count": 832,
+      "max": [
+        0.92388087511062622,
+        0.92388087511062622,
+        0.96502619981765747
+      ],
+      "min": [
+        -0.92388087511062622,
+        -0.92388087511062622,
+        -1
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 18924,
+      "componentType": 5125,
+      "count": 1290,
+      "max": [
+        831
+      ],
+      "min": [
+        0
+      ],
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 86592,
+      "componentType": 5126,
+      "count": 462,
+      "max": [
+        2.25,
+        2.25,
+        9.6627902984619141
+      ],
+      "min": [
+        -2.25,
+        -2.25,
+        0
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 92136,
+      "componentType": 5126,
+      "count": 462,
+      "max": [
+        1,
+        1,
+        1
+      ],
+      "min": [
+        -1,
+        -1,
+        -1
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 24084,
+      "componentType": 5125,
+      "count": 1428,
+      "max": [
+        461
+      ],
+      "min": [
+        0
+      ],
+      "type": "SCALAR"
+    }
+  ],
+  "asset": {
+    "extras": {
+      "author": "moyicat (https://sketchfab.com/moyicat)",
+      "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+      "source": "https://sketchfab.com/models/218776bed6144332ab41417badd5df6b",
+      "title": "Chess Scene Pieces / Blender"
+    },
+    "generator": "Sketchfab-3.18.6",
+    "version": "2.0"
+  },
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 29796,
+      "byteOffset": 0,
+      "name": "floatBufferViews",
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteLength": 97680,
+      "byteOffset": 29796,
+      "byteStride": 12,
+      "name": "floatBufferViews",
+      "target": 34962
+    }
+  ],
+  "buffers": [
+    {
+      "byteLength": 127476,
+      "uri": "scene.bin"
+    }
+  ],
+  "materials": [
+    {
+      "doubleSided": true,
+      "emissiveFactor": [
+        0,
+        0,
+        0
+      ],
+      "name": "Root",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "metallicFactor": 0,
+        "roughnessFactor": 0.59999999999999998
+      }
+    },
+    {
+      "doubleSided": true,
+      "emissiveFactor": [
+        0,
+        0,
+        0
+      ],
+      "name": "White_Piece",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.84118330480000003,
+          0.84118330480000003,
+          0.84118330480000003,
+          1
+        ],
+        "metallicFactor": 0,
+        "roughnessFactor": 0.59999999999999998
+      }
+    }
+  ],
+  "meshes": [
+    {
+      "name": "WhiteKnight.001_0",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 1,
+            "POSITION": 0
+          },
+          "indices": 2,
+          "material": 0,
+          "mode": 4
+        }
+      ]
+    },
+    {
+      "name": "Rook.001_0",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 4,
+            "POSITION": 3
+          },
+          "indices": 5,
+          "material": 0,
+          "mode": 4
+        }
+      ]
+    },
+    {
+      "name": "PrimaryWhitePawn.007_0",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 7,
+            "POSITION": 6
+          },
+          "indices": 8,
+          "material": 1,
+          "mode": 4
+        }
+      ]
+    },
+    {
+      "name": "PrimaryWhiteBishop.001_0",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 10,
+            "POSITION": 9
+          },
+          "indices": 11,
+          "material": 0,
+          "mode": 4
+        }
+      ]
+    },
+    {
+      "name": "WhiteQueen_0",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 13,
+            "POSITION": 12
+          },
+          "indices": 14,
+          "material": 0,
+          "mode": 4
+        }
+      ]
+    },
+    {
+      "name": "WhiteKing_0",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 16,
+            "POSITION": 15
+          },
+          "indices": 17,
+          "material": 0,
+          "mode": 4
+        }
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "children": [
+        1
+      ],
+      "name": "RootNode (gltf orientation matrix)",
+      "rotation": [
+        -0.70710678118654746,
+        -0,
+        -0,
+        0.70710678118654757
+      ]
+    },
+    {
+      "children": [
+        2
+      ],
+      "matrix": [
+        -1,
+        0,
+        0,
+        0,
+        0,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        -0.74999600648880005,
+        1.9072999748459551e-06,
+        0,
+        1
+      ],
+      "name": "RootNode (model correction matrix)"
+    },
+    {
+      "children": [
+        3,
+        20
+      ],
+      "name": "Root"
+    },
+    {
+      "children": [
+        4,
+        7,
+        10,
+        13,
+        16,
+        18
+      ],
+      "matrix": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        2,
+        1
+      ],
+      "name": "WhitePieces"
+    },
+    {
+      "children": [
+        5
+      ],
+      "name": "White Knights"
+    },
+    {
+      "children": [
+        6
+      ],
+      "matrix": [
+        1.3333299999999999,
+        0,
+        0,
+        0,
+        0,
+        1.3333299999999999,
+        0,
+        0,
+        0,
+        0,
+        1.3333299999999999,
+        0,
+        3,
+        -0,
+        0,
+        1
+      ],
+      "name": "WhiteKnight.001"
+    },
+    {
+      "mesh": 0,
+      "name": "WhiteKnight.001_0"
+    },
+    {
+      "children": [
+        8
+      ],
+      "name": "WhiteRooks"
+    },
+    {
+      "children": [
+        9
+      ],
+      "matrix": [
+        1.3333299999999999,
+        0,
+        0,
+        0,
+        0,
+        1.3333299999999999,
+        0,
+        0,
+        0,
+        0,
+        1.3333299999999999,
+        0,
+        9,
+        0,
+        0,
+        1
+      ],
+      "name": "Rook.001"
+    },
+    {
+      "mesh": 1,
+      "name": "Rook.001_0"
+    },
+    {
+      "children": [
+        11
+      ],
+      "name": "WhitePawns"
+    },
+    {
+      "children": [
+        12
+      ],
+      "matrix": [
+        0.72492000000000012,
+        0,
+        0,
+        0,
+        0,
+        0.72492000000000012,
+        0,
+        0,
+        0,
+        0,
+        0.72492000000000012,
+        0,
+        15,
+        0,
+        0,
+        1
+      ],
+      "name": "PrimaryWhitePawn.007"
+    },
+    {
+      "mesh": 2,
+      "name": "PrimaryWhitePawn.007_0"
+    },
+    {
+      "children": [
+        14
+      ],
+      "name": "WhiteBishops"
+    },
+    {
+      "children": [
+        15
+      ],
+      "matrix": [
+        0.23616000000000001,
+        0,
+        0,
+        0,
+        0,
+        0.23616000000000001,
+        0,
+        0,
+        0,
+        0,
+        0.23616000000000001,
+        0,
+        -3,
+        0,
+        0,
+        1
+      ],
+      "name": "PrimaryWhiteBishop.001"
+    },
+    {
+      "mesh": 3,
+      "name": "PrimaryWhiteBishop.001_0"
+    },
+    {
+      "children": [
+        17
+      ],
+      "matrix": [
+        0.23616000000000001,
+        0,
+        0,
+        0,
+        0,
+        0.23616000000000001,
+        0,
+        0,
+        0,
+        0,
+        0.23616000000000001,
+        0,
+        -9,
+        0,
+        0,
+        1
+      ],
+      "name": "WhiteQueen"
+    },
+    {
+      "mesh": 4,
+      "name": "WhiteQueen_0"
+    },
+    {
+      "children": [
+        19
+      ],
+      "matrix": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        -15,
+        0,
+        0,
+        1
+      ],
+      "name": "WhiteKing"
+    },
+    {
+      "mesh": 5,
+      "name": "WhiteKing_0"
+    },
+    {
+      "children": [
+        21,
+        23
+      ],
+      "matrix": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        2,
+        1
+      ],
+      "name": "Lighting"
+    },
+    {
+      "children": [
+        22
+      ],
+      "matrix": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        48,
+        1
+      ],
+      "name": "Lamp"
+    },
+    {
+      "name": "Lamp"
+    },
+    {
+      "children": [
+        24
+      ],
+      "matrix": [
+        0.93301000000000001,
+        -0.25,
+        -0.25882000000000005,
+        0,
+        0.0062400000000000016,
+        0.73038000000000003,
+        -0.68301000000000012,
+        0,
+        0.35979,
+        0.63565000000000016,
+        0.68301000000000012,
+        0,
+        0,
+        21,
+        48,
+        1
+      ],
+      "name": "Sun"
+    },
+    {
+      "name": "Sun"
+    }
+  ],
+  "scene": 0,
+  "scenes": [
+    {
+      "name": "OSG_Scene",
+      "nodes": [
+        0
+      ]
+    }
+  ]
+}
+
