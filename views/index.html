@@ -1,0 +1,82 @@
+<!-- This is a static file -->
+<!-- served from your routes in server.js -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Audiovisualizer made for CS4241 Assignment 4" />
+
+    <title>CS4241 Assignment 4</title>
+    <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/picnic" />
+    <link
+      id="favicon"
+      rel="icon"
+      href="https://glitch.com/edit/favicon-app.ico"
+      type="image/x-icon"
+    />
+    <style>
+      .collapsible {
+        background-color: #777;
+        color: white;
+        cursor: pointer;
+        padding: 18px;
+        width: 100%;
+        border: none;
+        text-align: left;
+        outline: none;
+        font-size: 18px;
+      }
+      .active,
+      .collapsible:hover {
+        background-color: #555;
+      }
+
+      .content {
+        text-align:left;
+        padding: 0 18px;
+        display: block;
+        overflow: hidden;
+        background-color: #262626;
+        color: #e3e3e3;
+      }
+    </style>
+    <script src="/script.js" type="module"></script>
+  </head>
+  <body style="background-color:#0a0a0a; text-align:center;">
+    <main>
+      <h1 style="color:#e3e3e3;">
+        Alex's Audiovisualizer
+      </h1>
+      <h3 style="color:#e3e3e3; font-style:italic;">
+        Toby Fox - Waterfall (Undertale OST)
+      </h3>
+
+      <canvas id="canvas"></canvas>
+      <br />
+      <button id="play">
+        Play/Pause
+      </button>
+      <button type="button" class="collapsible">
+        Help
+      </button>
+      <div class="content"><p>
+        Welcome to my audiovisualizer! This represents a song's waveform with a series of colorful, bouncing balls.
+        Start the visualization by clicking on the "Play/Pause" button. 
+        Using the controls menu at the top-right, you can change the following parameters: <br>
+        </p>
+        <ul>
+          <li>ballRadius: Size of the balls</li>
+          <li>gravity: How high the balls bounce</li>
+          <li>ballSpaceMultiplier: Space between the balls</li>
+          <li>lowR, lowG, lowB: RGB value for low volume</li>
+          <li>medR, medG, medB: RGB value for medium volume</li>
+          <li>highR, highG, highB: RGB value for high volume</li>
+        </ul>
+        Click on "Help" to collapse/open this menu.
+      </div>
+    </main>
+  </body>
+</html>
